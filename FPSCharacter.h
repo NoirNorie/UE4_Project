@@ -4,19 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
-// 1인칭 카메라 설정을 위한 헤더 추가
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-
-// 반드시 아래 헤더가 가장 아래에 위치해야 한다
+#include "FPSProjectile.h"
 #include "FPSCharacter.generated.h"
-
 
 UCLASS()
 class FPSPROJECT_API AFPSCharacter : public ACharacter
 {
-	GENERATED_BODY() // 가끔씩 여기서 빨간 줄이 그이지만 무시해도 상관 없다
+	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
@@ -26,6 +22,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Projectile class to spawn.
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<class AFPSProjectile> ProjectileClass;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -33,27 +33,38 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// 2-0: 캐릭터 이동 선언
-	// 에디터에서 키 매핑을 선행해야 한다.
-	UFUNCTION() void MoveForward(float Value);
-	UFUNCTION() void MoveRight(float Value);
+	// Handles input for moving forward and backward.
+	UFUNCTION()
+		void MoveForward(float Value);
 
-	// 3-0: 시야 이동
-	// 에디터에서 키 매핑을 선행해야 한다
-	// 시야 이동은 내장 함수여서 선언이 불필요한 것 같음
+	// Handles input for moving right and left.
+	UFUNCTION()
+		void MoveRight(float Value);
 
-	// 4-0: 캐릭터 행동 선언
-	// 에디터에서 키 매핑을 선행해야 한다 (점프는 액션 매핑)
-	UFUNCTION() void StartJump(); // 키를 누를 때 점프 플래그를 킨다
-	UFUNCTION() void StopJump();  // 키에서 손을 떼었을 때 점프 플래그를 제거
+	// Sets jump flag when key is pressed.
+	UFUNCTION()
+		void StartJump();
+
+	// Clears jump flag when key is released.
+	UFUNCTION()
+		void StopJump();
+
+	// Function that handles firing projectiles.
+	// 투사체 발사를 다룰 함수 정의
+	UFUNCTION()
+		void Fire();
 
 
-	// 5-0: 1인칭 카메라 조절
-	UPROPERTY(VisibleAnywhere) 
-	class UCameraComponent* FPSCameraComponent;
+	// FPS camera
+	UPROPERTY(VisibleAnywhere)
+		UCameraComponent* FPSCameraComponent;
 
-	// 6-0: 스태틱 메시 추가
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh) 
-	class USkeletalMeshComponent* FPSMesh;
+	// First-person mesh (arms), visible only to the owning player.
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+		USkeletalMeshComponent* FPSMesh;
+
+	// Gun muzzle offset from the camera location.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		FVector MuzzleOffset;
 
 };
