@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "FPSProjectile.h"
 #include "FPSCharacter.generated.h"
 
@@ -53,6 +55,15 @@ public:
 	// 투사체 발사를 다룰 함수 정의
 	UFUNCTION()
 		void Fire();
+
+	// 달리기 함수 정의
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Movement: Walking")
+		float SprintSpeedMultiplier;
+
+	UFUNCTION() 
+		void StartRun();
+	UFUNCTION() 
+		void StopRun();
 
 
 	// FPS camera

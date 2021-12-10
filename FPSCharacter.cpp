@@ -32,6 +32,8 @@ AFPSCharacter::AFPSCharacter()
 
 	// The owning player doesn't see the regular (third-person) body mesh.
 	GetMesh()->SetOwnerNoSee(true);
+
+	SprintSpeedMultiplier = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -69,6 +71,9 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::StopJump);
 	// 투사체 발사 바인딩
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::Fire);
+	// 액션 바인딩 중 달리기
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AFPSCharacter::StartRun);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &AFPSCharacter::StopRun);
 }
 
 void AFPSCharacter::MoveForward(float Value)
@@ -92,6 +97,17 @@ void AFPSCharacter::StartJump()
 void AFPSCharacter::StopJump()
 {
 	bPressedJump = false;
+}
+void AFPSCharacter::StartRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
+	// 버전이 바뀌면서 제대로 동작이 안된다
+	// #include "GameFramework/CharacterMovementComponent.h" 헤더를 반드시 포함시켜야 한다
+	// 하나 배운것 = 불완전한 ~ => 높은 확률로 헤더가 없어서 그런 것이다
+}
+void AFPSCharacter::StopRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
 }
 
 void AFPSCharacter::Fire()
