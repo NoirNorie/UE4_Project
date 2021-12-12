@@ -8,6 +8,9 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "FPSProjectile.generated.h"
 
+// íˆ¬ì‚¬ì²´ì˜ ë°œì‚¬ ë°©ì‹ì— ëŒ€í•´ì„œ ë³€ê²½ì´ í•„ìš”í•  ê²ƒ ê°™ë‹¤
+// íˆíŠ¸ìŠ¤ìº” ë°©ì‹ì„ ì´í›„ì— ì œì‘í•  ê²ƒì„
+
 UCLASS()
 class FPSPROJECT_API AFPSProjectile : public AActor
 {
@@ -26,7 +29,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Function that is called when the projectile hits something.
-	// Åõ»çÃ¼°¡ Ãæµ¹Çß´Ù´Â ÆÇÁ¤À» ³»¸± ÇÔ¼ö
+	// íˆ¬ì‚¬ì²´ê°€ ì¶©ëŒí–ˆë‹¤ëŠ” íŒì •ì„ ë‚´ë¦´ í•¨ìˆ˜
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 			UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
@@ -34,23 +37,23 @@ public:
 	// Sphere collision component
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
-	// ±¸Ã¼ Ãæµ¹ ÄÄÆ÷³ÍÆ®
+	// êµ¬ì²´ ì¶©ëŒ ì»´í¬ë„ŒíŠ¸
 
 	// Projectile movement component.
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
-	// Åõ»çÃ¼ ¶Ç´Â ¹ß»çÃ¼ÀÇ ÀÌµ¿ ÄÄÆ÷³ÍÆ®
+	// íˆ¬ì‚¬ì²´ ë˜ëŠ” ë°œì‚¬ì²´ì˜ ì´ë™ ì»´í¬ë„ŒíŠ¸
 
 	// Function that initializes the projectile's velocity in the shoot direction.
-	// Åõ»çÃ¼ÀÇ ¼Óµµ¿Í ¹ß»ç ¹æÇâÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+	// íˆ¬ì‚¬ì²´ì˜ ì†ë„ì™€ ë°œì‚¬ ë°©í–¥ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 	void FireInDirection(const FVector& ShootDirection);
 
 	// Projectile mesh
-	// Åõ»çÃ¼ÀÇ ¸Ş½Ã Ãß°¡
+	// íˆ¬ì‚¬ì²´ì˜ ë©”ì‹œ ì¶”ê°€
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		UStaticMeshComponent* ProjectileMeshComponent;
 	// Projectile material
-	// Åõ»çÃ¼ÀÇ ¸ŞÅÍ¸®¾ó Ãß°¡
+	// íˆ¬ì‚¬ì²´ì˜ ë©”í„°ë¦¬ì–¼ ì¶”ê°€
 	UPROPERTY(VisibleDefaultsOnly, Category = Movement)
 		UMaterialInstanceDynamic* ProjectileMaterialInstance;
 
