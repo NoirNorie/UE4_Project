@@ -4,11 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+// 카메라 관련 헤더
 #include "Camera/CameraComponent.h"
+
 #include "Components/CapsuleComponent.h"
+
+// 컨트롤 관련 헤더
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+// 생성자 중 사용할 함수가 들어있는 헤더
+#include "UObject/ConstructorHelpers.h"
+
+// 사운드 관련 헤더
+#include "Sound/SoundCue.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "FPSProjectile.h"
+
+// 이 헤더가 반드시 아래에 있어야 한다
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -51,10 +67,19 @@ public:
 	UFUNCTION()
 		void StopJump();
 
-	// Function that handles firing projectiles.
-	// 투사체 발사를 다룰 함수 정의
+	//// Function that handles firing projectiles.
+	//// 투사체 발사를 다룰 함수 정의
+	//UFUNCTION()
+	//	void Fire();
+
+	// 좁은 공간에 PvP 가 아니므로 히트스캔과 유사한 사격 체계를 사용함
+	FTimerHandle timer;
+	UPROPERTY() bool isFiring;
 	UFUNCTION()
-		void Fire();
+		void StartFire();
+	UFUNCTION()
+		void StopFire();
+	void Fire();
 
 	// 달리기 함수 정의
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Movement: Walking")
@@ -65,6 +90,9 @@ public:
 	UFUNCTION() 
 		void StopRun();
 
+	// 사운드
+	UAudioComponent* AudioComponent;
+	USoundBase* Fire_Sound;
 
 	// FPS camera
 	UPROPERTY(VisibleAnywhere)

@@ -34,6 +34,22 @@ AFPSCharacter::AFPSCharacter()
 	GetMesh()->SetOwnerNoSee(true);
 
 	SprintSpeedMultiplier = 2.0f;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
+	AudioComponent->SetupAttachment(FPSMesh);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase>FireSound(TEXT(
+		"SoundWave'/Game/FirstPerson/Audio/FirstPersonTemplateWeaponFire02.FirstPersonTemplateWeaponFire02'")
+	);
+	if (FireSound.Succeeded())
+	{
+		Fire_Sound = FireSound.Object;
+	}
+
+	if (AudioComponent->IsValidLowLevelFast())
+	{
+		AudioComponent->SetSound(Fire_Sound);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -69,8 +85,14 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	// Set up "action" bindings.
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFPSCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::StopJump);
-	// 투사체 발사 바인딩
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::Fire);
+	//// 투사체 발사 바인딩
+	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::Fire);
+	
+	// 사격
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AFPSCharacter::StopFire);
+
+
 	// 액션 바인딩 중 달리기
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AFPSCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AFPSCharacter::StopRun);
@@ -110,41 +132,62 @@ void AFPSCharacter::StopRun()
 	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
 }
 
+void AFPSCharacter::StartFire()
+{
+	isFiring = true;
+	Fire();
+}
 void AFPSCharacter::Fire()
 {
-	// Attempt to fire a projectile.
-	if (ProjectileClass)
+	// try and play the sound if specified
+	if (isFiring)
 	{
-		// Get the camera transform.
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
-		MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
-
-		// Transform MuzzleOffset from camera space to world space.
-		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-
-		// Skew the aim to be slightly upwards.
-		FRotator MuzzleRotation = CameraRotation;
-		MuzzleRotation.Pitch += 10.0f;
-
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
-
-			// Spawn the projectile at the muzzle.
-			AFPSProjectile* Projectile = World->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
-			if (Projectile)
-			{
-				// Set the projectile's initial trajectory.
-				FVector LaunchDirection = MuzzleRotation.Vector();
-				Projectile->FireInDirection(LaunchDirection);
-			}
-		}
+		AudioComponent->Play();
+		GetWorld()->GetTimerManager().SetTimer(timer, this, &AFPSCharacter::Fire, 0.1f, false);
 	}
+	
 }
+void AFPSCharacter::StopFire()
+{
+	isFiring = false;
+}
+
+// 투사체 발사가 아닌 라인 트레이스를 사용할 것임
+//void AFPSCharacter::Fire()
+//{
+//	// Attempt to fire a projectile.
+//	if (ProjectileClass)
+//	{
+//		// Get the camera transform.
+//		FVector CameraLocation;
+//		FRotator CameraRotation;
+//		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+//
+//		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
+//		MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
+//
+//		// Transform MuzzleOffset from camera space to world space.
+//		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+//
+//		// Skew the aim to be slightly upwards.
+//		FRotator MuzzleRotation = CameraRotation;
+//		MuzzleRotation.Pitch += 10.0f;
+//
+//		UWorld* World = GetWorld();
+//		if (World)
+//		{
+//			FActorSpawnParameters SpawnParams;
+//			SpawnParams.Owner = this;
+//			SpawnParams.Instigator = GetInstigator();
+//
+//			// Spawn the projectile at the muzzle.
+//			AFPSProjectile* Projectile = World->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
+//			if (Projectile)
+//			{
+//				// Set the projectile's initial trajectory.
+//				FVector LaunchDirection = MuzzleRotation.Vector();
+//				Projectile->FireInDirection(LaunchDirection);
+//			}
+//		}
+//	}
+//}
