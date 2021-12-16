@@ -28,6 +28,12 @@ ATPlayer::ATPlayer()
 		GetMesh()->SetAnimInstanceClass(TPlayerAnim.Class);
 	}
 
+	// 달리기 배속 초기화
+	SprintSpeedMultiplier = 2.0f;
+
+	// 인터페이스로 보낼 변수 초기화
+	CheckWeapon = false;
+
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +66,10 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// 점프 바인드
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATPlayer::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ATPlayer::StopJump);
+
+	// 달리기 바인드
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ATPlayer::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ATPlayer::StopSprinting);
 }
 
 void ATPlayer::MoveForward(float v)
@@ -81,4 +91,25 @@ void ATPlayer::StartJump()
 void ATPlayer::StopJump()
 {
 	bPressedJump = false;
+}
+
+// 달리기 함수 구현
+void ATPlayer::Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
+}
+void ATPlayer::StopSprinting()
+{
+	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
+}
+
+bool ATPlayer::React_WeaponItem_Implementation()
+{
+	if (CheckWeapon == true) return true;
+	else return false;
+}
+
+bool ATPlayer::GetWeaponCheck()
+{
+	return CheckWeapon;
 }
