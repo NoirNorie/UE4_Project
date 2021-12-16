@@ -103,11 +103,10 @@ void ATPlayer::StopSprinting()
 	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
 }
 
-bool ATPlayer::React_WeaponItem_Implementation()
-{
-	if (CheckWeapon == true) return true;
-	else return false;
-}
+//void ATPlayer::Equip_WeaponItem_Implementation(AActor inp)
+//{
+//
+//}
 
 bool ATPlayer::GetWeaponCheck()
 {

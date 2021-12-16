@@ -25,5 +25,5 @@ class PP_API ITPlayerInterface
 	// 인터페이스 함수
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
-	bool React_WeaponItem();
+	void Equip_WeaponItem();
 };

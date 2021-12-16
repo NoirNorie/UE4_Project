@@ -23,9 +23,9 @@
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
 
-// ITPlayerInterface는 TPlayerInterface의 인터페이스를 상속받은 것
+// ITPlayerInterface는 TPlayerInterface의 인터페이스를 상속받은 것 , public ITPlayerInterface
 UCLASS()
-class PP_API ATPlayer : public ACharacter , public ITPlayerInterface
+class PP_API ATPlayer : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -70,9 +70,9 @@ public:
 	UFUNCTION() void StopJump();
 
 	// 인터페이스에서 함수를 가져온다
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
-	bool React_WeaponItem();
-	virtual bool React_WeaponItem_Implementation() override;
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
+	//void Equip_WeaponItem();
+	//virtual void Equip_WeaponItem_Implementation() override;
 
 	// 변수 반환용 함수들
 	bool GetWeaponCheck();
