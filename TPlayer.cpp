@@ -70,6 +70,10 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// 달리기 바인드
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ATPlayer::Sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ATPlayer::StopSprinting);
+
+	// 정조준 바인드
+	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &ATPlayer::StartAim);
+	PlayerInputComponent->BindAction("Aim", IE_Released, this, &ATPlayer::StopAim);
 }
 
 void ATPlayer::MoveForward(float v)
@@ -103,6 +107,19 @@ void ATPlayer::StopSprinting()
 	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
 }
 
+// 조준 함수 구현
+void ATPlayer::StartAim()
+{
+	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView /= 2);
+	CheckAim = true;
+}
+
+void ATPlayer::StopAim()
+{
+	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView *= 2);
+	CheckAim = false;
+}
+
 //void ATPlayer::Equip_WeaponItem_Implementation(AActor inp)
 //{
 //
@@ -111,4 +128,9 @@ void ATPlayer::StopSprinting()
 bool ATPlayer::GetWeaponCheck()
 {
 	return CheckWeapon;
+}
+
+bool ATPlayer::GetAimCheck()
+{
+	return CheckAim;
 }

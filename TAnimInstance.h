@@ -46,6 +46,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool WeaponState;
 
+	// 조준에 사용할 변수
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool Aiming;
+
 public:
 	UTAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;

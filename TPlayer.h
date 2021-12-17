@@ -46,6 +46,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool CheckWeapon;
 
+	// 조준에 사용할 변수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool CheckAim;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -69,12 +74,18 @@ public:
 	UFUNCTION() void StartJump();
 	UFUNCTION() void StopJump();
 
+	// 정조준
+	UFUNCTION() void StartAim();
+	UFUNCTION() void StopAim();
+
 	// 인터페이스에서 함수를 가져온다
 	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
 	//void Equip_WeaponItem();
 	//virtual void Equip_WeaponItem_Implementation() override;
 
 	// 변수 반환용 함수들
-	bool GetWeaponCheck();
+	bool GetWeaponCheck(); // 무기 장착 여부 확인
+
+	bool GetAimCheck(); // 조준 여부 확인
 
 };

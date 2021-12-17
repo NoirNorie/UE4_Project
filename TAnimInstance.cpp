@@ -28,6 +28,7 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		// 이동 속도를 받아온다
 		CurrentWalkSpeed = Character->GetMovementComponent()->GetMaxSpeed();
 		WeaponState = Character->GetWeaponCheck();
+		Aiming = Character->GetAimCheck();
 	}
 
 }
