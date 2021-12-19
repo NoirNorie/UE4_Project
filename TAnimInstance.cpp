@@ -36,3 +36,9 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 }
+
+void UTAnimInstance::PlayFire()
+{
+	IsFire = true;
+	UE_LOG(LogTemp, Log, TEXT("Fire"));
+}

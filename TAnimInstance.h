@@ -56,6 +56,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn)
 		float aim_Yaw;
 
+	// 사격에 사용할 변수
+	UFUNCTION() void PlayFire(); // 애니메이션에 전달할 함수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsFire; // 사격 여부를 알릴 변수
+
+
 public:
 	UTAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;

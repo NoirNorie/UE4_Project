@@ -41,6 +41,23 @@ ATPlayer::ATPlayer()
 	// 인터페이스로 보낼 변수 초기화
 	CheckWeapon = false;
 
+	// 사운드 큐와 오디어 컴포넌트 설정
+	static ConstructorHelpers::FObjectFinder<USoundCue>RifleShot(TEXT("SoundCue'/Game/Blueprint/WeaponSound/Rifle2_Cue.Rifle2_Cue'"));
+	if (RifleShot.Succeeded())
+	{
+		ShotCue = RifleShot.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
+	if (RifleEmpty.Succeeded())
+	{
+		EmptyCue = RifleEmpty.Object;
+	}
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerAudio"));
+	AudioComponent->bAutoActivate = false;
+	AudioComponent->SetupAttachment(RootComponent);
+
+	player_ammo = 30;
+
 }
 
 // Called when the game starts or when spawned
@@ -81,6 +98,10 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// 정조준 바인드
 	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &ATPlayer::StartAim);
 	PlayerInputComponent->BindAction("Aim", IE_Released, this, &ATPlayer::StopAim);
+
+	// 사격 바인드
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATPlayer::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATPlayer::StopFire);
 }
 
 void ATPlayer::MoveForward(float v)
@@ -136,6 +157,52 @@ void ATPlayer::StopAim()
 	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView *= 2);
 	CheckAim = false;
 }
+
+// 사격 함수 구현
+void ATPlayer::StartFire()
+{
+	isFiring = true;
+	Fire();
+}
+
+void ATPlayer::StopFire()
+{
+	isFiring = false;
+}
+
+void ATPlayer::Fire()
+{
+	if (isFiring == true)
+	{
+		if (player_ammo == 0)
+		{
+			AudioComponent->SetSound(EmptyCue);
+			AudioComponent->Play();
+		}
+
+		if (player_ammo > 0)
+		{
+			player_ammo--;
+			AudioComponent->SetSound(ShotCue);
+			AudioComponent->Play();
+			AnimInst->PlayFire();
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.5f, false);
+			UE_LOG(LogTemp, Log, TEXT("Ammo : %d"), player_ammo);
+		}
+		
+
+
+	}
+}
+
+// 사격 애니메이션 출력용
+void ATPlayer::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	AnimInst = Cast<UTAnimInstance>(GetMesh()->GetAnimInstance());
+}
+// 액터가 월드에 등장하기 최종 단계에서 호출되는 함수
+// AnimInstance 초기화에 적합한 함수
 
 //void ATPlayer::Equip_WeaponItem_Implementation(AActor inp)
 //{
