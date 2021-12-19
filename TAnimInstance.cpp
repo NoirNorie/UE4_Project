@@ -29,6 +29,10 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentWalkSpeed = Character->GetMovementComponent()->GetMaxSpeed();
 		WeaponState = Character->GetWeaponCheck();
 		Aiming = Character->GetAimCheck();
+
+		Direction = CalculateDirection(Character->GetVelocity(), Character->GetControlRotation());
+		aim_Pitch = Character->GetBaseAimRotation().Pitch;
+		aim_Yaw = Character->GetBaseAimRotation().Yaw;
 	}
 
 }

@@ -9,6 +9,13 @@ ATPlayer::ATPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//GetCharacterMovement()->bOrientRotationToMovement = true;
+	//GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
+	//GetCharacterMovement()->JumpZVelocity = 450.0f;
+	//GetCharacterMovement()->AirControl = 0.2f;
+	//GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+
+
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
 	TPSpringArm->SetupAttachment(RootComponent);
 	TPSpringArm->TargetArmLength = 300.0f;
@@ -78,13 +85,23 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATPlayer::MoveForward(float v)
 {
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+
+	FRotator Rotation = Controller->GetControlRotation();
+	FRotator YawRotation(0, Rotation.Yaw, 0);
+	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	// FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+	
 	AddMovementInput(Direction, v);
 }
 
 void ATPlayer::MoveRight(float v)
 {
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	FRotator Rotation = Controller->GetControlRotation();
+	FRotator YawRotation(0, Rotation.Yaw, 0);
+	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, v);
 }
 

@@ -30,7 +30,7 @@ UCLASS()
 class PP_API UTAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-private:
+public:
 	// 점프 판정용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsInAir;
@@ -49,6 +49,12 @@ private:
 	// 조준에 사용할 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool Aiming;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn)
+		float Direction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn)
+		float aim_Pitch;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn)
+		float aim_Yaw;
 
 public:
 	UTAnimInstance();

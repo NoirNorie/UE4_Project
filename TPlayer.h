@@ -13,6 +13,10 @@
 // 생성자 보조함수 헤더
 #include "UObject/ConstructorHelpers.h"
 
+// 엔진 위에 그리기 위한 헤더
+#include "Engine/Canvas.h" 
+// HUD 헤더
+#include "PlayerHUD.h"
 
 // 캐릭터 이동 컴포넌트 헤더(속도를 받아오는데 사용함
 #include "GameFramework/CharacterMovementComponent.h"
@@ -34,6 +38,10 @@ class PP_API ATPlayer : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD, meta = (AllowPrivateAcceess = "true"))
+	//	class UKHUDWidget* HUDWidget;
+
 public:
 	// Sets default values for this character's properties
 	ATPlayer();
