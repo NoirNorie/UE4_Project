@@ -98,6 +98,13 @@ public:
 	UFUNCTION() void StopFire();
 	UFUNCTION() void Fire();
 
+	// 재장전 함수 선언
+	UFUNCTION() void StartReload();
+	UFUNCTION() void ReloadEnd();
+	
+	// 상호작용 함수 선언
+	//UFUNCTION() void PlayerInteraction();
+
 	// 사운드 재생
 	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 사운드 컴포넌트
 		class UAudioComponent* AudioComponent;
@@ -111,7 +118,15 @@ public:
 		class UTAnimInstance* AnimInst;
 	virtual void PostInitializeComponents() override;
 
-	int32 player_ammo;
+	// 재장전 변수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UAnimMontage* ReloadMontage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int32 player_ammo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int32 player_mag;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool IsReloading;
 
 	// 인터페이스에서 함수를 가져온다
 	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")

@@ -56,8 +56,16 @@ ATPlayer::ATPlayer()
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
 
-	player_ammo = 30;
+	// 총알 초기화
+	player_ammo = 30; // 총알 수
+	player_mag = 3; // 탄창 수
 
+	// 몽타주 초기화
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>Reload(TEXT(""));
+	if (Reload.Succeeded())
+	{
+		ReloadMontage = Reload.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -102,6 +110,9 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// 사격 바인드
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATPlayer::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATPlayer::StopFire);
+
+	// 재장전 바인드
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPlayer::StartReload);
 }
 
 void ATPlayer::MoveForward(float v)
@@ -158,42 +169,7 @@ void ATPlayer::StopAim()
 	CheckAim = false;
 }
 
-// 사격 함수 구현
-void ATPlayer::StartFire()
-{
-	isFiring = true;
-	Fire();
-}
 
-void ATPlayer::StopFire()
-{
-	isFiring = false;
-}
-
-void ATPlayer::Fire()
-{
-	if (isFiring == true)
-	{
-		if (player_ammo == 0)
-		{
-			AudioComponent->SetSound(EmptyCue);
-			AudioComponent->Play();
-		}
-
-		if (player_ammo > 0)
-		{
-			player_ammo--;
-			AudioComponent->SetSound(ShotCue);
-			AudioComponent->Play();
-			AnimInst->PlayFire();
-			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.5f, false);
-			UE_LOG(LogTemp, Log, TEXT("Ammo : %d"), player_ammo);
-		}
-		
-
-
-	}
-}
 
 // 사격 애니메이션 출력용
 void ATPlayer::PostInitializeComponents()
@@ -204,10 +180,53 @@ void ATPlayer::PostInitializeComponents()
 // 액터가 월드에 등장하기 최종 단계에서 호출되는 함수
 // AnimInstance 초기화에 적합한 함수
 
-//void ATPlayer::Equip_WeaponItem_Implementation(AActor inp)
-//{
-//
-//}
+// 사격 함수 구현
+void ATPlayer::StartFire()
+{
+	isFiring = true;
+	Fire();
+}
+void ATPlayer::StopFire()
+{
+	isFiring = false;
+}
+void ATPlayer::Fire()
+{
+	if (isFiring == true && CheckWeapon == true)
+	{
+		if (player_ammo == 0)
+		{
+			AudioComponent->SetSound(EmptyCue);
+			AudioComponent->Play();
+		}
+
+		if (player_ammo > 0)
+		{
+			player_ammo--;
+			//AudioComponent->SetSound(ShotCue);
+			//AudioComponent->Play();
+			AnimInst->PlayFire();
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.1f, false);
+			UE_LOG(LogTemp, Log, TEXT("Ammo : %d"), player_ammo);
+		}
+
+	}
+}
+// 재장전 함수 구현
+void ATPlayer::StartReload()
+{
+	if (player_mag != 0 && CheckWeapon == true)
+	{
+		//CheckAim = false; // 장전 중 조준을 푼다
+		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
+		IsReloading = true;
+	}
+}
+void ATPlayer::ReloadEnd()
+{
+	IsReloading = false;
+}
+
 
 bool ATPlayer::GetWeaponCheck()
 {

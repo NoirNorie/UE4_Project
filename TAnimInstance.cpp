@@ -34,11 +34,33 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		aim_Pitch = Character->GetBaseAimRotation().Pitch;
 		aim_Yaw = Character->GetBaseAimRotation().Yaw;
 	}
-
 }
 
 void UTAnimInstance::PlayFire()
 {
 	IsFire = true;
 	UE_LOG(LogTemp, Log, TEXT("Fire"));
+}
+
+void UTAnimInstance::PlayReload()
+{
+	IsReload = true;
+}
+//
+void UTAnimInstance::AnimNotify_ReloadEnd()
+{
+	// 폰을 받아온다
+	auto Pawn = TryGetPawnOwner();
+	if (::IsValid(Pawn))
+	{
+		CurrentPawnSpeed = Pawn->GetVelocity().Size();
+	}
+	// 캐릭터 타입으로 폰을 형변환
+	ATPlayer* Character = Cast<ATPlayer>(Pawn);
+	if (Character)
+	{
+		Character->player_ammo = 30;
+		Character->player_mag--;
+	}
+	IsReload = false;
 }

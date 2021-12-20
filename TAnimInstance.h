@@ -61,6 +61,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsFire; // 사격 여부를 알릴 변수
 
+	// 재장전에 사용할 변수
+	UFUNCTION() void PlayReload();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsReload; // 사격 여부를 알릴 변수
+
+	UFUNCTION()
+		void AnimNotify_ReloadEnd();
+
 
 public:
 	UTAnimInstance();
