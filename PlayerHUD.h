@@ -8,6 +8,9 @@
 // 엔진 위에 그리기 위한 헤더
 #include "Engine/Canvas.h" 
 
+// 위젯 출력을 위한 헤더
+#include "Blueprint/UserWidget.h"
+
 #include "PlayerHUD.generated.h"
 
 /**
