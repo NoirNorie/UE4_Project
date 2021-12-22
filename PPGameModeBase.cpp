@@ -24,18 +24,26 @@
 void APPGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	CreatePlayerWidget(StartingWidgetClass);
-}
-
-void APPGameModeBase::CreatePlayerWidget(TSubclassOf<UUserWidget> NewWidgetClass)
-{
-	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), NewWidgetClass);
-	if (CurrentWidget)
+	//CreatePlayerWidget(StartingWidgetClass);
+	if (Player_StatusWidget)
 	{
-		CurrentWidget->AddToViewport();
+		StatusWidget = CreateWidget<UTPlayerWidget>(GetWorld(), Player_StatusWidget);
+		if (StatusWidget)
+		{
+			StatusWidget->AddToViewport();
+		}
 	}
-
-	//PlayerStateWidget->AddToViewport();
-	//UUserWidget* PlayerState = LoadObject<UUserWidget>();
-	//PlayerState->AddToViewport();
 }
+
+//void APPGameModeBase::CreatePlayerWidget(TSubclassOf<UUserWidget> NewWidgetClass)
+//{
+//	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), NewWidgetClass);
+//	if (CurrentWidget)
+//	{
+//		CurrentWidget->AddToViewport();
+//	}
+//
+//	//PlayerStateWidget->AddToViewport();
+//	//UUserWidget* PlayerState = LoadObject<UUserWidget>();
+//	//PlayerState->AddToViewport();
+//}

@@ -8,6 +8,7 @@
 // 위젯 헤더
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetBlueprintGeneratedClass.h"
+#include "TPlayerWidget.h"
 
 // 생성자 보조함수 헤더
 #include "UObject/ConstructorHelpers.h"
@@ -26,13 +27,18 @@ protected:
 public:
 	// void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass); // 위젯 변경 함수
 
-	UFUNCTION(BlueprintCallable, Category = "UMG Game")
-	void CreatePlayerWidget(TSubclassOf<UUserWidget> NewWidgetClass); // 위젯 생성 함수
+	//UFUNCTION(BlueprintCallable, Category = "UMG Game")
+	//void CreatePlayerWidget(TSubclassOf<UUserWidget> NewWidgetClass); // 위젯 생성 함수
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
-		TSubclassOf<UUserWidget> StartingWidgetClass; // 출력할 위젯
-	//
-	UPROPERTY() UUserWidget* CurrentWidget; // 출력되고 있던 위젯 변수
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+	//	TSubclassOf<UUserWidget> StartingWidgetClass; // 출력할 위젯
+	////
+	//UPROPERTY() UUserWidget* CurrentWidget; // 출력되고 있던 위젯 변수
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", Meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UTPlayerWidget>Player_StatusWidget;
+
+	UPROPERTY() class UTPlayerWidget* StatusWidget;
 
 
 };
