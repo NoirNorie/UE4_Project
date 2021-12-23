@@ -115,28 +115,24 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPlayer::StartReload);
 }
 
+// 전후이동 함수
 void ATPlayer::MoveForward(float v)
 {
-
 	FRotator Rotation = Controller->GetControlRotation();
 	FRotator YawRotation(0, Rotation.Yaw, 0);
-	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-	// FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	
+	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);	
 	AddMovementInput(Direction, v);
 }
-
+// 좌우이동 함수
 void ATPlayer::MoveRight(float v)
 {
 	FRotator Rotation = Controller->GetControlRotation();
 	FRotator YawRotation(0, Rotation.Yaw, 0);
 	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, v);
 }
 
+// 점프 함수
 void ATPlayer::StartJump()
 {
 	bPressedJump = true;
@@ -146,7 +142,7 @@ void ATPlayer::StopJump()
 	bPressedJump = false;
 }
 
-// 달리기 함수 구현
+// 달리기 함수
 void ATPlayer::Sprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
@@ -156,22 +152,19 @@ void ATPlayer::StopSprinting()
 	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
 }
 
-// 조준 함수 구현
+// 조준 함수
 void ATPlayer::StartAim()
 {
 	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView /= 2);
 	CheckAim = true;
 }
-
 void ATPlayer::StopAim()
 {
 	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView *= 2);
 	CheckAim = false;
 }
 
-
-
-// 사격 애니메이션 출력용
+// 사격 애니메이션 출력용 함수
 void ATPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -202,16 +195,16 @@ void ATPlayer::Fire()
 
 		if (player_ammo > 0)
 		{
-			player_ammo--;
-			//AudioComponent->SetSound(ShotCue);
-			//AudioComponent->Play();
-			AnimInst->PlayFire();
+			// 사운드 재생은 애니메이션 노티파이에 부착했다
+			// 소리가 중첩될 수 있도록 처리함
+			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
+			// 총알은 노티파이 함수에서 감소한다
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.1f, false);
-			UE_LOG(LogTemp, Log, TEXT("Ammo : %d"), player_ammo);
 		}
 
 	}
 }
+
 // 재장전 함수 구현
 void ATPlayer::StartReload()
 {
@@ -219,6 +212,7 @@ void ATPlayer::StartReload()
 	{
 		//CheckAim = false; // 장전 중 조준을 푼다
 		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
+		// 재장전 시 탄창은 노티파이 함수에서 감소한다.
 		IsReloading = true;
 	}
 }
@@ -227,12 +221,12 @@ void ATPlayer::ReloadEnd()
 	IsReloading = false;
 }
 
-
+// 무기 장착 사실을 전달할 함수
 bool ATPlayer::GetWeaponCheck()
 {
 	return CheckWeapon;
 }
-
+// 조준 여부를 전달할 함수
 bool ATPlayer::GetAimCheck()
 {
 	return CheckAim;

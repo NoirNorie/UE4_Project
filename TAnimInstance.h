@@ -31,14 +31,13 @@ class PP_API UTAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 public:
+	// -- 변수 --
 	// 점프 판정용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsInAir;
-
 	// 걷기, 달리기 용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentPawnSpeed;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentWalkSpeed;
 
@@ -56,20 +55,27 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn)
 		float aim_Yaw;
 
-	// 사격에 사용할 변수
-	UFUNCTION() void PlayFire(); // 애니메이션에 전달할 함수
+	// 행동 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		bool IsFire; // 사격 여부를 알릴 변수
-
-	// 재장전에 사용할 변수
-	UFUNCTION() void PlayReload();
+	bool IsFire; // 사격 여부를 알릴 변수	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		bool IsReload; // 사격 여부를 알릴 변수
+	bool IsReload; // 재장전 여부를 알릴 변수
 
+	// -- 변수 --
+
+	// -- 노티파이 변수 --
 	UFUNCTION()
-		void AnimNotify_ReloadEnd();
+	void AnimNotify_FireEnd(); // 사격 종료를 알릴 변수
+	UFUNCTION()
+	void AnimNotify_ReloadEnd();
 
+	// -- 노티파이 변수 --
 
+	// -- 함수 --
+	UFUNCTION() void PlayFire(); // 사격 함수
+	UFUNCTION() void PlayReload(); // 재장전 함수
+
+	// -- 함수 --
 public:
 	UTAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;

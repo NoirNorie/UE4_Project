@@ -32,7 +32,6 @@
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
 
-// ITPlayerInterface는 TPlayerInterface의 인터페이스를 상속받은 것 , public ITPlayerInterface
 UCLASS()
 class PP_API ATPlayer : public ACharacter
 {
@@ -44,8 +43,10 @@ protected:
 
 public:
 	// Sets default values for this character's properties
-	ATPlayer();
+	ATPlayer(); // 생성자
 
+
+	// -- 변수 -- 
 	// 스프링 암
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* TPSpringArm;
@@ -55,9 +56,6 @@ public:
 
 	FTimerHandle timer;
 	UPROPERTY() bool isFiring;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD, meta = (AllowPrivateAcceess = "true"))
-	//	class UKHUDWidget* HUDWidget;
 
 	// 달리기 속도
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Movement: Walking")
@@ -71,12 +69,38 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool CheckAim;
 
-	// Called every frame
+	// 사운드 재생
+	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 사운드 컴포넌트
+		class UAudioComponent* AudioComponent;
+	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 총 소리
+		class USoundCue* ShotCue;
+	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 탄창이 빈 경우의 소리
+		class USoundCue* EmptyCue;
+
+	// 애니메이션 인스턴스 변수
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+		class UTAnimInstance* AnimInst;
+	
+
+	// 재장전 변수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UAnimMontage* ReloadMontage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 player_ammo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 player_mag;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool IsReloading;
+	// -- 변수 -- 
+
+	// -- 함수 --
+	// - 엔진 함수
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void PostInitializeComponents() override;
+	// - 엔진 함수
 
+	// - 커스텀 함수
 	// 이동 함수 선언
 	UFUNCTION() void MoveForward(float v);
 	UFUNCTION() void MoveRight(float v);
@@ -101,41 +125,26 @@ public:
 	// 재장전 함수 선언
 	UFUNCTION() void StartReload();
 	UFUNCTION() void ReloadEnd();
-	
-	// 상호작용 함수 선언
-	//UFUNCTION() void PlayerInteraction();
-
-	// 사운드 재생
-	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 사운드 컴포넌트
-		class UAudioComponent* AudioComponent;
-	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 총 소리
-		class USoundCue* ShotCue;
-	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 탄창이 빈 경우의 소리
-		class USoundCue* EmptyCue;
-
-	// 애니메이션 인스턴스 변수
-	UPROPERTY(BlueprintReadOnly, Category = "Animation")
-		class UTAnimInstance* AnimInst;
-	virtual void PostInitializeComponents() override;
-
-	// 재장전 변수
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		class UAnimMontage* ReloadMontage;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 player_ammo;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 player_mag;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool IsReloading;
-
-	// 인터페이스에서 함수를 가져온다
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
-	//void Equip_WeaponItem();
-	//virtual void Equip_WeaponItem_Implementation() override;
+	// - 커스텀 함수
 
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인
 
 	bool GetAimCheck(); // 조준 여부 확인
 
+	// -- 함수 --
 };
+
+
+// 리팩토링 도중에 빼낸 코드
+/*
+	// 인터페이스에서 함수를 가져온다
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
+	//void Equip_WeaponItem();
+	//virtual void Equip_WeaponItem_Implementation() override;
+
+	// 상호작용 함수 선언
+	//UFUNCTION() void PlayerInteraction();
+
+
+*/
