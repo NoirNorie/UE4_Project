@@ -6,6 +6,6 @@
 AW_Rifle::AW_Rifle()
 {
 	// 총알 초기화
-	MAXW_Ammo = 30;
-	CurrentW_Ammo = 30;
+	Weapon_Name = "AR-15";
+	W_Ammo = 30;
 }

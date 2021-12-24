@@ -46,11 +46,8 @@ public:
 
 	// 총알 정보
 	// BlueprintReadOnly 매개변수는 private에서 못쓴다.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Name")
+		FName Weapon_Name; // 무기 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Ammo")
-		float W_Ammo;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Ammo")
-		float MAXW_Ammo;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Ammo")
-		float CurrentW_Ammo;
-
+		float W_Ammo; // 무기 총알
 };

@@ -56,6 +56,9 @@ ATPlayer::ATPlayer()
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
 
+	// 무기 이름 초기화
+	WeaponName = "-";
+
 	// 총알 초기화
 	player_ammo = 30; // 총알 수
 	player_mag = 3; // 탄창 수

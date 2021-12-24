@@ -64,6 +64,8 @@ public:
 	// 인터페이스로 보낼 무기 확인용 변수
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool CheckWeapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FName WeaponName;
 
 	// 조준에 사용할 변수
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
