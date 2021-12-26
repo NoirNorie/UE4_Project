@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+// 좀비용으로 만든 컨트롤러 헤더
 #include "ZombieAIController.h"
+
 #include "Zombie.generated.h"
 
 UCLASS()
