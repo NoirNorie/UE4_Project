@@ -27,8 +27,8 @@ public:
 	// »ý¼ºÀÚ
 	AZombieAIController();
 	
-	//static const FName HomePosKey;
-	//static const FName PatrolPosKey;
+	static const FName HomePosKey;
+	static const FName PatrolPosKey;
 
 	UFUNCTION() 
 	virtual void OnPossess(APawn* InPawn) override;

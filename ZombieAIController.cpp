@@ -3,8 +3,8 @@
 
 #include "ZombieAIController.h"
 
-//const FName AZombieAIController::HomePosKey(TEXT("HomePos"));
-//const FName AZombieAIController::PatrolPosKey(TEXT("PatrolPos"));
+const FName AZombieAIController::HomePosKey(TEXT("HomePos"));
+const FName AZombieAIController::PatrolPosKey(TEXT("PatrolPos"));
 
 AZombieAIController::AZombieAIController()
 {
@@ -27,7 +27,11 @@ AZombieAIController::AZombieAIController()
 void AZombieAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	RunAI();
+	if (UseBlackboard(BBZombie, Blackboard))
+	{
+		RunBehaviorTree(BTZombie);
+	}
+	//RunAI();
 }
 
 void AZombieAIController::RunAI()
@@ -41,7 +45,7 @@ void AZombieAIController::RunAI()
 void AZombieAIController::StopAI()
 {
 	UBehaviorTreeComponent* BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
-	if (BehaviorTreeComponent)
+	if (BehaviorTreeComponent == nullptr)
 	{
 		return;
 	}
