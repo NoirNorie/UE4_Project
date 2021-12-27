@@ -29,6 +29,7 @@ public:
 	
 	static const FName HomePosKey;
 	static const FName PatrolPosKey;
+	static const FName TargetPosKey;
 
 	UFUNCTION() 
 	virtual void OnPossess(APawn* InPawn) override;

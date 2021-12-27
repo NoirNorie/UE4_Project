@@ -5,6 +5,7 @@
 
 const FName AZombieAIController::HomePosKey(TEXT("HomePos"));
 const FName AZombieAIController::PatrolPosKey(TEXT("PatrolPos"));
+const FName AZombieAIController::TargetPosKey(TEXT("TargetPos"));
 
 AZombieAIController::AZombieAIController()
 {
