@@ -24,3 +24,17 @@ void UZombieAnim::NativeUpdateAnimation(float DeltaSeconds)
 		
 	}
 }
+
+void UZombieAnim::Detect()
+{
+	DetectTarget = true;
+}
+void UZombieAnim::Attack()
+{
+	IsAttacking = true;
+}
+
+void UZombieAnim::AnimNotify_AttackEnd()
+{
+	IsAttacking = false; // 공격 종료
+}

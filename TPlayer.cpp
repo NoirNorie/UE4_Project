@@ -167,7 +167,7 @@ void ATPlayer::StopAim()
 	CheckAim = false;
 }
 
-// 사격 애니메이션 출력용 함수
+// 애니메이션 출력용 함수
 void ATPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

@@ -12,6 +12,17 @@ AZombie::AZombie()
 	// 컨트롤러를 사용하도록 설정
 	AIControllerClass = AZombieAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	IsAttacking = false; // 비공격상태로 초기화
+
+	// 애니메이션 블루프린트 속성 지정
+	static ConstructorHelpers::FClassFinder<UZombieAnim>TZombieAnim(TEXT(
+		"AnimBlueprint'/Game/Blueprint/Enemy/Anim_Zombie.Anim_Zombie'")
+	);
+	if (TZombieAnim.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(TZombieAnim.Class);
+	}
 	
 }
 
@@ -34,5 +45,28 @@ void AZombie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AZombie::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	ZombieAnimInst = Cast<UZombieAnim>(GetMesh()->GetAnimInstance());
+}
+
+void AZombie::Attack()
+{
+	IsAttacking = true;
+	ZombieAnimInst->Attack(); // 공격 모션 동작
+}
+void AZombie::Detect()
+{
+	IsDetect = true;
+	ZombieAnimInst->Detect(); // 추격 모션 동작
+}
+
+void AZombie::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	IsAttacking = false; // 공격이 끝나면 비공격 상태로 전환한다.
+	OnAttackEnd.Broadcast(); // 공격이 종료되었다고 브로드캐스트한다.
 }
 

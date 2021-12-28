@@ -5,10 +5,18 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
+// 생성자 보조함수 헤더
+#include "UObject/ConstructorHelpers.h"
+
 // 좀비용으로 만든 컨트롤러 헤더
 #include "ZombieAIController.h"
 
+// 좀비 애니메이션 헤더
+#include "ZombieAnim.h"
+
 #include "Zombie.generated.h"
+
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 UCLASS()
 class PP_API AZombie : public ACharacter
@@ -18,8 +26,19 @@ class PP_API AZombie : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AZombie();
+	
+	UFUNCTION() void Attack();
+	UFUNCTION() void Detect();
+	FOnAttackEndDelegate OnAttackEnd;
 
 	// -- 변수--
+	UPROPERTY() bool IsAttacking;
+	UPROPERTY() bool IsDetect;
+
+	// 애니메이션 인스턴스 변수
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+	class UZombieAnim* ZombieAnimInst;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,4 +51,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// 애니메이션 출력용 함수
+	virtual void PostInitializeComponents() override;
+
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 };

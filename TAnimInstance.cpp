@@ -22,19 +22,15 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	// 캐릭터 타입으로 폰을 형변환
 	ATPlayer* Character = Cast<ATPlayer>(Pawn);
 	if (Character) // 읽어오는데 성공했다면
-	{
+	{	
 		// 공중에 떠있는지 판정한다	
 		IsInAir = Character->GetMovementComponent()->IsFalling(); 
-
 		// 이동 속도를 받아온다
-		CurrentWalkSpeed = Character->GetMovementComponent()->GetMaxSpeed(); 
-		
+		CurrentWalkSpeed = Character->GetMovementComponent()->GetMaxSpeed(); 		
 		// 무기 장착 여부를 확인한다
 		WeaponState = Character->GetWeaponCheck();
-
 		// 조준 상태 확인
 		Aiming = Character->GetAimCheck();
-
 		// 바라보고 있는 방향을 확인한다.
 		Direction = CalculateDirection(Character->GetVelocity(), Character->GetControlRotation());
 		aim_Pitch = Character->GetBaseAimRotation().Pitch;

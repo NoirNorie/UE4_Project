@@ -27,11 +27,22 @@ public:
 	float currentPawnSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
 	float currentWalkSpeed;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
+	bool DetectTarget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
 	bool IsDead;
 	
 	// 함수
 	UZombieAnim(); // 생성자
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION() void Detect();
+	UFUNCTION() void Attack();
+
+	// 노티파이 함수
+	UFUNCTION() void AnimNotify_AttackEnd();
+
+
 };
