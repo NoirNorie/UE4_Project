@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 // 캐릭터 헤더
 #include "GameFramework/Character.h"
+#include "GameFramework/Pawn.h"
+
 // 스프링 암과 카메라 헤더
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"

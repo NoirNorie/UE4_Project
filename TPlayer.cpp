@@ -190,6 +190,36 @@ void ATPlayer::Fire()
 {
 	if (isFiring == true && CheckWeapon == true)
 	{
+		if (ProjectileClass)
+		{
+			FVector CameraLocation;
+			FRotator CameraRotation;
+			GetActorEyesViewPoint(CameraLocation, CameraRotation);
+			//FVector Gun_Direction;
+
+			FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+			FRotator MuzzleRotation = CameraRotation;
+
+			//MuzzleLocation.Y += 60;
+			//MuzzleRotation.Pitch += 10.0f;
+			UWorld* World = GetWorld();
+			if (World)
+			{
+				FActorSpawnParameters SpawnParams;
+				SpawnParams.Owner = this;
+				SpawnParams.Instigator = GetInstigator();
+				ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
+					ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
+					);
+				if (Projectile)
+				{
+					FVector LaunchDirection = MuzzleRotation.Vector();
+					Projectile->FireInDirection(LaunchDirection);
+				}
+			}
+		}
+
+
 		if (player_ammo == 0)
 		{
 			AudioComponent->SetSound(EmptyCue);

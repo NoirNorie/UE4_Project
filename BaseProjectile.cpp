@@ -7,7 +7,7 @@
 ABaseProjectile::ABaseProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	CollisionComponent->InitSphereRadius(1.0f);
@@ -15,11 +15,11 @@ ABaseProjectile::ABaseProjectile()
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-	ProjectileMovementComponent->InitialSpeed = 3000.0f;
-	ProjectileMovementComponent->MaxSpeed = 3000.0f;
-	ProjectileMovementComponent->bRotationFollowsVelocity = true;
-	ProjectileMovementComponent->bShouldBounce = true;
-	ProjectileMovementComponent->Bounciness = 0.3f;
+	ProjectileMovementComponent->InitialSpeed = 20000.0f;
+	ProjectileMovementComponent->MaxSpeed = 20000.0f;
+	//ProjectileMovementComponent->bRotationFollowsVelocity = true;
+	//ProjectileMovementComponent->bShouldBounce = true;
+	//ProjectileMovementComponent->Bounciness = 0.1f;
 }
 
 // Called when the game starts or when spawned
