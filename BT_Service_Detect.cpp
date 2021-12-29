@@ -43,15 +43,22 @@ void UBT_Service_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 			{
 				// Character면, 블랙보드에 저장한다.
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieAIController::TargetPosKey, aPlayer);
-				//OwnerComp.GetBlackboardComponent()->SetValueAsVector(AZombieAIController::TargetPosKey, aPlayer);
 
+				//OwnerComp.GetBlackboardComponent()->SetValueAsVector(AZombieAIController::TargetPosKey, aPlayer->GetActorLocation());
+
+				if (ControllingPawn->GetDistanceTo(aPlayer) > 600.0f)
+				{
+					OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieAIController::TargetPosKey, nullptr);
+				}
 				return;
 			}
+			
 		}
 	}
 	else
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieAIController::TargetPosKey, nullptr);
+		return;
 	}
 
 

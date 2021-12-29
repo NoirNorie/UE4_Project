@@ -29,6 +29,9 @@
 // 사용자 애니메이션 헤더
 #include "TAnimInstance.h"
 
+// 투사체 헤더
+#include "BaseProjectile.h"
+
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
 
@@ -93,6 +96,14 @@ public:
 		int32 player_mag;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsReloading;
+
+	// 사격 관련 변수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset; // 총구 위치의 오프셋
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수
+
 	// -- 변수 -- 
 
 	// -- 함수 --

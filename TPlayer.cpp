@@ -203,6 +203,9 @@ void ATPlayer::Fire()
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
 			// 총알은 노티파이 함수에서 감소한다
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.1f, false);
+
+			
+
 		}
 
 	}

@@ -44,15 +44,12 @@ void AZombie::Tick(float DeltaTime)
 void AZombie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
-
 void AZombie::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	ZombieAnimInst = Cast<UZombieAnim>(GetMesh()->GetAnimInstance());
 }
-
 void AZombie::Attack()
 {
 	IsAttacking = true;
@@ -63,10 +60,20 @@ void AZombie::Detect()
 	IsDetect = true;
 	ZombieAnimInst->Detect(); // 추격 모션 동작
 }
-
-void AZombie::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+void AZombie::OnDetectEnded()
 {
-	IsAttacking = false; // 공격이 끝나면 비공격 상태로 전환한다.
-	OnAttackEnd.Broadcast(); // 공격이 종료되었다고 브로드캐스트한다.
+	IsDetect = false;
+	OnDetectEnd.Broadcast(); // 추적 종료 델리게이트 브로드캐스트
 }
+void AZombie::OnAttackEnded()
+{
+	IsAttacking = false;
+	OnAttackEnd.Broadcast(); // 공격 종료 델리게이트 브로드캐스트
+}
+
+//void AZombie::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	IsAttacking = false; // 공격이 끝나면 비공격 상태로 전환한다.
+//	OnAttackEnd.Broadcast(); // 공격이 종료되었다고 브로드캐스트한다.
+//}
 

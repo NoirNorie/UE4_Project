@@ -27,6 +27,9 @@ public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-	UPROPERTY() bool IsAttacking = false;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite) class AZombie* m_pZombie;
+
+	UPROPERTY() bool IsAttacking;
+	//UFUNCTION() void CallDeleFunc_AttackEnd(); // 공격 종료를 알릴 델리게이트 호출 함수
 
 };

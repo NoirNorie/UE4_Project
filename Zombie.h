@@ -16,7 +16,8 @@
 
 #include "Zombie.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate); // 공격 종료 멀티캐스트 델리게이트 선언
+DECLARE_MULTICAST_DELEGATE(FOnDetectEndDelegate); // 추적 종료 멀티캐스트 델리게이트 선언
 
 UCLASS()
 class PP_API AZombie : public ACharacter
@@ -29,7 +30,8 @@ public:
 	
 	UFUNCTION() void Attack();
 	UFUNCTION() void Detect();
-	FOnAttackEndDelegate OnAttackEnd;
+	FOnAttackEndDelegate OnAttackEnd; // 공격이 종료되었다는 델리게이트
+	FOnDetectEndDelegate OnDetectEnd; // 추적이 종료되었다는 델리게이트
 
 	// -- 변수--
 	UPROPERTY() bool IsAttacking;
@@ -54,5 +56,8 @@ public:
 	// 애니메이션 출력용 함수
 	virtual void PostInitializeComponents() override;
 
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	//void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	
+	UFUNCTION() void OnAttackEnded();
+	UFUNCTION() void OnDetectEnded();
 };

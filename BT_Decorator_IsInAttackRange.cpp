@@ -23,5 +23,7 @@ bool UBT_Decorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeComp
 	}
 
 	bool bResult = (Target->GetDistanceTo(ControllingPawn) <= 200.0f);
+
 	return bResult;
+
 }
