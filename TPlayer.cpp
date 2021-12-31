@@ -25,6 +25,11 @@ ATPlayer::ATPlayer()
 	FollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	CharacterMesh->SetupAttachment(RootComponent);
+	
+	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	Weapon_Socket->SetupAttachment(CharacterMesh);
 
 	// 애니메이션 블루프린트 속성 시정
 	static ConstructorHelpers::FClassFinder<UAnimInstance>TPlayerAnim(TEXT(
@@ -195,13 +200,22 @@ void ATPlayer::Fire()
 			FVector CameraLocation;
 			FRotator CameraRotation;
 			GetActorEyesViewPoint(CameraLocation, CameraRotation);
-			//FVector Gun_Direction;
 
-			FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-			FRotator MuzzleRotation = CameraRotation;
+			//FVector Gun_Direction;		
+			// CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 
+			
+			// Weapon_Socket->GetSocketLocation(TEXT("Socket_R_Hand"));
+			
+			//	FRotator MuzzleRotation = CameraRotation;
+
+			FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
+			FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
+
+			//FVector WeaponLocation = ;
 			//MuzzleLocation.Y += 60;
 			//MuzzleRotation.Pitch += 10.0f;
+			
 			UWorld* World = GetWorld();
 			if (World)
 			{

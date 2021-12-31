@@ -19,6 +19,8 @@
 #include "PlayerHUD.h"
 // 캐릭터 이동 컴포넌트 헤더(속도를 받아오는데 사용함
 #include "GameFramework/CharacterMovementComponent.h"
+// 스켈레탈 메시 컴포넌트 헤더
+#include "Components/SkeletalMeshComponent.h"
 
 // 인터페이스 헤더
 #include "TPlayerInterface.h"
@@ -58,6 +60,12 @@ public:
 	// 카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+	// 몸체
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Character, meta = (AllowPrivateAccess = "true"))
+		class USkeletalMeshComponent* CharacterMesh;
+	// 손 위치
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class USkeletalMeshComponent* Weapon_Socket; // 무기 장착 위치가 될 곳
 
 	FTimerHandle timer;
 	UPROPERTY() bool isFiring;
