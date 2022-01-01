@@ -209,28 +209,39 @@ void ATPlayer::Fire()
 			
 			//	FRotator MuzzleRotation = CameraRotation;
 
-			FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
-			FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
+
+
+			if (Weapon_Socket) // ¹«±â¸¦ È¹µæÇÏ¿´´Ù¸é
+			{
+				//FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
+				//FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
+
+				FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_MuzzleLoc"));
+				FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_MuzzleLoc"));
+				MuzzleRotation.Yaw += 90;
+
+				UWorld* World = GetWorld();
+				if (World)
+				{
+					FActorSpawnParameters SpawnParams;
+					SpawnParams.Owner = this;
+					SpawnParams.Instigator = GetInstigator();
+					ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
+						ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
+						);
+					if (Projectile)
+					{
+						FVector LaunchDirection = MuzzleRotation.Vector();
+						Projectile->FireInDirection(LaunchDirection);
+					}
+				}
+			}
 
 			//FVector WeaponLocation = ;
 			//MuzzleLocation.Y += 60;
 			//MuzzleRotation.Pitch += 10.0f;
 			
-			UWorld* World = GetWorld();
-			if (World)
-			{
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.Owner = this;
-				SpawnParams.Instigator = GetInstigator();
-				ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
-					ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
-					);
-				if (Projectile)
-				{
-					FVector LaunchDirection = MuzzleRotation.Vector();
-					Projectile->FireInDirection(LaunchDirection);
-				}
-			}
+			
 		}
 
 
