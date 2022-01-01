@@ -74,6 +74,9 @@ ATPlayer::ATPlayer()
 	{
 		ReloadMontage = Reload.Object;
 	}
+
+	WeaponSet();
+
 }
 
 // Called when the game starts or when spawned
@@ -200,25 +203,23 @@ void ATPlayer::Fire()
 			FVector CameraLocation;
 			FRotator CameraRotation;
 			GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
 			//FVector Gun_Direction;		
-			// CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-
-			
-			// Weapon_Socket->GetSocketLocation(TEXT("Socket_R_Hand"));
-			
-			//	FRotator MuzzleRotation = CameraRotation;
-
-
+			//CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);		
+			//Weapon_Socket->GetSocketLocation(TEXT("Socket_R_Hand"));		
+			//FRotator MuzzleRotation = CameraRotation;
 
 			if (Weapon_Socket) // 무기를 획득하였다면
 			{
 				//FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
 				//FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
 
-				FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_MuzzleLoc"));
-				FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_MuzzleLoc"));
-				MuzzleRotation.Yaw += 90;
+				//FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_MuzzleLoc"));
+				//FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_MuzzleLoc"));
+				FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_Root"));
+				FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_Root"));
+				MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
+
+				MuzzleRotation.Pitch += CameraRotation.Pitch;
 
 				UWorld* World = GetWorld();
 				if (World)
@@ -291,4 +292,12 @@ bool ATPlayer::GetWeaponCheck()
 bool ATPlayer::GetAimCheck()
 {
 	return CheckAim;
+}
+
+void ATPlayer::WeaponSet()
+{
+	FName ARName = "AR15";
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Tmp(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
+	USkeletalMesh* ARX = Tmp.Object;
+	WeaponMap.Add(ARName, ARX);
 }

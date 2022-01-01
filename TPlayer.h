@@ -155,9 +155,12 @@ public:
 
 	bool GetAimCheck(); // 조준 여부 확인
 
-	// -- 함수 --
-};
+	void WeaponSet();
 
+	// -- 함수 --
+
+	TMap<FName, USkeletalMesh*> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
+};
 
 // 리팩토링 도중에 빼낸 코드
 /*
