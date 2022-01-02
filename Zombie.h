@@ -8,6 +8,11 @@
 // 생성자 보조함수 헤더
 #include "UObject/ConstructorHelpers.h"
 
+// 캡슐 컴포넌트 헤더
+#include "Components/CapsuleComponent.h"
+// 정적 클래스 헤더
+#include "UObject/Class.h"
+
 // 좀비용으로 만든 컨트롤러 헤더
 #include "ZombieAIController.h"
 
@@ -30,16 +35,31 @@ public:
 	
 	UFUNCTION() void Attack();
 	UFUNCTION() void Detect();
+	UFUNCTION() float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+
+
+	UFUNCTION() void Death();
+	
+	
 	FOnAttackEndDelegate OnAttackEnd; // 공격이 종료되었다는 델리게이트
 	FOnDetectEndDelegate OnDetectEnd; // 추적이 종료되었다는 델리게이트
+
+	
 
 	// -- 변수--
 	UPROPERTY() bool IsAttacking;
 	UPROPERTY() bool IsDetect;
 
+	UPROPERTY() float Zombie_HP;
+	UPROPERTY() bool IsDeath;
+
+
 	// 애니메이션 인스턴스 변수
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 	class UZombieAnim* ZombieAnimInst;
+
+	UPROPERTY()
+	class UAnimMontage* DieMontage;
 
 
 protected:

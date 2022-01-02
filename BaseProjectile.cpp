@@ -17,26 +17,36 @@ ABaseProjectile::ABaseProjectile()
 	ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
 	ProjectileMovementComponent->InitialSpeed = 20000.0f;
 	ProjectileMovementComponent->MaxSpeed = 20000.0f;
-	//ProjectileMovementComponent->bRotationFollowsVelocity = true;
-	//ProjectileMovementComponent->bShouldBounce = true;
-	//ProjectileMovementComponent->Bounciness = 0.1f;
+
+	Damage = 20.0f;
 }
 
 // Called when the game starts or when spawned
 void ABaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnBeginOverlap);
+
 }
 
 // Called every frame
 void ABaseProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	UE_LOG(LogClass, Warning, TEXT("check"));
 }
 
 void ABaseProjectile::FireInDirection(const FVector& ShootDirection)
 {
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+}
+
+void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//if (OtherActor == this) return;
+	//if (OtherActor == GetOwner()) return;
+	UE_LOG(LogClass, Warning, TEXT("ApplyDamage"));
+	UGameplayStatics::ApplyDamage(OtherActor, Damage, nullptr, this, nullptr);
+	
 }
