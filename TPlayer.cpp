@@ -65,18 +65,8 @@ ATPlayer::ATPlayer()
 	WeaponName = "-";
 
 	// 총알 초기화
-	player_ammo = 30; // 총알 수
-	player_mag = 3; // 탄창 수
-
-	// 몽타주 초기화
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>Reload(TEXT(""));
-	if (Reload.Succeeded())
-	{
-		ReloadMontage = Reload.Object;
-	}
-
-	WeaponSet();
-
+	player_ammo = 0; // 총알 수
+	player_mag = 0; // 탄창 수
 }
 
 // Called when the game starts or when spawned
@@ -204,18 +194,10 @@ void ATPlayer::Fire()
 			FVector CameraLocation;
 			FRotator CameraRotation;
 			GetActorEyesViewPoint(CameraLocation, CameraRotation);
-			//FVector Gun_Direction;		
-			//CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);		
-			//Weapon_Socket->GetSocketLocation(TEXT("Socket_R_Hand"));		
-			//FRotator MuzzleRotation = CameraRotation;
 
 			if (Weapon_Socket) // 무기를 획득하였다면
 			{
-				//FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
-				//FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
 
-				//FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_MuzzleLoc"));
-				//FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_MuzzleLoc"));
 				FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_Root"));
 				FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_Root"));
 				MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
@@ -238,16 +220,9 @@ void ATPlayer::Fire()
 					}
 				}
 			}
-
-			//FVector WeaponLocation = ;
-			//MuzzleLocation.Y += 60;
-			//MuzzleRotation.Pitch += 10.0f;
-			
-			
 		}
 
-
-		if (player_ammo == 0)
+		if (player_ammo == 0) // 총알이 없는 경우 공이 소리만 나도록 한다
 		{
 			AudioComponent->SetSound(EmptyCue);
 			AudioComponent->Play();
@@ -260,11 +235,7 @@ void ATPlayer::Fire()
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
 			// 총알은 노티파이 함수에서 감소한다
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.1f, false);
-
-			
-
 		}
-
 	}
 }
 
@@ -273,7 +244,6 @@ void ATPlayer::StartReload()
 {
 	if (player_mag != 0 && CheckWeapon == true)
 	{
-		//CheckAim = false; // 장전 중 조준을 푼다
 		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
 		// 재장전 시 탄창은 노티파이 함수에서 감소한다.
 		IsReloading = true;
@@ -295,10 +265,31 @@ bool ATPlayer::GetAimCheck()
 	return CheckAim;
 }
 
-void ATPlayer::WeaponSet()
-{
-	FName ARName = "AR15";
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Tmp(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
-	USkeletalMesh* ARX = Tmp.Object;
-	WeaponMap.Add(ARName, ARX);
-}
+// 코드 정리 중 빼낸 것
+
+//void ATPlayer::WeaponSet()
+//{
+//	FName ARName = "AR15";
+//	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Tmp(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
+//	USkeletalMesh* ARX = Tmp.Object;
+//	WeaponMap.Add(ARName, ARX);
+//}
+
+
+//FVector Gun_Direction;		
+//CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);		
+//Weapon_Socket->GetSocketLocation(TEXT("Socket_R_Hand"));		
+//FRotator MuzzleRotation = CameraRotation;
+
+//FVector MuzzleLocation = CharacterMesh->GetSocketLocation(TEXT("Socket_R_Hand"));
+//FRotator MuzzleRotation = CharacterMesh->GetSocketRotation(TEXT("Socket_R_Hand"));
+
+//FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_MuzzleLoc"));
+//FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_MuzzleLoc"));
+
+//// 몽타주 초기화
+//static ConstructorHelpers::FObjectFinder<UAnimMontage>Reload(TEXT(""));
+//if (Reload.Succeeded())
+//{
+//	ReloadMontage = Reload.Object;
+//}

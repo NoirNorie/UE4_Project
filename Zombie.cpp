@@ -78,19 +78,15 @@ float AZombie::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	if (IsDeath != true) // 죽으면 데미지를 받지 않게 한다 (엔진 충돌로 인해 게임이 터진다)
 	{
 		float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), damage));
-
 		Zombie_HP -= damage;
-
-
 		if (Zombie_HP <= 0)
 		{
 			Death();
 		}
 
-		UE_LOG(LogClass, Warning, TEXT("Damage: %f"), damage);
-
+		// 디버그용 메시지
+		// UE_LOG(LogClass, Warning, TEXT("Damage: %f"), damage);
 		return damage;
 	}
 	return 0;
@@ -100,58 +96,17 @@ void AZombie::Death()
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None); // 움직임을 멈춘다
 	
-	IsDeath = true;
-	ZombieAnimInst->IsDead = true;
+	IsDeath = true; // 사망 상태를 체크
+	ZombieAnimInst->IsDead = true; // 애니메이션에 사망 상태를 알린다.
 
 	GetController()->UnPossess();
 
 	// 애니매이션에서 루프를 멈춰놓아서 쓰러진 상태로 존재한다.
+	// 별도의 동작 불필요
 	FTimerHandle WaitHandle;
-	float WaitTime = 10.0f;
+	float WaitTime = 10.0f; // 타이머의 동작 시간
 	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
 		{
-			Destroy(); // 액터 소멸
-		}), WaitTime, false);
-	
-
-
-	// 게임이 터진다. 다른 방법을 찾아야 한다.
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage>LoadDieMontage(TEXT(
-	//	"AnimMontage'/Game/Blueprint/Enemy/ZomibeDie.ZomibeDie'")
-	//);
-	//if (LoadDieMontage.Succeeded())
-	//{
-	//	DieMontage = LoadDieMontage.Object;
-	//	//UE_LOG(LogClass, Warning, TEXT("Load"));
-	//}
-	//GetMesh()->SetAnimationMode(LoadDieMontage.Object->RegenerateClass(UAnimMontage::GetClass));
-	//GetMesh()->SetAnimInstanceClass(LoadDieMontage.Object->GetClass());
-	//PlayAnimMontage(DieMontage);	
-	
+			Destroy(); // 사망 상태 후 10초 후 액터 소멸
+		}), WaitTime, false);	
 }
-
-
-//void AZombie::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-//{
-//	IsAttacking = false; // 공격이 끝나면 비공격 상태로 전환한다.
-//	OnAttackEnd.Broadcast(); // 공격이 종료되었다고 브로드캐스트한다.
-//}
-
-//void AZombie::ReceivePointDamage(float Damage, const UDamageType* DamageType, FVector HitLocation, FVector HitNormal,
-//	UPrimitiveComponent* HitComponent, FName BoneName, FVector ShotFromDirection, AController* InstigateBy,
-//	AActor* DamageCauser, const FHitResult& HitInfo)
-//{
-//	if (BoneName == TEXT("Character1_Head"))
-//	{
-//		IsDeath = true;
-//		Death();
-//	}
-//	else
-//	{
-//		Zombie_HP -= Damage;
-//		if (Zombie_HP <= 0)
-//		{
-//			Death();
-//		}
-//	}
-//}

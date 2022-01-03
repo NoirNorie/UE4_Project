@@ -25,34 +25,23 @@ ABaseProjectile::ABaseProjectile()
 void ABaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	//CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// 콜리전을 추가한다.
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnBeginOverlap);
 	CollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ABaseProjectile::OnEndOverlap);
 }
 
 void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//UE_LOG(LogClass, Warning, TEXT("ApplyDamage"));
-	//FHitResult hitResult(ForceInit);
-	//ABaseProjectile* hitBase = Cast<ABaseProjectile>(hitResult.Actor);
-
-	//if (hitBase != nullptr)
-	//{
-	//	FPointDamageEvent damageEvent;
-	//	damageEvent.HitInfo = hitResult;
-	//	hitBase->TakeDamage(Damage, damageEvent, GetInstigatorController(), this);
-	//}
-
-	if (OtherActor == this) return;
+	if (OtherActor == this) return; // 그럴일은 없겠지만 총알과 총알이 충돌한 경우의 예외처리
 	if (OtherActor == GetOwner()) return;
 
-	UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
-
+	UGameplayStatics::ApplyDamage(OtherActor, Damage, NULL, GetOwner(), NULL); // 충돌한 객체에게 이 총알의 데미지를 가한다
 }
 
 void ABaseProjectile::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-
+	// 겹친 상태의 종료 시의 이벤트
+	// 아직 내용이 없다
 }
 
 // Called every frame

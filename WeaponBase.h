@@ -49,5 +49,5 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Name")
 		FName Weapon_Name; // 무기 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Ammo")
-		float W_Ammo; // 무기 총알
+		int32 W_Ammo; // 무기 총알
 };

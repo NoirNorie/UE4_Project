@@ -6,5 +6,5 @@
 AW_AK::AW_AK()
 {
 	Weapon_Name = "AK-47";
-	W_Ammo = 30;
+	W_Ammo = 25;
 }
