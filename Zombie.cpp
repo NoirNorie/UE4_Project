@@ -24,14 +24,6 @@ AZombie::AZombie()
 		GetMesh()->SetAnimInstanceClass(TZombieAnim.Class);
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>LoadDieMontage(TEXT(
-		"AnimMontage'/Game/Blueprint/Enemy/ZomibeDie.ZomibeDie'")
-	);
-	if (LoadDieMontage.Succeeded())
-	{
-		DieMontage = LoadDieMontage.Object;
-	}
-
 	Zombie_HP = 100.0f;
 	IsDeath = false;
 }
@@ -83,19 +75,58 @@ void AZombie::OnAttackEnded()
 
 float AZombie::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (IsDeath != true) // 죽으면 데미지를 받지 않게 한다 (엔진 충돌로 인해 게임이 터진다)
+	{
+		float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	UE_LOG(LogClass, Warning, TEXT("Damage: %f"), damage);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), damage));
 
-	return damage;
+		Zombie_HP -= damage;
+
+
+		if (Zombie_HP <= 0)
+		{
+			Death();
+		}
+
+		UE_LOG(LogClass, Warning, TEXT("Damage: %f"), damage);
+
+		return damage;
+	}
+	return 0;
 }
 
 void AZombie::Death()
 {
-	//AIControllerClass->ConditionalFinishDestroy();
 	GetCharacterMovement()->SetMovementMode(MOVE_None); // 움직임을 멈춘다
-	PlayAnimMontage(DieMontage);
-	AutoPossessAI = EAutoPossessAI::Disabled;
+	
+	IsDeath = true;
+	ZombieAnimInst->IsDead = true;
+
+	GetController()->UnPossess();
+
+	// 애니매이션에서 루프를 멈춰놓아서 쓰러진 상태로 존재한다.
+	FTimerHandle WaitHandle;
+	float WaitTime = 10.0f;
+	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			Destroy(); // 액터 소멸
+		}), WaitTime, false);
+	
+
+
+	// 게임이 터진다. 다른 방법을 찾아야 한다.
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage>LoadDieMontage(TEXT(
+	//	"AnimMontage'/Game/Blueprint/Enemy/ZomibeDie.ZomibeDie'")
+	//);
+	//if (LoadDieMontage.Succeeded())
+	//{
+	//	DieMontage = LoadDieMontage.Object;
+	//	//UE_LOG(LogClass, Warning, TEXT("Load"));
+	//}
+	//GetMesh()->SetAnimationMode(LoadDieMontage.Object->RegenerateClass(UAnimMontage::GetClass));
+	//GetMesh()->SetAnimInstanceClass(LoadDieMontage.Object->GetClass());
+	//PlayAnimMontage(DieMontage);	
 	
 }
 

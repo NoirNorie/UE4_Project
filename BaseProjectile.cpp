@@ -25,8 +25,33 @@ ABaseProjectile::ABaseProjectile()
 void ABaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnBeginOverlap);
+	CollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ABaseProjectile::OnEndOverlap);
+}
+
+void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//UE_LOG(LogClass, Warning, TEXT("ApplyDamage"));
+	//FHitResult hitResult(ForceInit);
+	//ABaseProjectile* hitBase = Cast<ABaseProjectile>(hitResult.Actor);
+
+	//if (hitBase != nullptr)
+	//{
+	//	FPointDamageEvent damageEvent;
+	//	damageEvent.HitInfo = hitResult;
+	//	hitBase->TakeDamage(Damage, damageEvent, GetInstigatorController(), this);
+	//}
+
+	if (OtherActor == this) return;
+	if (OtherActor == GetOwner()) return;
+
+	UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
+
+}
+
+void ABaseProjectile::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
 
 }
 
@@ -34,19 +59,9 @@ void ABaseProjectile::BeginPlay()
 void ABaseProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogClass, Warning, TEXT("check"));
 }
 
 void ABaseProjectile::FireInDirection(const FVector& ShootDirection)
 {
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
-}
-
-void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//if (OtherActor == this) return;
-	//if (OtherActor == GetOwner()) return;
-	UE_LOG(LogClass, Warning, TEXT("ApplyDamage"));
-	UGameplayStatics::ApplyDamage(OtherActor, Damage, nullptr, this, nullptr);
-	
 }

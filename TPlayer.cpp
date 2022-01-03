@@ -83,7 +83,7 @@ ATPlayer::ATPlayer()
 void ATPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
 }
 
 // Called every frame
@@ -198,6 +198,7 @@ void ATPlayer::Fire()
 {
 	if (isFiring == true && CheckWeapon == true)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
 		if (ProjectileClass)
 		{
 			FVector CameraLocation;

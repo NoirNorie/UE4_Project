@@ -35,7 +35,8 @@ public:
 	
 	UFUNCTION() void Attack();
 	UFUNCTION() void Detect();
-	UFUNCTION() float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+	UFUNCTION()
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 
 	UFUNCTION() void Death();
@@ -57,9 +58,6 @@ public:
 	// 애니메이션 인스턴스 변수
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 	class UZombieAnim* ZombieAnimInst;
-
-	UPROPERTY()
-	class UAnimMontage* DieMontage;
 
 
 protected:
