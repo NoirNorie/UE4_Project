@@ -188,40 +188,6 @@ void ATPlayer::Fire()
 {
 	if (isFiring == true && CheckWeapon == true)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
-		if (ProjectileClass)
-		{
-			FVector CameraLocation;
-			FRotator CameraRotation;
-			GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-			if (Weapon_Socket) // 무기를 획득하였다면
-			{
-
-				FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_Root"));
-				FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_Root"));
-				MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
-
-				MuzzleRotation.Pitch += CameraRotation.Pitch;
-
-				UWorld* World = GetWorld();
-				if (World)
-				{
-					FActorSpawnParameters SpawnParams;
-					SpawnParams.Owner = this;
-					SpawnParams.Instigator = GetInstigator();
-					ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
-						ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
-						);
-					if (Projectile)
-					{
-						FVector LaunchDirection = MuzzleRotation.Vector();
-						Projectile->FireInDirection(LaunchDirection);
-					}
-				}
-			}
-		}
-
 		if (player_ammo == 0) // 총알이 없는 경우 공이 소리만 나도록 한다
 		{
 			AudioComponent->SetSound(EmptyCue);
@@ -230,6 +196,40 @@ void ATPlayer::Fire()
 
 		if (player_ammo > 0)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
+			if (ProjectileClass)
+			{
+				FVector CameraLocation;
+				FRotator CameraRotation;
+				GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+				if (Weapon_Socket) // 무기를 획득하였다면
+				{
+
+					FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_Root"));
+					FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_Root"));
+					MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
+
+					MuzzleRotation.Pitch += CameraRotation.Pitch;
+
+					UWorld* World = GetWorld();
+					if (World)
+					{
+						FActorSpawnParameters SpawnParams;
+						SpawnParams.Owner = this;
+						SpawnParams.Instigator = GetInstigator();
+						ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
+							ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
+							);
+						if (Projectile)
+						{
+							FVector LaunchDirection = MuzzleRotation.Vector();
+							Projectile->FireInDirection(LaunchDirection);
+						}
+					}
+				}
+			}
+
 			// 사운드 재생은 애니메이션 노티파이에 부착했다
 			// 소리가 중첩될 수 있도록 처리함
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
