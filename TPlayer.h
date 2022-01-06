@@ -55,14 +55,11 @@ public:
 
 	// -- 변수 -- 
 	// 스프링 암
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* TPSpringArm;
 	// 카메라
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
-	// 몸체
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Character, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* CharacterMesh;
 	// 손 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USkeletalMeshComponent* Weapon_Socket; // 무기 장착 위치가 될 곳
@@ -95,7 +92,7 @@ public:
 	// 애니메이션 인스턴스 변수
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 		class UTAnimInstance* AnimInst;
-	
+
 
 	// 재장전 변수
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -109,15 +106,15 @@ public:
 
 	// 사격 관련 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	FVector MuzzleOffset; // 총구 위치의 오프셋
+		FVector MuzzleOffset; // 총구 위치의 오프셋
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수
+		TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수
 
-	// -- 변수 -- 
+		// -- 변수 -- 
 
-	// -- 함수 --
-	// - 엔진 함수
+		// -- 함수 --
+		// - 엔진 함수
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;

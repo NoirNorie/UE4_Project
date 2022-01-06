@@ -1,12 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "TPlayer.h"
 
 // Sets default values
 ATPlayer::ATPlayer()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -21,15 +20,18 @@ ATPlayer::ATPlayer()
 	TPSpringArm->TargetArmLength = 300.0f;
 	TPSpringArm->bUsePawnControlRotation = true;
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCmaera"));
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	CharacterMesh->SetupAttachment(RootComponent);
-	
+	//Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	//Mesh->SetupAttachment(RootComponent);
+
+	FName weaponSocketName = TEXT("Socket_R_Hand");
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	Weapon_Socket->SetupAttachment(CharacterMesh);
+	//Weapon_Socket->SetupAttachment(GetMesh());
+	Weapon_Socket->AttachToComponent(GetMesh(), 
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
 	// 애니메이션 블루프린트 속성 시정
 	static ConstructorHelpers::FClassFinder<UAnimInstance>TPlayerAnim(TEXT(
@@ -94,7 +96,7 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	// 카메라 회전 바인드
 	PlayerInputComponent->BindAxis("Turn", this, &ATPlayer::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, & ATPlayer::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &ATPlayer::AddControllerPitchInput);
 
 	// 점프 바인드
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATPlayer::StartJump);
@@ -121,7 +123,7 @@ void ATPlayer::MoveForward(float v)
 {
 	FRotator Rotation = Controller->GetControlRotation();
 	FRotator YawRotation(0, Rotation.Yaw, 0);
-	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);	
+	FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	AddMovementInput(Direction, v);
 }
 // 좌우이동 함수
