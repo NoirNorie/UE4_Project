@@ -14,24 +14,23 @@ ATPlayer::ATPlayer()
 	//GetCharacterMovement()->AirControl = 0.2f;
 	//GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 
-
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
 	TPSpringArm->SetupAttachment(RootComponent);
-	TPSpringArm->TargetArmLength = 300.0f;
+	TPSpringArm->TargetArmLength = CamArmLength = 300.0f;
+	CamOriginPos.X = 100.0f;
+	CamOriginPos.Y = 50.0f;
+	CamOriginPos.Z = 50.0f;
 	TPSpringArm->bUsePawnControlRotation = true;
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
+	TFollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TFollowCamera"));
+	TFollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
+	TFollowCamera->bUsePawnControlRotation = false;
 
-	//Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	//Mesh->SetupAttachment(RootComponent);
+	
 
 	FName weaponSocketName = TEXT("Socket_R_Hand");
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	//Weapon_Socket->SetupAttachment(GetMesh());
-	Weapon_Socket->AttachToComponent(GetMesh(), 
-		FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
+	Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
 	// 애니메이션 블루프린트 속성 시정
 	static ConstructorHelpers::FClassFinder<UAnimInstance>TPlayerAnim(TEXT(
@@ -158,12 +157,12 @@ void ATPlayer::StopSprinting()
 // 조준 함수
 void ATPlayer::StartAim()
 {
-	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView /= 2);
+	TFollowCamera->SetFieldOfView(TFollowCamera->FieldOfView /= 2);
 	CheckAim = true;
 }
 void ATPlayer::StopAim()
 {
-	FollowCamera->SetFieldOfView(FollowCamera->FieldOfView *= 2);
+	TFollowCamera->SetFieldOfView(TFollowCamera->FieldOfView *= 2);
 	CheckAim = false;
 }
 
@@ -198,39 +197,69 @@ void ATPlayer::Fire()
 
 		if (player_ammo > 0)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
-			if (ProjectileClass)
+
+			// 1차 충돌 검사용 선분
+
+			FHitResult OutHit; // 충돌 검사를 할 변수
+			FVector Line1Start = TFollowCamera->GetComponentLocation(); // 선분의 시작점
+			FVector Line1FV = TFollowCamera->GetForwardVector(); // 선분의 방향 벡터
+			FVector Line1End = Line1Start + (Line1FV * 10000.0f); // 선분의 끝점
+
+			FCollisionQueryParams CollisionParams;
+			CollisionParams.AddIgnoredActor(this); // 충돌에서 이 플레이어 액터를 제외한다.
+			DrawDebugLine(GetWorld(), Line1Start, Line1End, FColor::Green, true);
+			bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Line1Start, Line1End, ECC_Visibility, CollisionParams);
+
+			if (isHit)
 			{
-				FVector CameraLocation;
-				FRotator CameraRotation;
-				GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-				if (Weapon_Socket) // 무기를 획득하였다면
+				if (OutHit.GetActor())
 				{
+					DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
+					UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
+					//UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
+					AActor* HitActor = OutHit.GetActor();
+					GameStatic->ApplyPointDamage(HitActor, 50.0f, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
 
-					FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Socket_Root"));
-					FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Socket_Root"));
-					MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
-
-					MuzzleRotation.Pitch += CameraRotation.Pitch;
-
-					UWorld* World = GetWorld();
-					if (World)
-					{
-						FActorSpawnParameters SpawnParams;
-						SpawnParams.Owner = this;
-						SpawnParams.Instigator = GetInstigator();
-						ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
-							ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
-							);
-						if (Projectile)
-						{
-							FVector LaunchDirection = MuzzleRotation.Vector();
-							Projectile->FireInDirection(LaunchDirection);
-						}
-					}
 				}
 			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
+			//if (ProjectileClass)
+			//{
+			//	FVector CameraLocation;
+			//	FRotator CameraRotation;
+			//	GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+			//	if (Weapon_Socket) // 무기를 획득하였다면
+			//	{
+
+			//		FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Muzzle"));
+			//		FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Muzzle"));
+			//		//FVector MuzzleLocation = GetMesh()->GetComponentLocation();
+			//		//FRotator MuzzleRotation = GetMesh()->GetComponentRotation();
+			//			
+			//		//Weapon_Socket->GetSocketRotation(TEXT("Muzzle"));
+
+			//		//MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
+			//		//MuzzleRotation += CameraRotation;
+
+			//		UWorld* World = GetWorld();
+			//		if (World)
+			//		{
+			//			FActorSpawnParameters SpawnParams;
+			//			SpawnParams.Owner = this;
+			//			SpawnParams.Instigator = GetInstigator();
+			//			ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
+			//				ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
+			//				);
+			//			if (Projectile)
+			//			{
+			//				FVector LaunchDirection = MuzzleRotation.Vector();
+			//				Projectile->FireInDirection(LaunchDirection);
+			//			}
+			//		}
+			//	}
+			//}
 
 			// 사운드 재생은 애니메이션 노티파이에 부착했다
 			// 소리가 중첩될 수 있도록 처리함

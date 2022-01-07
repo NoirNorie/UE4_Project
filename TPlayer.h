@@ -36,6 +36,13 @@
 // 투사체 헤더
 #include "BaseProjectile.h"
 
+// 게임 플레이 헤더
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+
+// 디버그 헤더
+#include "DrawDebugHelpers.h"
+
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
 
@@ -59,7 +66,11 @@ public:
 		class USpringArmComponent* TPSpringArm;
 	// 카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FollowCamera;
+		class UCameraComponent* TFollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		FVector CamOriginPos;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		float CamArmLength;
 	// 손 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USkeletalMeshComponent* Weapon_Socket; // 무기 장착 위치가 될 곳
@@ -107,6 +118,9 @@ public:
 	// 사격 관련 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset; // 총구 위치의 오프셋
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UGameplayStatics* GameStatic;
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 		TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수

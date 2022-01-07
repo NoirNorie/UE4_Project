@@ -73,6 +73,22 @@ void AZombie::OnAttackEnded()
 	OnAttackEnd.Broadcast(); // 공격 종료 델리게이트 브로드캐스트
 }
 
+//void AZombie::ReceivePointDamage(float Damage, const UDamageType* DamageType,
+//	FVector HitLocation, FVector HitNormal,
+//	UPrimitiveComponent* HitComponent, FName BoneName,
+//	FVector ShotFromDirection, AController* InstigatedBy,
+//	AActor* DamageCauser, const FHitResult& HitInfo)
+//{
+//	FDamageEvent DamageEvent;
+//
+//	Zombie_HP -= Damage;
+//	if (Zombie_HP <= 0)
+//	{
+//		Death();
+//	}
+//}
+
+
 float AZombie::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	if (IsDeath != true) // 죽으면 데미지를 받지 않게 한다 (엔진 충돌로 인해 게임이 터진다)
