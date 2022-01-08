@@ -32,6 +32,8 @@ ATPlayer::ATPlayer()
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
+	FireRate = 0.0f; // 초기 발사 속도는 무기가 없으므로 0.0f;
+
 	// 애니메이션 블루프린트 속성 시정
 	static ConstructorHelpers::FClassFinder<UAnimInstance>TPlayerAnim(TEXT(
 		"AnimBlueprint'/Game/Blueprint/PlayerAnim.PlayerAnim'")
@@ -62,9 +64,29 @@ ATPlayer::ATPlayer()
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
 
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
+	if (WeaponSK1.Succeeded())
+	{
+		FName WeaponSKName = "AR-15";
+		WeaponMap.Add(WeaponSKName, WeaponSK1);
+	}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK2(TEXT("SkeletalMesh'/Game/Blueprint/SK_KA47_X.SK_KA47_X'"));
+	if (WeaponSK2.Succeeded())
+	{
+		FName WeaponSKName = "AK-47";
+		WeaponMap.Add(WeaponSKName, WeaponSK2);
+	}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK3(TEXT("SkeletalMesh'/Game/Blueprint/SK_KA_Val_X.SK_KA_Val_X'"));
+	if (WeaponSK3.Succeeded())
+	{
+		FName WeaponSKName = "KA-Val";
+		WeaponMap.Add(WeaponSKName, WeaponSK3);
+	}
+
+
+
 	// 무기 이름 초기화
 	WeaponName = "-";
-
 	// 총알 초기화
 	player_ammo = 0; // 총알 수
 	player_mag = 0; // 탄창 수
@@ -215,57 +237,22 @@ void ATPlayer::Fire()
 				if (OutHit.GetActor())
 				{
 					DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
-					UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
+					//UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
 					//UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
 					AActor* HitActor = OutHit.GetActor();
-					GameStatic->ApplyPointDamage(HitActor, 50.0f, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
+					
+					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
 
 				}
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
-			//if (ProjectileClass)
-			//{
-			//	FVector CameraLocation;
-			//	FRotator CameraRotation;
-			//	GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-			//	if (Weapon_Socket) // 무기를 획득하였다면
-			//	{
-
-			//		FVector MuzzleLocation = Weapon_Socket->GetSocketLocation(TEXT("Muzzle"));
-			//		FRotator MuzzleRotation = Weapon_Socket->GetSocketRotation(TEXT("Muzzle"));
-			//		//FVector MuzzleLocation = GetMesh()->GetComponentLocation();
-			//		//FRotator MuzzleRotation = GetMesh()->GetComponentRotation();
-			//			
-			//		//Weapon_Socket->GetSocketRotation(TEXT("Muzzle"));
-
-			//		//MuzzleRotation.Yaw += 90; // 스켈레톤 메시 방향과 일치시키기 위해 90도를 돌려준다.
-			//		//MuzzleRotation += CameraRotation;
-
-			//		UWorld* World = GetWorld();
-			//		if (World)
-			//		{
-			//			FActorSpawnParameters SpawnParams;
-			//			SpawnParams.Owner = this;
-			//			SpawnParams.Instigator = GetInstigator();
-			//			ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(
-			//				ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams
-			//				);
-			//			if (Projectile)
-			//			{
-			//				FVector LaunchDirection = MuzzleRotation.Vector();
-			//				Projectile->FireInDirection(LaunchDirection);
-			//			}
-			//		}
-			//	}
-			//}
 
 			// 사운드 재생은 애니메이션 노티파이에 부착했다
 			// 소리가 중첩될 수 있도록 처리함
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
 			// 총알은 노티파이 함수에서 감소한다
-			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, 0.1f, false);
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
 		}
 	}
 }
@@ -294,6 +281,23 @@ bool ATPlayer::GetWeaponCheck()
 bool ATPlayer::GetAimCheck()
 {
 	return CheckAim;
+}
+
+void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
+	WeaponName = weapon_Name;
+	player_ammo = weaponAmmo;
+	player_Damage = weaponDamage;
+	FireRate = weaponFireRate;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));
+	
+	USkeletalMesh* CurrentWeapon = WeaponMap.Find(WeaponName)->Object;
+	Weapon_Socket->SetSkeletalMesh(CurrentWeapon);
+	CheckWeapon = true;
+	
+
+	
 }
 
 // 코드 정리 중 빼낸 것

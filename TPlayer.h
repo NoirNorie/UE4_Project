@@ -47,7 +47,7 @@
 #include "TPlayer.generated.h"
 
 UCLASS()
-class PP_API ATPlayer : public ACharacter
+class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -118,6 +118,10 @@ public:
 	// 사격 관련 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset; // 총구 위치의 오프셋
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+		float player_Damage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+		float FireRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
@@ -163,25 +167,14 @@ public:
 
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인
-
 	bool GetAimCheck(); // 조준 여부 확인
-
 	void WeaponSet();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
+	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate);
+	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate) override;
 
 	// -- 함수 --
 
-	TMap<FName, USkeletalMesh*> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
+	TMap<FName, ConstructorHelpers::FObjectFinder<USkeletalMesh>> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
 };
-
-// 리팩토링 도중에 빼낸 코드
-/*
-	// 인터페이스에서 함수를 가져온다
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
-	//void Equip_WeaponItem();
-	//virtual void Equip_WeaponItem_Implementation() override;
-
-	// 상호작용 함수 선언
-	//UFUNCTION() void PlayerInteraction();
-
-
-*/

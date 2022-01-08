@@ -15,6 +15,9 @@
 // 스켈레탈 메시 컴포넌트 헤더
 #include "Components/SkeletalMeshComponent.h"
 
+#include "TPlayer.h"
+#include "TPlayerInterface.h"
+
 #include "WeaponBase.generated.h"
 
 // 무기 정보의 베이스 클래스
@@ -50,4 +53,19 @@ public:
 		FName Weapon_Name; // 무기 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Ammo")
 		int32 W_Ammo; // 무기 총알
+	UPROPERTY(VIsibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: WeaponDamage")
+		float W_Damage; // 무기 데미지
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: FireRate")
+		float W_FireRate; // 무기의 발사 속도
+
+	//UFUNCTION()
+	//	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	//		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	//		bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor, UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex, bool bFromSweep,
+			const FHitResult& SweepResult);
 };

@@ -81,11 +81,19 @@ void UTAnimInstance::AnimNotify_ReloadEnd()
 	ATPlayer* Character = Cast<ATPlayer>(Pawn);
 	if (Character)
 	{
+		
 		if (Character->WeaponName == "AR-15")
 		{
-			Character->player_ammo = 30; // 일단 AR 탄창으로 고정한다
+			Character->player_ammo = 30;
 		}
-		else if(Character->WeaponName == "AK-47")
+		else if (Character->WeaponName == "AK-47")
+		{
+			Character->player_ammo = 25;
+		}
+		else if (Character->WeaponName == "KA-Val")
+		{
+			Character->player_ammo = 11;
+		}
 
 		Character->player_mag--; // 탄창을 1개 줄인다.
 	}
