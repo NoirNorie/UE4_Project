@@ -54,6 +54,8 @@ ATPlayer::ATPlayer()
 	if (RifleShot.Succeeded())
 	{
 		ShotCue = RifleShot.Object;
+		//ShotCue = Cast<USoundCue>;
+
 	}
 	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
 	if (RifleEmpty.Succeeded())
@@ -64,6 +66,8 @@ ATPlayer::ATPlayer()
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
 
+
+	// 사용할 무기를 맵에 기록해 놓는다
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
 	if (WeaponSK1.Succeeded())
 	{
@@ -291,13 +295,12 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));
-	
+
+	GetOwner()->FindComponentByClass<UAudioComponent>()->SetIntParameter(TEXT("soundSelect"), 2);
+
 	USkeletalMesh* CurrentWeapon = WeaponMap.Find(WeaponName)->Object;
 	Weapon_Socket->SetSkeletalMesh(CurrentWeapon);
 	CheckWeapon = true;
-	
-
-	
 }
 
 // 코드 정리 중 빼낸 것
