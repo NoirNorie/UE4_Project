@@ -57,6 +57,8 @@ public:
 		float W_Damage; // 무기 데미지
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: FireRate")
 		float W_FireRate; // 무기의 발사 속도
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: WeaponIndex")
+		int32 W_IDX; // 사운드 출력할 무기의 인덱스
 
 	//UFUNCTION()
 	//	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

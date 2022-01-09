@@ -47,7 +47,7 @@ void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 				if (EQWeaponInterface)
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Active")));
-					EQWeaponInterface->Execute_EquipWeaponItem(OtherActor, Weapon_Name, W_Ammo, W_Damage, W_FireRate); // 인터페이스로 값 전달
+					EQWeaponInterface->Execute_EquipWeaponItem(OtherActor, Weapon_Name, W_Ammo, W_Damage, W_FireRate, W_IDX); // 인터페이스로 값 전달
 				}			
 				Destroy();
 			}		

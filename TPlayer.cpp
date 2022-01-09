@@ -287,7 +287,7 @@ bool ATPlayer::GetAimCheck()
 	return CheckAim;
 }
 
-void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate)
+void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
 	WeaponName = weapon_Name;
@@ -295,8 +295,8 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));
+	AnimInst->shotIDX = weaponIDX;
 
-	GetOwner()->FindComponentByClass<UAudioComponent>()->SetIntParameter(TEXT("soundSelect"), 2);
 
 	USkeletalMesh* CurrentWeapon = WeaponMap.Find(WeaponName)->Object;
 	Weapon_Socket->SetSkeletalMesh(CurrentWeapon);

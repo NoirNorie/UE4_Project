@@ -10,4 +10,5 @@ AW_Rifle::AW_Rifle()
 	W_Ammo = 30;
 	W_Damage = 25.0f;
 	W_FireRate = 0.1f;
+	W_IDX = 0;
 }

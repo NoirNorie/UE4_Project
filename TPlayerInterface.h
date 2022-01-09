@@ -28,7 +28,7 @@ public:
 	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
 	//void Equip_WeaponItem();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
-	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate); // 인터페이스는 구현이 불가능함
+	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponType); // 인터페이스는 구현이 불가능함
 	//virtual void Equip_WeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate)= 0;
 
 	// 탄창 획득 인터페이스 함수

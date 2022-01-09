@@ -61,9 +61,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool IsReload; // 재장전 여부를 알릴 변수
 
+	// 사운드 변수
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+		class USoundCue* ShotCue;
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+		class UAudioComponent* ShotCueComponent;
+
+	int32 shotIDX;
 	// -- 변수 --
 
 	// -- 노티파이 변수 --
+	UFUNCTION()
+	void AnimNotify_FireStart();
 	UFUNCTION()
 	void AnimNotify_FireEnd(); // 사격 종료를 알릴 변수
 	UFUNCTION()

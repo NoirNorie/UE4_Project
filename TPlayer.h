@@ -171,8 +171,8 @@ public:
 	void WeaponSet();
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
-	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate);
-	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate) override;
+	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX);
+	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX) override;
 
 	// -- ÇÔ¼ö --
 

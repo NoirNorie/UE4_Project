@@ -9,4 +9,5 @@ AW_Val::AW_Val()
 	W_Ammo = 15;
 	W_Damage = 50.0f;
 	W_FireRate = 0.5f;
+	W_IDX = 2;
 }

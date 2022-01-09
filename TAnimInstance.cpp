@@ -6,6 +6,15 @@
 UTAnimInstance::UTAnimInstance()
 {
 	CurrentPawnSpeed = 0.0f;
+
+	static ConstructorHelpers::FObjectFinder<USoundCue>RifleShot(TEXT("SoundCue'/Game/Blueprint/WeaponSound/Rifle2_Cue.Rifle2_Cue'"));
+	if (RifleShot.Succeeded())
+	{
+		ShotCue = RifleShot.Object;
+	}
+	ShotCueComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ShotSoundCue"));
+	ShotCueComponent->SetSound(ShotCue);
+	
 }
 
 void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -36,6 +45,14 @@ void UTAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		aim_Pitch = Character->GetBaseAimRotation().Pitch;
 		aim_Yaw = Character->GetBaseAimRotation().Yaw;
 	}
+	//static ConstructorHelpers::FObjectFinder<USoundCue>RifleShot(TEXT("SoundCue'/Game/Blueprint/WeaponSound/Rifle2_Cue.Rifle2_Cue'"));
+	//if (RifleShot.Succeeded())
+	//{
+	//	ShotCue = RifleShot.Object;
+	//}
+	//ShotCueComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ShotSoundCue"));
+	//ShotCueComponent->SetSound(ShotCue);
+	ShotCueComponent->SetIntParameter("soundSelect", shotIDX);
 }
 
 // 사격 함수
@@ -43,7 +60,13 @@ void UTAnimInstance::PlayFire()
 {
 	IsFire = true; // 사격 시작
 }
-
+void UTAnimInstance::AnimNotify_FireStart() //
+{
+	//ShotCueComponent->SetIntParameter("soundSelect", soundIDX);
+	//shotIDX = soundIDX;
+	//ShotCueComponent->SetIntParameter("soundSelect", shotIDX);
+	ShotCueComponent->Play();
+}
 // 사격 모션이 종료된 것을 확인하는 노티파이 함수
 void UTAnimInstance::AnimNotify_FireEnd()
 {
