@@ -40,11 +40,44 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+// 위젯 헤더
+#include "Components/Widget.h"
+
 // 디버그 헤더
 #include "DrawDebugHelpers.h"
 
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
+
+// 아이템의 열거형
+UENUM(BlueprintType) 
+enum class EItemType : uint8
+{
+	ITEM_None		UMETA(DisplayName = "None"),
+	ITEM_Usable		UMETA(DisplayName = "Usable"),
+	ITEM_Equipment	UMETA(DisplayName = "Equipment")
+};
+
+// 아이템의 구조체
+USTRUCT(BlueprintType)
+struct FItemData
+{
+	GENERATED_BODY()
+public:
+	FItemData() : Name(TEXT("")), Texture(nullptr), Type(EItemType::ITEM_None), Count(0) {};
+	// 초기화 리스트 방식의 생성 방법
+	virtual void Use(ATPlayer* player) {};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FName Name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		UTexture2D* Texture;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<EItemType> Type;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int Count;
+};
+
 
 UCLASS()
 class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
@@ -126,8 +159,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수
+	// 인벤토리 변수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
+		TArray<FItemData> Item_Inventory;
+
+
+	//UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	//	TSubclassOf<class ABaseProjectile> ProjectileClass; // 투사체 변수
+
+
 
 		// -- 변수 -- 
 
@@ -163,6 +203,10 @@ public:
 	// 재장전 함수 선언
 	UFUNCTION() void StartReload();
 	UFUNCTION() void ReloadEnd();
+
+	// 인벤토리 열고 닫기 함수
+	//UFUNCTION() void OpenInventory();
+
 	// - 커스텀 함수
 
 	// 변수 반환용 함수들

@@ -50,13 +50,13 @@ ATPlayer::ATPlayer()
 	CheckWeapon = false;
 
 	// 사운드 큐와 오디어 컴포넌트 설정
-	static ConstructorHelpers::FObjectFinder<USoundCue>RifleShot(TEXT("SoundCue'/Game/Blueprint/WeaponSound/Rifle2_Cue.Rifle2_Cue'"));
-	if (RifleShot.Succeeded())
-	{
-		ShotCue = RifleShot.Object;
-		//ShotCue = Cast<USoundCue>;
+	//static ConstructorHelpers::FObjectFinder<USoundCue>RifleShot(TEXT("SoundCue'/Game/Blueprint/WeaponSound/Rifle2_Cue.Rifle2_Cue'"));
+	//if (RifleShot.Succeeded())
+	//{
+	//	ShotCue = RifleShot.Object;
+	//	//ShotCue = Cast<USoundCue>;
 
-	}
+	//}
 	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
 	if (RifleEmpty.Succeeded())
 	{
@@ -87,7 +87,12 @@ ATPlayer::ATPlayer()
 		WeaponMap.Add(WeaponSKName, WeaponSK3);
 	}
 
-
+	//// 인벤토리 읽어오기
+	//static ConstructorHelpers::FObjectFinder<UWdiget>InventoryWidget(TEXT("WidgetBlueprint'/Game/Blueprint/StatusWidget/BP_Inventory.BP_Inventory'"));
+	//if (InventoryWidget.Succeeded())
+	//{
+	//	Inventory = InventoryWidget.Object;
+	//}
 
 	// 무기 이름 초기화
 	WeaponName = "-";
@@ -141,6 +146,9 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	// 재장전 바인드
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPlayer::StartReload);
+
+	// 인벤토리 열고 닫기 바인드
+	//PlayerInputComponent->BindAction("OpenInventory", IE_Pressed, this, &ATPlayer::OpenInventory);
 }
 
 // 전후이동 함수
@@ -275,6 +283,21 @@ void ATPlayer::ReloadEnd()
 {
 	IsReloading = false;
 }
+
+// 인벤토리 함수 구현
+//void ATPlayer::OpenInventory()
+//{
+//	if (Inventory->IsVisible())
+//	{
+//		Inventory->VisibleInventory(ESlateVisibility::Collapsed);
+//	}
+//	else
+//	{
+//		Inventory->VisibleInventory(ESlateVisibility::Visible);
+//	}
+//}
+
+
 
 // 무기 장착 사실을 전달할 함수
 bool ATPlayer::GetWeaponCheck()
