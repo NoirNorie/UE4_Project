@@ -88,11 +88,7 @@ ATPlayer::ATPlayer()
 	}
 
 	//// 인벤토리 읽어오기
-	//static ConstructorHelpers::FObjectFinder<UWdiget>InventoryWidget(TEXT("WidgetBlueprint'/Game/Blueprint/StatusWidget/BP_Inventory.BP_Inventory'"));
-	//if (InventoryWidget.Succeeded())
-	//{
-	//	Inventory = InventoryWidget.Object;
-	//}
+
 
 	// 무기 이름 초기화
 	WeaponName = "-";

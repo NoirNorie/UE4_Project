@@ -46,11 +46,14 @@
 // 디버그 헤더
 #include "DrawDebugHelpers.h"
 
+// 아이템-인벤토리 열거형 구조체 변수
+#include "ItemEnumC.h"
+
 // 반드시 맨 아래여야 하는 헤더
 #include "TPlayer.generated.h"
 
 // 아이템의 열거형
-UENUM(BlueprintType) 
+UENUM(BlueprintType)
 enum class EItemType : uint8
 {
 	ITEM_None		UMETA(DisplayName = "None"),
@@ -71,13 +74,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		FName Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		UTexture2D* Texture;
+	class UTexture2D *Texture;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		TEnumAsByte<EItemType> Type;
+	TEnumAsByte<EItemType> Type;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		int Count;
+	int Count;
 };
-
 
 UCLASS()
 class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
@@ -160,8 +162,8 @@ public:
 		class UGameplayStatics* GameStatic;
 
 	// 인벤토리 변수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
-		TArray<FItemData> Item_Inventory;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+		TArray<FItemData> Inventory;
 
 
 	//UPROPERTY(EditDefaultsOnly, Category = Projectile)

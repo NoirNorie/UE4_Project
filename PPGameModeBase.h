@@ -25,7 +25,6 @@ class PP_API APPGameModeBase : public AGameModeBase
 protected:
 	virtual void BeginPlay() override;
 public:
-
 	// 위젯 출력용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", Meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UTPlayerWidget>Player_StatusWidget;
