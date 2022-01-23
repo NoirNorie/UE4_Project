@@ -34,6 +34,7 @@
 
 // 위젯 헤더
 #include "Components/Widget.h"
+#include "TPlayerStateWidget.h"
 
 // 엔진 위에 그리기 위한 헤더
 #include "Engine/Canvas.h" 
@@ -100,6 +101,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
+
+	// 위젯
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Player State UI")
+	//	class UTPlayerStateWidget* Widget_Status;
 
 	// -- 변수 -- 
 
@@ -173,4 +178,12 @@ public:
 		int32 player_mag;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsReloading;
+
+	// 캐릭터 상태 변수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float player_HP;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float player_Hungry;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float player_Thirsty;
 };

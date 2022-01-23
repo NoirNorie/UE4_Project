@@ -18,10 +18,6 @@ UTPlayerStateWidget::UTPlayerStateWidget(const FObjectInitializer& ObjectInitial
 void UTPlayerStateWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	//UBlueprintGeneratedClass* Widget_PlayerState = LoadObject<UBlueprintGeneratedClass>(
-	//	nullptr, TEXT("WidgetBlueprint'/Game/Blueprint/Widget/PlayerWidget.PlayerWidget'")
-	//);
-	//Widget_Status = Cast<UClass>(Widget_PlayerState);
 
 	WeaponName = Cast<UTextBlock>(GetWidgetFromName(TEXT("WeaponName")));
 	WeaponName->SetText(FText::FromName(UI_WeaponName));

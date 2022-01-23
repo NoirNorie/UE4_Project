@@ -2,6 +2,7 @@
 
 
 #include "ZombieAnim.h"
+#include "AZombie.h"
 
 UZombieAnim::UZombieAnim()
 {

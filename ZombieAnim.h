@@ -8,8 +8,6 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "AZombie.h"
-
 #include "ZombieAnim.generated.h"
 
 /**

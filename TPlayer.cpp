@@ -9,6 +9,25 @@ ATPlayer::ATPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	FireRate = 0; // 초기 발사 속도는 무기가 없으므로 0.0f;
+
+// 달리기 배속 초기화
+	SprintSpeedMultiplier = 2.0f;
+
+	// 무기 장착 상태 표시
+	CheckWeapon = false;
+
+	// 무기 이름 초기화
+	WeaponName = "-";
+	// 총알 초기화
+	player_ammo = 0; // 총알 수
+	player_mag = 0; // 탄창 수
+
+	// 캐릭터 상태 초기화
+	player_HP = 100.0f;
+	player_Hungry = 0.0f;
+	player_Thirsty = 0.0f;
+
 	// 스프링암
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
 	TPSpringArm->SetupAttachment(RootComponent);
@@ -28,13 +47,7 @@ ATPlayer::ATPlayer()
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
-	FireRate = 0.0f; // 초기 발사 속도는 무기가 없으므로 0.0f;
 
-	// 달리기 배속 초기화
-	SprintSpeedMultiplier = 2.0f;
-
-	// 무기 장착 상태 표시
-	CheckWeapon = false;
 
 	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
 	if (RifleEmpty.Succeeded())
@@ -66,11 +79,17 @@ ATPlayer::ATPlayer()
 		WeaponMap.Add(WeaponSKName, WeaponSK3);
 	}
 
-	// 무기 이름 초기화
-	WeaponName = "-";
-	// 총알 초기화
-	player_ammo = 0; // 총알 수
-	player_mag = 0; // 탄창 수
+
+
+	// 위젯
+	//static ConstructorHelpers::FObjectFinder<UTPlayerStateWidget>UPTWidget(TEXT(
+	//	"/Game/Blueprint/Widget/PlayerWidget"));
+	//if (UPTWidget.Succeeded())
+	//{
+	//	Widget_Status = UPTWidget.Object;
+	//	Widget_Status->WeaponName->SetText(FText::FromName(WeaponName));
+	//}
+	//auto PlayerWidget = Cast<UTPlayerStateWidget>()
 
 }
 
