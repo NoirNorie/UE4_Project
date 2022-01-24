@@ -3,6 +3,18 @@
 
 #include "PPGameModeBase.h"
 
+APPGameModeBase::APPGameModeBase(const FObjectInitializer& ObjectInitializer) :Super(ObjectInitializer)
+{
+	// 위젯 읽어오기
+	static ConstructorHelpers::FClassFinder<UTPlayerStateWidget> PlayerStateWidgetAsset(
+		TEXT("/Game/Blueprint/Widget/PlayerWidget")
+	);
+	if (PlayerStateWidgetAsset.Succeeded())
+	{
+		PlayerStateWidgetClass = PlayerStateWidgetAsset.Class;
+	}
+}
+
 void APPGameModeBase::StartPlay()
 {
 	Super::StartPlay();
@@ -12,20 +24,7 @@ void APPGameModeBase::StartPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Game Start"));
 	}
 
-}
-
-void APPGameModeBase::BeginPlay()
-{
-
-	// 위젯 읽어오기
-	static ConstructorHelpers::FClassFinder<UTPlayerStateWidget> PlayerStateWidgetAsset(
-		TEXT("WidgetBlueprint'/Game/Blueprint/Widget/PlayerWidget.PlayerWidget'")
-	);
-	if (PlayerStateWidgetAsset.Succeeded())
-	{
-		PlayerStateWidgetClass = PlayerStateWidgetAsset.Class;
-	}
-
+	// 위젯 배치
 	if (IsValid(PlayerStateWidgetClass))
 	{
 		PlayerStateWidget = Cast<UTPlayerStateWidget>(CreateWidget(GetWorld(), PlayerStateWidgetClass));
@@ -35,6 +34,7 @@ void APPGameModeBase::BeginPlay()
 			PlayerStateWidget->AddToViewport();
 		}
 	}
+
 }
 
 UTPlayerStateWidget* APPGameModeBase::GetPlayerStateWidget() const

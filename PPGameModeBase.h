@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 
+// 생성자 보조 함수 헤더
+#include "UObject/ConstructorHelpers.h"
+
  #include "Blueprint/UserWidget.h"
 #include "TPlayerStateWidget.h"
 
@@ -18,13 +21,16 @@ class PP_API APPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 protected:
+
+
+
 	virtual void StartPlay() override;
-	virtual void BeginPlay() override;
+	// virtual void BeginPlay() override;
 	TSubclassOf<UUserWidget> PlayerStateWidgetClass;
 	UTPlayerStateWidget* PlayerStateWidget;
 
 public:
-
+	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
 	UTPlayerStateWidget* GetPlayerStateWidget() const;
 
 
