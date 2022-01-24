@@ -2,6 +2,7 @@
 
 
 #include "TPlayer.h"
+#include "TPlayerStateWidget.h"
 
 // Sets default values
 ATPlayer::ATPlayer()
@@ -78,19 +79,6 @@ ATPlayer::ATPlayer()
 		FName WeaponSKName = "As-Val";
 		WeaponMap.Add(WeaponSKName, WeaponSK3);
 	}
-
-
-
-	// 위젯
-	//static ConstructorHelpers::FObjectFinder<UTPlayerStateWidget>UPTWidget(TEXT(
-	//	"/Game/Blueprint/Widget/PlayerWidget"));
-	//if (UPTWidget.Succeeded())
-	//{
-	//	Widget_Status = UPTWidget.Object;
-	//	Widget_Status->WeaponName->SetText(FText::FromName(WeaponName));
-	//}
-	//auto PlayerWidget = Cast<UTPlayerStateWidget>()
-
 }
 
 // Called when the game starts or when spawned
@@ -99,6 +87,17 @@ void ATPlayer::BeginPlay()
 	Super::BeginPlay();
 	// 디버그 메시지
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
+
+	// 위젯 불러오기
+	// 플레이어 컨트롤러를 불러온다.
+	
+	//GameStatic
+	//ATPlayerController* PCon = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	//StateWidget = PCon->GetPlayerStateWidget(); // 컨트롤러에 있는 위젯을 가져온다.
+	//if (IsValid(StateWidget)) // 위젯이 유효할 경우
+	//{
+	//	StateWidget->SetWeaponName(WeaponName); // 무기 이름을 지정한다.
+	//}
 }
 
 // Called every frame
@@ -232,7 +231,6 @@ void ATPlayer::Fire()
 					AActor* HitActor = OutHit.GetActor();
 
 					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
-
 				}
 			}
 
@@ -275,7 +273,13 @@ bool ATPlayer::GetAimCheck()
 void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
+	
 	WeaponName = weapon_Name;
+	//if (IsValid(StateWidget)) // 위젯이 유효할 경우
+	//{
+	//	StateWidget->SetWeaponName(WeaponName); // 무기 이름을 지정한다.
+	//}
+
 	player_ammo = weaponAmmo;
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;

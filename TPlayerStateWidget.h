@@ -28,11 +28,11 @@ public:
 
 	//// 텍스트 블록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
-	class UTextBlock* WeaponName;
+	class UTextBlock* WeaponNameBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
-	class UTextBlock* CurrentAmmo;
+	class UTextBlock* CurrentAmmoBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
-	class UTextBlock* Remain;
+	class UTextBlock* RemainAmmoBox;
 	
 	// 막대 바
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
@@ -41,6 +41,7 @@ public:
 	class UProgressBar* HungryBar;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
 	class UProgressBar* ThirstBar;
+
 public:
 	// 사용할 변수들
 	FName UI_WeaponName;
@@ -50,5 +51,7 @@ public:
 	float UI_HP;
 	float UI_HungryBar;
 	float UI_ThirstBar;
+
+	void SetWeaponName(FName WName);
 
 };

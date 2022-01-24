@@ -21,7 +21,6 @@
 
 // 생성자 보조 함수 헤더
 #include "UObject/ConstructorHelpers.h"
-
 // 캐릭터 애니메이션 헤더
 #include "TPlayerAnimInst.h"
 
@@ -34,7 +33,10 @@
 
 // 위젯 헤더
 #include "Components/Widget.h"
-#include "TPlayerStateWidget.h"
+// #include "TPlayerStateWidget.h"
+
+// 플레이어 컨트롤러 헤더
+#include "TPlayerController.h"
 
 // 엔진 위에 그리기 위한 헤더
 #include "Engine/Canvas.h" 
@@ -42,6 +44,9 @@
 #include "DrawDebugHelpers.h"
 
 #include "TPlayer.generated.h"
+
+// 델리게이트
+DECLARE_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
 
 UCLASS()
 class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
@@ -51,7 +56,6 @@ class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
 public:
 	// Sets default values for this character's properties
 	ATPlayer(); // 캐릭터 생성자
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -103,6 +107,9 @@ public:
 		class UGameplayStatics* GameStatic;
 
 	// 위젯
+	//class UTPlayerStateWidget* StateWidget;
+
+
 	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Player State UI")
 	//	class UTPlayerStateWidget* Widget_Status;
 
@@ -186,4 +193,8 @@ public:
 		float player_Hungry;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float player_Thirsty;
+
+	// 델리게이트
+	FOnWeaponChangedDelegate OnWeaponNameChanged;
+
 };

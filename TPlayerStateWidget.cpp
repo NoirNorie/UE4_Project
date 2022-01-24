@@ -19,21 +19,20 @@ void UTPlayerStateWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	WeaponName = Cast<UTextBlock>(GetWidgetFromName(TEXT("WeaponName")));
-	WeaponName->SetText(FText::FromName(UI_WeaponName));
+	WeaponNameBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("WeaponNameBox")));
 
-	CurrentAmmo = Cast<UTextBlock>(GetWidgetFromName(TEXT("CurrentAmmo")));
-	CurrentAmmo->SetText(FText::FromName(UI_CurrentAmmo));
+	//WeaponNameBox->SetText(FText::FromName(UI_WeaponName));
+	//CurrentAmmoBox->SetText(FText::FromName(UI_CurrentAmmo));
+	//RemainAmmoBox->SetText(FText::FromName(UI_RemainAmmo));
+	//HPBar->SetPercent(UI_HP);
+	//HungryBar->SetPercent(UI_HungryBar);
+	//ThirstBar->SetPercent(UI_ThirstBar);
+}
 
-	Remain = Cast<UTextBlock>(GetWidgetFromName(TEXT("Remain")));
-	Remain->SetText(FText::FromName(UI_RemainAmmo));
-
-	HPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
-	HPBar->SetPercent(UI_HP);
-
-	HungryBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HungryBar")));
-	HungryBar->SetPercent(UI_HungryBar);
-
-	ThirstBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("ThirstBar")));
-	ThirstBar->SetPercent(UI_ThirstBar);
+void UTPlayerStateWidget::SetWeaponName(FName WName)
+{
+	if (IsValid(WeaponNameBox))
+	{
+		WeaponNameBox->SetText(FText::FromName(WName));
+	}
 }

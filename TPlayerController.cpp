@@ -7,32 +7,24 @@ void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//UUserWidget* Widget = CreateWidget<UUserWidget>(this, WidgetAsset);
-	//if (Widget)
+	//if (Widget_MainClass != nullptr)
 	//{
-	//	Widget->AddToViewport();
-	//	Widget->SetVisibility(ESlateVisibility::HitTestInvisible);
+	//	Widget_Main = CreateWidget<UTPlayerStateWidget>(this, Widget_MainClass);
+	//	if (Widget_Main != nullptr)
+	//	{
+	//		Widget_Main->AddToViewport();
+	//		Widget_Main->SetVisibility(ESlateVisibility::HitTestInvisible);
+	//	}
 	//}
 }
 
-void ATPlayerController::OnPossess(APawn* aPawn)
-{
-	Super::OnPossess(aPawn);
+//void ATPlayerController::OnPossess(APawn* aPawn)
+//{
+//	Super::OnPossess(aPawn);
+//
+//}
 
-	//UUserWidget* Widget = CreateWidget<UUserWidget>(this, WidgetAsset);
-	//if (Widget)
-	//{
-	//	Widget->AddToViewport();
-	//	Widget->SetVisibility(ESlateVisibility::HitTestInvisible);
-	//}
-
-	if (Widget_MainClass != nullptr)
-	{
-		Widget_Main = CreateWidget<UTPlayerStateWidget>(this, Widget_MainClass);
-		if (Widget_Main != nullptr)
-		{
-			Widget_Main->AddToViewport();
-		}
-	}
-
-}
+//UTPlayerStateWidget* ATPlayerController::GetPlayerStateWidget() const
+//{
+//	return Widget_Main; // 위젯 반환
+//}
