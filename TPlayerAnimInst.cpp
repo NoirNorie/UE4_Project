@@ -15,6 +15,9 @@ UTPlayerAnimInst::UTPlayerAnimInst()
 		ShotCueComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ShotSoundCue"));
 		ShotCueComponent->SetSound(ShotCue);
 	}
+
+	WeaponState = false;
+
 }
 
 void UTPlayerAnimInst::NativeUpdateAnimation(float DeltaSeconds)

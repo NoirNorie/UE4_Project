@@ -8,7 +8,7 @@
 // 생성자 보조 함수 헤더
 #include "UObject/ConstructorHelpers.h"
 
- #include "Blueprint/UserWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "TPlayerStateWidget.h"
 
 #include "PPGameModeBase.generated.h"
@@ -22,24 +22,20 @@ class PP_API APPGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 protected:
 
-
-
 	virtual void StartPlay() override;
-	// virtual void BeginPlay() override;
-	TSubclassOf<UUserWidget> PlayerStateWidgetClass;
-	UTPlayerStateWidget* PlayerStateWidget;
+	//// virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+	TSubclassOf<UTPlayerStateWidget> StartWidgetClass;
+
+	UPROPERTY()
+		UTPlayerStateWidget* CurrentWidget;
 
 public:
 	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
-	UTPlayerStateWidget* GetPlayerStateWidget() const;
 
+	UFUNCTION(BlueprintCallable, Category = "UMG Game")
+		void ChangeMenuWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass);
 
-	//UFUNCTION(BlueprintCallable, Category = "UMG_Game")
-	//void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
-	//TSubclassOf<UUserWidget> StartingWidgetClass;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
-	//UUserWidget* CurrentWidget;
+	//UTPlayerStateWidget* GetPlayerStateWidget() const;
 };

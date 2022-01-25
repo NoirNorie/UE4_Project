@@ -20,19 +20,53 @@ void UTPlayerStateWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	WeaponNameBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("WeaponNameBox")));
-
-	//WeaponNameBox->SetText(FText::FromName(UI_WeaponName));
-	//CurrentAmmoBox->SetText(FText::FromName(UI_CurrentAmmo));
-	//RemainAmmoBox->SetText(FText::FromName(UI_RemainAmmo));
-	//HPBar->SetPercent(UI_HP);
-	//HungryBar->SetPercent(UI_HungryBar);
-	//ThirstBar->SetPercent(UI_ThirstBar);
+	CurrentAmmoBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("CurrentAmmoBox")));
+	RemainAmmoBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("RemainAmmoBox")));
+	HPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
+	HungryBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HungryBar")));
+	ThirstBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("ThirtBar")));
 }
 
+// Set 함수
 void UTPlayerStateWidget::SetWeaponName(FName WName)
 {
 	if (IsValid(WeaponNameBox))
 	{
 		WeaponNameBox->SetText(FText::FromName(WName));
+	}
+}
+void UTPlayerStateWidget::SetCurrentAmmo(int32 ammo)
+{
+	if (IsValid(CurrentAmmoBox))
+	{
+		CurrentAmmoBox->SetText(FText::FromString(FString::FromInt(ammo)));
+	}
+}
+void UTPlayerStateWidget::SetRemainAmmo(int32 ammo)
+{
+	if (IsValid(RemainAmmoBox))
+	{
+		RemainAmmoBox->SetText(FText::FromString(FString::FromInt(ammo)));
+	}
+}
+void UTPlayerStateWidget::SetCurrentHP(float hp)
+{
+	if (IsValid(HPBar))
+	{
+		HPBar->SetPercent(hp);
+	}
+}
+void UTPlayerStateWidget::SetCurrentHungry(float hungry)
+{
+	if (IsValid(HungryBar))
+	{
+		HungryBar->SetPercent(hungry);
+	}
+}
+void UTPlayerStateWidget::SetCurrentThirst(float thirst)
+{
+	if (IsValid(ThirstBar))
+	{
+		ThirstBar->SetPercent(thirst);
 	}
 }

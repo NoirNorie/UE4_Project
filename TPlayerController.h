@@ -17,19 +17,7 @@ class PP_API ATPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
-	//	TSubclassOf<class UUserWidget> WidgetAsset;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
-	//	TSubclassOf<class UTPlayerStateWidget> Widget_MainClass;
-	//class UTPlayerStateWidget* Widget_Main;
 
-	//UTPlayerStateWidget* GetPlayerStateWidget() const;
-
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
-	//	TSubclassOf<class ATPlayer> Player;
 protected:
 	virtual void BeginPlay() override;
-
-	//virtual void OnPossess(APawn* aPawn) override;
 };

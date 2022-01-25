@@ -33,7 +33,9 @@
 
 // 위젯 헤더
 #include "Components/Widget.h"
-// #include "TPlayerStateWidget.h"
+#include "TPlayerStateWidget.h"
+// 위젯을 위해 가져올 게임모드 헤더
+#include "PPGameModeBase.h"
 
 // 플레이어 컨트롤러 헤더
 #include "TPlayerController.h"
@@ -106,12 +108,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
-	// 위젯
-	//class UTPlayerStateWidget* StateWidget;
-
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Player State UI")
-	//	class UTPlayerStateWidget* Widget_Status;
+	//// 위젯 접근용 포인터
+	//UTPlayerStateWidget* StateWidget = nullptr;
+	//APPGameModeBase* GameMode = nullptr;
 
 	// -- 변수 -- 
 
@@ -160,7 +159,7 @@ public:
 
 
 	// 무기 처리용 맵
-	TMap<FName, ConstructorHelpers::FObjectFinder<USkeletalMesh>> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
+	 TMap<FName, ConstructorHelpers::FObjectFinder<USkeletalMesh>> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
 
 	// 인터페이스 함수
 	// 인터페이스 함수의 인터페이스
@@ -170,7 +169,7 @@ public:
 	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX) override;
 
 	// 인터페이스로 보낼 무기 확인용 변수
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool CheckWeapon;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FName WeaponName;

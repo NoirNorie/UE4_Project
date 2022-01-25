@@ -53,5 +53,11 @@ public:
 	float UI_ThirstBar;
 
 	void SetWeaponName(FName WName);
+	void SetCurrentAmmo(int32 ammo);
+	void SetRemainAmmo(int32 ammo);
+
+	void SetCurrentHP(float hp);
+	void SetCurrentHungry(float hungry);
+	void SetCurrentThirst(float thirst);
 
 };

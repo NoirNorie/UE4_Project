@@ -2,17 +2,16 @@
 
 
 #include "TPlayer.h"
-#include "TPlayerStateWidget.h"
 
 // Sets default values
 ATPlayer::ATPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	FireRate = 0; // 초기 발사 속도는 무기가 없으므로 0.0f;
 
-// 달리기 배속 초기화
+	// 달리기 배속 초기화
 	SprintSpeedMultiplier = 2.0f;
 
 	// 무기 장착 상태 표시
@@ -59,7 +58,6 @@ ATPlayer::ATPlayer()
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
 
-
 	// 사용할 무기를 맵에 기록해 놓는다
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
 	if (WeaponSK1.Succeeded())
@@ -87,17 +85,6 @@ void ATPlayer::BeginPlay()
 	Super::BeginPlay();
 	// 디버그 메시지
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
-
-	// 위젯 불러오기
-	// 플레이어 컨트롤러를 불러온다.
-	
-	//GameStatic
-	//ATPlayerController* PCon = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	//StateWidget = PCon->GetPlayerStateWidget(); // 컨트롤러에 있는 위젯을 가져온다.
-	//if (IsValid(StateWidget)) // 위젯이 유효할 경우
-	//{
-	//	StateWidget->SetWeaponName(WeaponName); // 무기 이름을 지정한다.
-	//}
 }
 
 // Called every frame
@@ -275,22 +262,17 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
 	
 	WeaponName = weapon_Name;
-	//if (IsValid(StateWidget)) // 위젯이 유효할 경우
-	//{
-	//	StateWidget->SetWeaponName(WeaponName); // 무기 이름을 지정한다.
-	//}
-
 	player_ammo = weaponAmmo;
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));
 	AnimInst->ShotIDX = weaponIDX;
 
-
 	USkeletalMesh* CurrentWeapon = WeaponMap.Find(WeaponName)->Object;
 	if (CurrentWeapon != nullptr)
 	{
 		Weapon_Socket->SetSkeletalMesh(CurrentWeapon);
 		CheckWeapon = true;
+		AnimInst->WeaponState = true;
 	}
 }

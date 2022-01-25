@@ -5,14 +5,15 @@
 
 APPGameModeBase::APPGameModeBase(const FObjectInitializer& ObjectInitializer) :Super(ObjectInitializer)
 {
-	// 위젯 읽어오기
-	static ConstructorHelpers::FClassFinder<UTPlayerStateWidget> PlayerStateWidgetAsset(
-		TEXT("/Game/Blueprint/Widget/PlayerWidget")
-	);
-	if (PlayerStateWidgetAsset.Succeeded())
-	{
-		PlayerStateWidgetClass = PlayerStateWidgetAsset.Class;
-	}
+	//// 위젯 읽어오기
+	//static ConstructorHelpers::FClassFinder<UTPlayerStateWidget> PlayerStateWidgetAsset(
+	//	TEXT("/Game/Blueprint/Widget/PlayerWidget")
+	//);
+
+	//if (PlayerStateWidgetAsset.Succeeded())
+	//{
+	//	PlayerStateWidgetClass = PlayerStateWidgetAsset.Class;
+	//}
 }
 
 void APPGameModeBase::StartPlay()
@@ -23,21 +24,24 @@ void APPGameModeBase::StartPlay()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Game Start"));
 	}
-
-	// 위젯 배치
-	if (IsValid(PlayerStateWidgetClass))
-	{
-		PlayerStateWidget = Cast<UTPlayerStateWidget>(CreateWidget(GetWorld(), PlayerStateWidgetClass));
-
-		if (IsValid(PlayerStateWidget))
-		{
-			PlayerStateWidget->AddToViewport();
-		}
-	}
+	ChangeMenuWidget(StartWidgetClass);
 
 }
 
-UTPlayerStateWidget* APPGameModeBase::GetPlayerStateWidget() const
+void APPGameModeBase::ChangeMenuWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass)
 {
-	return PlayerStateWidget;
+	if (CurrentWidget != nullptr)
+	{
+		CurrentWidget->RemoveFromViewport();
+		CurrentWidget = nullptr;
+	}
+	if (NewWidgetClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UTPlayerStateWidget>(GetWorld(), NewWidgetClass);
+		if (CurrentWidget != nullptr)
+		{
+			CurrentWidget->AddToViewport();
+		}
+	}
+
 }
