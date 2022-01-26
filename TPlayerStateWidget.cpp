@@ -33,6 +33,7 @@ void UTPlayerStateWidget::SetWeaponName(FName WName)
 	if (IsValid(WeaponNameBox))
 	{
 		WeaponNameBox->SetText(FText::FromName(WName));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
 	}
 }
 void UTPlayerStateWidget::SetCurrentAmmo(int32 ammo)

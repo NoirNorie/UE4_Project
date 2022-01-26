@@ -77,6 +77,9 @@ ATPlayer::ATPlayer()
 		FName WeaponSKName = "As-Val";
 		WeaponMap.Add(WeaponSKName, WeaponSK3);
 	}
+
+
+
 }
 
 // Called when the game starts or when spawned
@@ -85,6 +88,27 @@ void ATPlayer::BeginPlay()
 	Super::BeginPlay();
 	// 디버그 메시지
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
+
+	UWorld* const world = GetWorld();
+	if (world) // 월드 유효성 검사
+	{
+		if (APPGameModeBase* myGmd = Cast<APPGameModeBase>(GetWorld()->GetAuthGameMode())) // 게임모드 포인터 유효성 검사
+		{
+			GMD = myGmd;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD ON")));
+
+			// 게임모드에서 위젯을 가져온다.
+			PlayerWidget = GMD->GetPlayerStateWidget();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
+			if (PlayerWidget)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
+				PlayerWidget->SetWeaponName(WeaponName);
+			}
+		}
+	}
+	
+
 }
 
 // Called every frame
@@ -262,6 +286,12 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
 	
 	WeaponName = weapon_Name;
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetWeaponName(WeaponName);
+	}
+
+
 	player_ammo = weaponAmmo;
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;

@@ -22,20 +22,20 @@ class PP_API APPGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 protected:
 
-	virtual void StartPlay() override;
-	//// virtual void BeginPlay() override;
+	// virtual void StartPlay() override;
+	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
-	TSubclassOf<UTPlayerStateWidget> StartWidgetClass;
+	TSubclassOf<UTPlayerStateWidget> StartWidgetClass; // 플레이어의 상태를 출력할 위젯
 
 	UPROPERTY()
-		UTPlayerStateWidget* CurrentWidget;
+	UTPlayerStateWidget* CurrentWidget;
 
 public:
 	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintCallable, Category = "UMG Game")
-		void ChangeMenuWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass);
+	void CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass); 
 
-	//UTPlayerStateWidget* GetPlayerStateWidget() const;
+	UTPlayerStateWidget* GetPlayerStateWidget() const;
 };

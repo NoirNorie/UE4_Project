@@ -108,9 +108,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
-	//// 위젯 접근용 포인터
-	//UTPlayerStateWidget* StateWidget = nullptr;
-	//APPGameModeBase* GameMode = nullptr;
+	class APPGameModeBase* GMD;
+	class UTPlayerStateWidget* PlayerWidget;
 
 	// -- 변수 -- 
 
