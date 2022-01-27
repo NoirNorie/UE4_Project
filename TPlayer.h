@@ -13,6 +13,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 // 스켈레탈 메시 컴포넌트 헤더
 #include "Components/SkeletalMeshComponent.h"
+// 캡슐 컴포넌트 헤더
+#include "Components/CapsuleComponent.h"
 
 // 사운드 컴포넌트 헤더
 #include "Components/AudioComponent.h"
@@ -105,9 +107,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 		float FireRate;
 
+	// 히트 스캔을 위한 포인터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
+
+
+
+
+	// 위젯을 가져올 포인터
 	class APPGameModeBase* GMD;
 	class UTPlayerStateWidget* PlayerWidget;
 
@@ -155,6 +163,9 @@ public:
 	bool GetWeaponCheck(); // 무기 장착 여부 확인
 	bool GetAimCheck(); // 조준 여부 확인
 	// void WeaponSet();
+
+	// 데미지 처리를 위한 프레임워크 함수
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 
 	// 무기 처리용 맵

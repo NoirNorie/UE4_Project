@@ -47,7 +47,8 @@ ATPlayer::ATPlayer()
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
-
+	// 콜리전 프로필
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TPlayer"));
 
 	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
 	if (RifleEmpty.Succeeded())
@@ -104,6 +105,11 @@ void ATPlayer::BeginPlay()
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
 				PlayerWidget->SetWeaponName(WeaponName);
+				PlayerWidget->SetCurrentAmmo(player_ammo);
+				PlayerWidget->SetRemainAmmo(player_mag);
+				PlayerWidget->SetCurrentHP(player_HP);
+				PlayerWidget->SetCurrentHungry(player_Hungry);
+				PlayerWidget->SetCurrentThirst(player_Thirsty);
 			}
 		}
 	}
@@ -214,8 +220,8 @@ void ATPlayer::Fire()
 		{
 			AudioComponent->SetSound(EmptyCue);
 			AudioComponent->Play();
+			return;
 		}
-
 		if (player_ammo > 0)
 		{
 
@@ -250,7 +256,7 @@ void ATPlayer::Fire()
 			// 사운드 재생은 애니메이션 노티파이에 부착했다
 			// 소리가 중첩될 수 있도록 처리함
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
-			// 총알은 노티파이 함수에서 감소한다
+			PlayerWidget->SetCurrentAmmo(--player_ammo);
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
 		}
 	}
@@ -261,13 +267,13 @@ void ATPlayer::StartReload()
 	if (player_mag != 0 && CheckWeapon == true)
 	{
 		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
-		// 재장전 시 탄창은 노티파이 함수에서 감소한다.
 		IsReloading = true;
 	}
 }
 void ATPlayer::ReloadEnd()
 {
 	IsReloading = false;
+	PlayerWidget->SetCurrentAmmo(--player_mag);
 }
 // 무기 장착 사실을 전달할 함수
 bool ATPlayer::GetWeaponCheck()
@@ -280,19 +286,25 @@ bool ATPlayer::GetAimCheck()
 	return CheckAim;
 }
 
+float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	UE_LOG(LogTemp, Log, TEXT("Actor : %s Took Damage : %f"), *GetName(), FinalDamage);
+	return FinalDamage;
+}
+
 // 무기 장착 인터페이스 함수
 void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Interface Called")));
 	
 	WeaponName = weapon_Name;
+	player_ammo = weaponAmmo;
 	if (PlayerWidget)
 	{
 		PlayerWidget->SetWeaponName(WeaponName);
+		PlayerWidget->SetCurrentAmmo(player_ammo);
 	}
-
-
-	player_ammo = weaponAmmo;
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));

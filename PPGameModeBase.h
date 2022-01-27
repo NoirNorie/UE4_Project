@@ -39,3 +39,12 @@ public:
 
 	UTPlayerStateWidget* GetPlayerStateWidget() const;
 };
+
+
+/*
+	언리얼 게임 플레이 파이프라인에 따라서
+	- StartPlay()로 위젯을 초기화 할 경우 캐릭터에서 위젯을 받아올 때 위젯을 제대로 받아내지 못한다
+	- 캐릭터의 BeginPlay()보다 게임모드의 StartPlay()가 느리게 실행된다
+	- 따라서 GetPlayerStateWidget()으로 현재 위젯을 넘겨줘도 의미가 없게 된다.
+	- BeginPlay()에서 위젯을 초기화 할 경우 캐릭터의 BeginPlay()보다 먼저 실행되어 제대로 위젯이 초기화된다
+*/

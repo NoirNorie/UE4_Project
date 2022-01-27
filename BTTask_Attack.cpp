@@ -18,7 +18,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 	Zombie->Attack();
 	IsAttacking = true;
-	Zombie->OnAttackEnd.AddLambda([this]()->void {IsAttacking = false; });
+	//Zombie->OnAttackEnd.AddLambda([this]()->void {IsAttacking = false; });
 
 	return EBTNodeResult::InProgress;
 }

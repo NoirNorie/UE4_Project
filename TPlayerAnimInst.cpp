@@ -59,16 +59,16 @@ void UTPlayerAnimInst::AnimNotify_FireStart()
 }
 void UTPlayerAnimInst::AnimNotify_FireEnd()
 {
-	auto Pawn = TryGetPawnOwner();
-	if (::IsValid(Pawn))
-	{
-		CurrentPawnSpeed = Pawn->GetVelocity().Size();
-	}
-	ATPlayer* Character = Cast<ATPlayer>(Pawn);
-	if (Character)
-	{
-		Character->player_ammo--; // 총알을 감소시킨다.
-	}
+	//auto Pawn = TryGetPawnOwner();
+	//if (::IsValid(Pawn))
+	//{
+	//	CurrentPawnSpeed = Pawn->GetVelocity().Size();
+	//}
+	//ATPlayer* Character = Cast<ATPlayer>(Pawn);
+	//if (Character)
+	//{
+	//	Character->(player_ammo); // 총알을 감소시킨다.
+	//}
 	IsFire = false;
 }
 
@@ -100,7 +100,7 @@ void UTPlayerAnimInst::AnimNotify_ReloadEnd()
 			Character->player_ammo = 11;
 		}
 
-		Character->player_mag--;
+		// Character->player_mag--;
 	}
 	IsReload = false;
 }

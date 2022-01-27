@@ -10,7 +10,10 @@
 
 // 오브젝트와 컴포넌트 헤더
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "UObject/Class.h"
+
+#include "DrawDebugHelpers.h"
 
 // 좀비 관련 헤더
 #include "ZombieController.h"
@@ -22,6 +25,10 @@
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate); // 공격 종료
 DECLARE_MULTICAST_DELEGATE(FOnDetectEndDelegate); // 추적 종료
 
+// ZombieAttack의 트레이스 채널
+// ECC_GameTraceChannel1
+// TPlayer의 오브젝트 채널
+// ECC_GameTraceChannel2
 
 UCLASS()
 class PP_API AAZombie : public ACharacter
@@ -35,6 +42,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void AttackCheck();
 
 public:	
 	// Called every frame
@@ -63,6 +72,10 @@ public:
 
 	UPROPERTY() float Zombie_HP;
 	UPROPERTY() bool IsDeath;
+	UPROPERTY() bool bEndOverlapEnable;
+
+	UPROPERTY() float AttackRange;
+	UPROPERTY() float AttackRadius;
 
 
 };
