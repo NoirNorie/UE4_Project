@@ -10,6 +10,8 @@
 
 #include "ZombieAnim.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+
 /**
  * 
  */
@@ -35,7 +37,11 @@ public:
 	UFUNCTION() void Detect();
 	UFUNCTION() void Attack();
 
+	UFUNCTION() void AnimNotify_AttackHitCheck();
 	UFUNCTION() void AnimNotify_AttackEnd();
 	UFUNCTION() void AnimNotify_DetectEnd();
+
+
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
 
 };

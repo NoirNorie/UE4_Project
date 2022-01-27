@@ -38,6 +38,10 @@ void UZombieAnim::Attack()
 {
 	IsAttacking = true;
 }
+void UZombieAnim::AnimNotify_AttackHitCheck()
+{
+	OnAttackHitCheck.Broadcast(); // 델리게이트 broadcast
+}
 void UZombieAnim::AnimNotify_AttackEnd()
 {
 	IsAttacking = false;

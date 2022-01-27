@@ -51,6 +51,10 @@ void AAZombie::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	ZombieAnimInst = Cast<UZombieAnim>(GetMesh()->GetAnimInstance());
+	if (ZombieAnimInst)
+	{
+		ZombieAnimInst->OnAttackHitCheck.AddUObject(this, &AAZombie::AttackCheck); // 공격 판정을 실행
+	}
 }
 float AAZombie::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -70,8 +74,8 @@ float AAZombie::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 void AAZombie::Attack()
 {
 	IsAttacking = true;
-	ZombieAnimInst->Attack();
-	AttackCheck();
+	ZombieAnimInst->Attack(); // 노티파이로 공격 함수를 동작시킨다.
+	// AttackCheck();
 }
 void AAZombie::Detect()
 {
@@ -114,18 +118,18 @@ void AAZombie::AttackCheck()
 		FCollisionShape::MakeSphere(AttackRadius), Params);
 	Params.AddIgnoredActor(this);
 
+	// 디버그 드로잉
 	FVector TraceVec = GetActorForwardVector() * AttackRange;
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
 	float HalfHeigh = AttackRange * 0.5f + AttackRadius;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 5.0f;
-
 	DrawDebugCapsule(GetWorld(), Center, HalfHeigh, 200.0f, CapsuleRot, DrawColor, false, DebugLifeTime);
 
-	if (bResult)
+	if (bResult) // 맞았는가?
 	{
-		if (HitResult.GetActor()->ActorHasTag("Player"))
+		if (HitResult.GetActor()->ActorHasTag("Player")) // 맞은 액터가 플레이어인가?
 		{
 			UE_LOG(LogTemp, Log, TEXT("Hit Actor Name: %s"), *HitResult.Actor->GetName());
 			FDamageEvent DamageEvent;

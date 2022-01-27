@@ -43,7 +43,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void AttackCheck();
+
 
 public:	
 	// Called every frame
@@ -61,6 +61,8 @@ public:
 	UFUNCTION() void Attack();
 	UFUNCTION() void Detect();
 	UFUNCTION() void Death();
+
+	void AttackCheck();
 
 	FOnAttackEndDelegate OnAttackEnd;
 	UFUNCTION() void OnAttackEnded(); 
