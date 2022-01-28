@@ -24,7 +24,7 @@ void UTPlayerStateWidget::NativeConstruct()
 	RemainAmmoBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("RemainAmmoBox")));
 	HPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
 	HungryBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HungryBar")));
-	ThirstBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("ThirtBar")));
+	ThirstBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("ThirstBar")));
 }
 
 // Set 함수
@@ -54,20 +54,21 @@ void UTPlayerStateWidget::SetCurrentHP(float hp)
 {
 	if (IsValid(HPBar))
 	{
-		HPBar->SetPercent(hp);
+		HPBar->SetPercent(hp / 100);
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("HP Set")));
 	}
 }
 void UTPlayerStateWidget::SetCurrentHungry(float hungry)
 {
 	if (IsValid(HungryBar))
 	{
-		HungryBar->SetPercent(hungry);
+		HungryBar->SetPercent(hungry / 100);
 	}
 }
 void UTPlayerStateWidget::SetCurrentThirst(float thirst)
 {
 	if (IsValid(ThirstBar))
 	{
-		ThirstBar->SetPercent(thirst);
+		ThirstBar->SetPercent(thirst / 100);
 	}
 }

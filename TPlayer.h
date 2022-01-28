@@ -203,6 +203,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float player_Thirsty;
 
+	// 에너지와 수분 소모량
+	float RequireMoisture;
+	float RequireFat;
+
 	// 델리게이트
 	FOnWeaponChangedDelegate OnWeaponNameChanged;
 

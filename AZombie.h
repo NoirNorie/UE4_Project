@@ -39,11 +39,23 @@ public:
 	// Sets default values for this character's properties
 	AAZombie();
 
+	float GetZombieDamage();
+	float GetZombieHP();
+	float GetZombieAttackRange();
+	float GetZombieAttackRadius();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Zombie Stat")
+		float ZombieDamage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Zombie Stat")
+		float Zombie_HP;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Zombie Stat")
+		float AttackRange;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Zombie Stat")
+		float AttackRadius;
 
 public:	
 	// Called every frame
@@ -72,12 +84,10 @@ public:
 	UPROPERTY() bool IsAttacking;
 	UPROPERTY() bool IsDetect;
 
-	UPROPERTY() float Zombie_HP;
+
 	UPROPERTY() bool IsDeath;
 	UPROPERTY() bool bEndOverlapEnable;
 
-	UPROPERTY() float AttackRange;
-	UPROPERTY() float AttackRadius;
 
 
 };

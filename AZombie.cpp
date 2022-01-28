@@ -26,7 +26,8 @@ AAZombie::AAZombie()
 	IsAttacking = false;
 	IsDeath = false;
 
-	AttackRange = 200.0f;
+	ZombieDamage = 30.0f;
+	AttackRange = 150.0f;
 	AttackRadius = 50.0f;
 }
 
@@ -96,7 +97,7 @@ void AAZombie::Death() // 좀비가 죽은 것을 처리하는 함수
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None); // 더 이상의 이동을 수행하지 못하도록 한다.
 	IsDeath = true;
-	ZombieAnimInst->IsDead = true;
+	ZombieAnimInst->IsDead = true; // 애니메이션에는 사망 동작이 일어나도록 설정한다.
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 캡슐 컴포넌트도 제거한다.
 	GetController()->UnPossess(); // 좀비와 컨트롤러의 연결을 끊는다.
 
@@ -113,15 +114,15 @@ void AAZombie::AttackCheck()
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
 	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * AttackRange,
+		HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * GetZombieAttackRange(),
 		FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel1,
-		FCollisionShape::MakeSphere(AttackRadius), Params);
+		FCollisionShape::MakeSphere(GetZombieAttackRadius()), Params);
 	Params.AddIgnoredActor(this);
 
 	// 디버그 드로잉
-	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector TraceVec = GetActorForwardVector() * GetZombieAttackRange();
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
-	float HalfHeigh = AttackRange * 0.5f + AttackRadius;
+	float HalfHeigh = GetZombieAttackRange() * 0.5f + GetZombieAttackRadius();
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 5.0f;
@@ -133,7 +134,25 @@ void AAZombie::AttackCheck()
 		{
 			UE_LOG(LogTemp, Log, TEXT("Hit Actor Name: %s"), *HitResult.Actor->GetName());
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(50.0f, DamageEvent, GetController(), this); // 플레이어에게 데미지를 가한다.
+			HitResult.Actor->TakeDamage(GetZombieDamage(), DamageEvent, GetController(), this); // 플레이어에게 데미지를 가한다.
 		}
 	}
+}
+
+// Getter 함수
+float AAZombie::GetZombieDamage()
+{
+	return ZombieDamage;
+}
+float AAZombie::GetZombieHP()
+{
+	return Zombie_HP;
+}
+float AAZombie::GetZombieAttackRange()
+{
+	return AttackRange;
+}
+float AAZombie::GetZombieAttackRadius()
+{
+	return AttackRadius;
 }

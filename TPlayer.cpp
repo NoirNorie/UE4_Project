@@ -7,7 +7,7 @@
 ATPlayer::ATPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	FireRate = 0; // 초기 발사 속도는 무기가 없으므로 0.0f;
 
@@ -27,6 +27,11 @@ ATPlayer::ATPlayer()
 	player_HP = 100.0f;
 	player_Hungry = 0.0f;
 	player_Thirsty = 0.0f;
+
+	// 에너지, 수분 소모량 초기화
+	RequireMoisture = 1.0f;
+	RequireFat = 1.0f;
+
 
 	// 스프링암
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
@@ -121,6 +126,15 @@ void ATPlayer::BeginPlay()
 void ATPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	RequireMoisture += DeltaTime * 10;
+	RequireFat += DeltaTime * 10;
+
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetCurrentThirst(RequireMoisture);
+		PlayerWidget->SetCurrentHungry(RequireFat);
+	}
 }
 
 // Called to bind functionality to input
@@ -290,6 +304,13 @@ float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	UE_LOG(LogTemp, Log, TEXT("Actor : %s Took Damage : %f"), *GetName(), FinalDamage);
+
+	player_HP -= FinalDamage;
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetCurrentHP(player_HP);
+	}
+
 	return FinalDamage;
 }
 
