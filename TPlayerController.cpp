@@ -7,4 +7,5 @@ void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	// SetInputMode(FInputModeGameAndUI());
+	SetInputMode(FInputModeGameOnly()); // 게임모드로 변환한다.
 }
