@@ -36,11 +36,14 @@
 // 위젯 헤더
 #include "Components/Widget.h"
 #include "TPlayerStateWidget.h"
+// 인벤토리 헤더
+#include "InventoryBase.h"
 // 위젯을 위해 가져올 게임모드 헤더
 #include "PPGameModeBase.h"
 
 // 플레이어 컨트롤러 헤더
 #include "TPlayerController.h"
+
 
 // 엔진 위에 그리기 위한 헤더
 #include "Engine/Canvas.h" 
@@ -111,13 +114,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
-
-
-
-
 	// 위젯을 가져올 포인터
 	class APPGameModeBase* GMD;
 	class UTPlayerStateWidget* PlayerWidget;
+	class UInventoryBase* Inventory;
 
 	// -- 변수 -- 
 
@@ -158,6 +158,9 @@ public:
 	// 재장전 함수 선언
 	UFUNCTION() void StartReload();
 	UFUNCTION() void ReloadEnd();
+
+	// 인벤토리 함수 선언
+	UFUNCTION() void InventoryToggle();
 
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인

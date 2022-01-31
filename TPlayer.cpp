@@ -116,9 +116,14 @@ void ATPlayer::BeginPlay()
 				PlayerWidget->SetCurrentHungry(player_Hungry);
 				PlayerWidget->SetCurrentThirst(player_Thirsty);
 			}
+			Inventory = GMD->GetInventoryWidget();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
+			if (Inventory)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
+			}
 		}
 	}
-	
 
 }
 
@@ -161,6 +166,8 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATPlayer::StopFire);
 	// 재장전 바인드
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPlayer::StartReload);
+	// 인벤토리 바인드
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &ATPlayer::InventoryToggle);
 }
 
 // 전후이동 함수
@@ -299,6 +306,25 @@ bool ATPlayer::GetAimCheck()
 {
 	return CheckAim;
 }
+
+void ATPlayer::InventoryToggle()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
+	if (Inventory != nullptr)
+	{
+		if (Inventory->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			Inventory->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			Inventory->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
+	
+}
+
+
 
 float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {

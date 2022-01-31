@@ -12,12 +12,11 @@ void UInventoryBase::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	UInventoryData* HeavyAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("HeavyAmmo"));
-	HeavyAmmo->SetItemIndex(0);
-	HeavyAmmo->SetItemCount(0);
-	HeavyAmmo->SetItemName("HeavyAmmo");
-	// HeavyAmmo->SetItemIcon(TEXT(""));
+	//UInventoryData* HeavyAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("HeavyAmmo"));
+	//HeavyAmmo->SetItemIndex(0);
+	//HeavyAmmo->SetItemCount(0);
+	//HeavyAmmo->SetItemName("HeavyAmmo");
+	//// HeavyAmmo->SetItemIcon(TEXT(""));
 
-	List->AddItem(HeavyAmmo);
-
+	//List->AddItem(HeavyAmmo);
 }

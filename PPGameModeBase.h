@@ -10,6 +10,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "TPlayerStateWidget.h"
+#include "InventoryBase.h"
 
 #include "PPGameModeBase.generated.h"
 
@@ -26,18 +27,26 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
-	TSubclassOf<UTPlayerStateWidget> StartWidgetClass; // 플레이어의 상태를 출력할 위젯
+	TSubclassOf<UTPlayerStateWidget> StartWidgetClass;  // 플레이어의 상태를 출력할 위젯
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+	TSubclassOf<UInventoryBase> InventoryClass;			// 인벤토리를 띄울 위젯
 
 	UPROPERTY()
 	UTPlayerStateWidget* CurrentWidget;
+
+	UPROPERTY()
+	UInventoryBase* PlayerInventory;
 
 public:
 	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintCallable, Category = "UMG Game")
-	void CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass); 
+	void CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass);
+	UFUNCTION(BlueprintCallable, Category = "UMG Game")
+	void CreateInventory(TSubclassOf<UInventoryBase>NewInventoryClass);
 
-	UTPlayerStateWidget* GetPlayerStateWidget() const;
+	UTPlayerStateWidget* GetPlayerStateWidget() const; // 플레이어 상태창 반환
+	UInventoryBase* GetInventoryWidget() const;		   // 플레이어 인벤토리 반환
 };
 
 

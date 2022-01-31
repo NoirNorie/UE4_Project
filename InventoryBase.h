@@ -26,6 +26,4 @@ protected:
 public:
 	UInventoryBase(const FObjectInitializer& ObjectInitializer);
 	virtual void NativeConstruct() override;
-
-
 };
