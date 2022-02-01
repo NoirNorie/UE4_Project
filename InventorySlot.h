@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/IUserObjectListEntry.h"
+#include "Components/TextBlock.h"
+
 #include "InventoryData.h"
 #include "InventorySlot.generated.h"
 
@@ -11,7 +14,7 @@
  * 
  */
 UCLASS()
-class PP_API UInventorySlot : public UUserWidget
+class PP_API UInventorySlot : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 protected:
@@ -25,9 +28,21 @@ protected:
 		FString ItemName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")
 		UTexture2D* ItemIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
+		class UTextBlock* ItemNameBox;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
+		class UTextBlock* ItemCountBox;
+	//UPROPERTY(EditAnywhere, BlueprintReadtWrite, Meta = (BindWidget))
+	//	class UImage* IconImage;
+
 public:
-	UFUNCTION(BlueprintCallable)
-		void SetData(class UInventoryData* Data);
+
+	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+
+
+	//UFUNCTION(BlueprintCallable)
+	//	void SetData(class UInventoryData* Data);
 
 	// Setter
 	void SetItemIndex(int32 idx);

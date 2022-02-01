@@ -14,7 +14,7 @@
  * 
  */
 UCLASS()
-class PP_API UInventoryBase : public UUserWidget
+class PP_API UInventoryBase : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 
@@ -26,4 +26,6 @@ protected:
 public:
 	UInventoryBase(const FObjectInitializer& ObjectInitializer);
 	virtual void NativeConstruct() override;
+
+	void InventoryInit();
 };

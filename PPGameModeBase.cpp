@@ -78,7 +78,7 @@ void APPGameModeBase::CreateInventory(TSubclassOf<UInventoryBase>NewInventoryCla
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("AddInventory")));
 		}
 
-		//PlayerInventory->SetVisibility(ESlateVisibility::Collapsed); // 일단 안보이게 한다.
+		PlayerInventory->SetVisibility(ESlateVisibility::Collapsed); // 일단 안보이게 한다.
 	}
 }
 

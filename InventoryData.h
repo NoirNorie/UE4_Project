@@ -34,7 +34,7 @@ public:
 	void SetItemNumber(int32 num);
 	void SetItemCount(int32 cnt);
 	void SetItemName(FString name);
-	void SetItemIcon(UTexture2D* Icon);
+	void SetItemIcon(FString& strPath);
 	// Getter
 	int32 GetItemIndex();
 	int32 GetItemNumber();

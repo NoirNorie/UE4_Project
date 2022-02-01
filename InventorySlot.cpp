@@ -46,10 +46,17 @@ void UInventorySlot::SetItemIcon(UTexture2D* Icon)
 //
 //}
 
-
-void UInventorySlot::SetData(class UInventoryData* Data)
+void UInventorySlot::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
-	SetItemIndex(Data->GetItemIndex());
-	SetItemCount(Data->GetItemCount());
-	SetItemName(Data->GetItemName());
+	UInventoryData* Item = Cast<UInventoryData>(ListItemObject);
+	ItemNameBox->SetText(FText::FromString(Item->GetItemName()));
+	ItemCountBox->SetText(FText::FromString(FString::FromInt(Item->GetItemCount())));
 }
+
+//void UInventorySlot::SetData(class UInventoryData* Data)
+//{
+//	SetItemIndex(Data->GetItemIndex());
+//	SetItemCount(Data->GetItemCount());
+//	SetItemName(Data->GetItemName());
+//	SetItemIcon(nullptr);
+//}
