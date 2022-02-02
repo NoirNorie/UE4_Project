@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "InventoryData.h"
 
+// 생성자 보조 함수 헤더
+#include "UObject/ConstructorHelpers.h"
+
 #include "Components/ListView.h"
 
 #include "InventoryBase.generated.h"
@@ -21,10 +24,7 @@ class PP_API UInventoryBase : public UUserWidget, public IUserObjectListEntry
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
 		class UListView* List;
-
-
 public:
-	UInventoryBase(const FObjectInitializer& ObjectInitializer);
 	virtual void NativeConstruct() override;
 
 	void InventoryInit();

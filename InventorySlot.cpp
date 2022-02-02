@@ -15,14 +15,17 @@ void UInventorySlot::SetItemNumber(int32 num)
 void UInventorySlot::SetItemCount(int32 cnt)
 {
 	ItemCount = cnt;
+	ItemCountBox->SetText(FText::FromString(FString::FromInt(ItemCount)));
 }
 void UInventorySlot::SetItemName(FString name)
 {
 	ItemName = name;
+	ItemNameBox->SetText(FText::FromString(ItemName));
 }
 void UInventorySlot::SetItemIcon(UTexture2D* Icon)
 {
 	ItemIcon = Icon;
+	ImgBox->SetBrushFromTexture(ItemIcon);
 }
 //// Getter
 //int32 UInventorySlot::GetItemIndex()
@@ -46,17 +49,10 @@ void UInventorySlot::SetItemIcon(UTexture2D* Icon)
 //
 //}
 
-void UInventorySlot::NativeOnListItemObjectSet(UObject* ListItemObject)
+void UInventorySlot::SetData(class UInventoryData* Data)
 {
-	UInventoryData* Item = Cast<UInventoryData>(ListItemObject);
-	ItemNameBox->SetText(FText::FromString(Item->GetItemName()));
-	ItemCountBox->SetText(FText::FromString(FString::FromInt(Item->GetItemCount())));
+	SetItemIndex(Data->GetItemIndex());
+	SetItemCount(Data->GetItemCount());
+	SetItemName(Data->GetItemName());
+	SetItemIcon(Data->GetItemIcon());
 }
-
-//void UInventorySlot::SetData(class UInventoryData* Data)
-//{
-//	SetItemIndex(Data->GetItemIndex());
-//	SetItemCount(Data->GetItemCount());
-//	SetItemName(Data->GetItemName());
-//	SetItemIcon(nullptr);
-//}

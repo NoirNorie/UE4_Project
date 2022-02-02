@@ -8,7 +8,8 @@
 
 // 아이템의 정보를 저장하는 클래스
 // 일반적으로 UObject는 블루프린트로 만들 수 없다
-// 특별하게 지정할 경우 UCLASS() 매크로에 Blueprintable, BlueprintType 지정자를 집어넣으면 된다.
+// 특별하게 지정하려고 하거나 블루프린트 상에서 나타내기 위해서는
+// UCLASS() 매크로에 Blueprintable, BlueprintType 지정자를 집어넣으면 된다.
 
 /**
  * 
@@ -34,7 +35,7 @@ public:
 	void SetItemNumber(int32 num);
 	void SetItemCount(int32 cnt);
 	void SetItemName(FString name);
-	void SetItemIcon(FString& strPath);
+	void SetItemIcon(const FString& IconPath);
 	// Getter
 	int32 GetItemIndex();
 	int32 GetItemNumber();

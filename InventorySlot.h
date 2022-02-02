@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/IUserObjectListEntry.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 
 #include "InventoryData.h"
 #include "InventorySlot.generated.h"
@@ -33,16 +34,13 @@ protected:
 		class UTextBlock* ItemNameBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
 		class UTextBlock* ItemCountBox;
-	//UPROPERTY(EditAnywhere, BlueprintReadtWrite, Meta = (BindWidget))
-	//	class UImage* IconImage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
+		class UImage* ImgBox;
 
 public:
 
-	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
-
-
-	//UFUNCTION(BlueprintCallable)
-	//	void SetData(class UInventoryData* Data);
+	UFUNCTION(BlueprintCallable)
+		void SetData(class UInventoryData* Data);
 
 	// Setter
 	void SetItemIndex(int32 idx);

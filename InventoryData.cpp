@@ -20,9 +20,10 @@ void UInventoryData::SetItemName(FString name)
 {
 	ItemName = name;
 }
-void UInventoryData::SetItemIcon(FString& strPath)
+void UInventoryData::SetItemIcon(const FString& IconPath)
 {
-	ItemIcon = LoadObject<UTexture2D>(nullptr, *strPath);
+	ItemIcon = LoadObject<UTexture2D>(nullptr, *IconPath);
+
 }
 
 // Getter
