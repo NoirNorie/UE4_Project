@@ -12,6 +12,7 @@ void UInventoryBase::NativeConstruct()
 
 void UInventoryBase::InventoryInit()
 {
+	// 인벤토리 아이템을 등록해놓는다.
 	// UInventoryData* HeavyAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("HeavyAmmo"));
 	UInventoryData* HeavyAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
 	HeavyAmmo->SetItemIndex(0);
@@ -25,13 +26,15 @@ void UInventoryBase::InventoryInit()
 	LightAmmo->SetItemIndex(1);
 	LightAmmo->SetItemCount(0);
 	LightAmmo->SetItemName("LightAmmo");
+	LightAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Bullet04.Bullet04'"));
 	List->AddItem(LightAmmo);
 
-	//UInventoryData* DMRAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
-	//HeavyAmmo->SetItemIndex(2);
-	//HeavyAmmo->SetItemCount(0);
-	//HeavyAmmo->SetItemName("DMRAmmo");
-	//List->AddItem(DMRAmmo);
+	UInventoryData* DMRAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
+	DMRAmmo->SetItemIndex(2);
+	DMRAmmo->SetItemCount(0);
+	DMRAmmo->SetItemName("DMRAmmo");
+	DMRAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/BulletBox.BulletBox'"));
+	List->AddItem(DMRAmmo);
 
 	//UInventoryData* DMRAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("DMRAmmo"));
 	//HeavyAmmo->SetItemIndex(2);

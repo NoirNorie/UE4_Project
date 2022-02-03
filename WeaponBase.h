@@ -5,8 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "UObject/ConstructorHelpers.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
+
+#include "ItemInteractionWidget.h"
 
 #include "TPlayer.h"
 #include "TPlayerInterface.h"
@@ -25,10 +31,20 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Casule, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Casule", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* W_Contact;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* SK_Mesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	class UWidgetComponent* InteractionWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	class TSubclassOf<UItemInteractionWidget> ItemInterClass;
+	UPROPERTY()
+	UItemInteractionWidget* ItemWidget;
+
+	// void CreateInteractionWidget();
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: Name")
@@ -42,11 +58,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Info: WeaponIndex")
 	int32 W_IDX;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Progress Variables")
+	float progressVar;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	UFUNCTION() void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	bool bOverlapped;
+
 };
