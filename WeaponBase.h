@@ -31,18 +31,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Casule", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Casule", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* W_Contact;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* SK_Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractionWidget", meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* Inter_Widget;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
-	class UWidgetComponent* InteractionWidget;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
-	class TSubclassOf<UItemInteractionWidget> ItemInterClass;
-	UPROPERTY()
-	UItemInteractionWidget* ItemWidget;
+	UItemInteractionWidget* DisplayedWidget;
 
 	// void CreateInteractionWidget();
 

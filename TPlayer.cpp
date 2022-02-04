@@ -65,19 +65,19 @@ ATPlayer::ATPlayer()
 	AudioComponent->SetupAttachment(RootComponent);
 
 	// 사용할 무기를 맵에 기록해 놓는다
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/SK_AR4_X.SK_AR4_X'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/Weapon/SK_AR4_X.SK_AR4_X'"));
 	if (WeaponSK1.Succeeded())
 	{
 		FName WeaponSKName = "AR-15";
 		WeaponMap.Add(WeaponSKName, WeaponSK1);
 	}
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK2(TEXT("SkeletalMesh'/Game/Blueprint/SK_KA47_X.SK_KA47_X'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK2(TEXT("SkeletalMesh'/Game/Blueprint/Weapon/SK_KA47_X.SK_KA47_X'"));
 	if (WeaponSK2.Succeeded())
 	{
 		FName WeaponSKName = "AK-47";
 		WeaponMap.Add(WeaponSKName, WeaponSK2);
 	}
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK3(TEXT("SkeletalMesh'/Game/Blueprint/SK_KA_Val_X.SK_KA_Val_X'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK3(TEXT("SkeletalMesh'/Game/Blueprint/Weapon/SK_KA_Val_X.SK_KA_Val_X'"));
 	if (WeaponSK3.Succeeded())
 	{
 		FName WeaponSKName = "As-Val";

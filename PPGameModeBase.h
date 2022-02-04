@@ -30,12 +30,13 @@ protected:
 	TSubclassOf<UTPlayerStateWidget> StartWidgetClass;  // 플레이어의 상태를 출력할 위젯
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
 	TSubclassOf<UInventoryBase> InventoryClass;			// 인벤토리를 띄울 위젯
-
 	UPROPERTY()
 	UTPlayerStateWidget* CurrentWidget;
-
 	UPROPERTY()
 	UInventoryBase* PlayerInventory;
+
+
+
 
 public:
 	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
