@@ -54,6 +54,8 @@
 
 // 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
+DECLARE_DELEGATE(FDele_LootingStart);
+DECLARE_DELEGATE(FDele_LootingCancle);
 
 UCLASS()
 class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
@@ -162,6 +164,10 @@ public:
 	// 인벤토리 함수 선언
 	UFUNCTION() void InventoryToggle();
 
+	// 상호작용 함수 선언
+	UFUNCTION() void StartInteraction();
+	UFUNCTION() void StopInteraction();
+
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인
 	bool GetAimCheck(); // 조준 여부 확인
@@ -206,11 +212,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float player_Thirsty;
 
+
+	UFUNCTION() void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION() void OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	AActor* ContactActor;
+
+
 	// 에너지와 수분 소모량
 	float RequireMoisture;
 	float RequireFat;
 
 	// 델리게이트
 	FOnWeaponChangedDelegate OnWeaponNameChanged;
+	FDele_LootingCancle OnLootingCancled;
+	FDele_LootingStart OnLootingStarted;
 
 };

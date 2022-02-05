@@ -84,8 +84,8 @@ ATPlayer::ATPlayer()
 		WeaponMap.Add(WeaponSKName, WeaponSK3);
 	}
 
-
-
+	// 접촉한 액터의 정보를 초기화한다.
+	ContactActor = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -168,6 +168,9 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPlayer::StartReload);
 	// 인벤토리 바인드
 	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &ATPlayer::InventoryToggle);
+	// 상호작용 바인드
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ATPlayer::StartInteraction);
+	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ATPlayer::StopInteraction);
 }
 
 // 전후이동 함수
@@ -296,6 +299,7 @@ void ATPlayer::ReloadEnd()
 	IsReloading = false;
 	PlayerWidget->SetCurrentAmmo(--player_mag);
 }
+
 // 무기 장착 사실을 전달할 함수
 bool ATPlayer::GetWeaponCheck()
 {
@@ -306,7 +310,7 @@ bool ATPlayer::GetAimCheck()
 {
 	return CheckAim;
 }
-
+// 인벤토리 토글 함수
 void ATPlayer::InventoryToggle()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
@@ -321,10 +325,25 @@ void ATPlayer::InventoryToggle()
 			Inventory->SetVisibility(ESlateVisibility::Collapsed);
 		}
 	}
-	
 }
+// 상호작용 함수 구현
+void ATPlayer::StartInteraction()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("On")));
+	if (OnLootingStarted.IsBound() == true)
+	{
+		OnLootingStarted.Execute(); // 델리게이트를 동작시킨다.
+	}
 
-
+}
+void ATPlayer::StopInteraction()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Off")));
+	if (OnLootingCancled.IsBound() == true)
+	{
+		OnLootingCancled.Execute();
+	}
+}
 
 float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -364,4 +383,17 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 		CheckWeapon = true;
 		AnimInst->WeaponState = true;
 	}
+}
+
+void ATPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ContactActor = OtherActor;
+}
+
+void ATPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ContactActor = nullptr;
 }

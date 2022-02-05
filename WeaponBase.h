@@ -40,6 +40,9 @@ protected:
 
 	UItemInteractionWidget* DisplayedWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerInfo")
+	class ATPlayer* InfoPlayer;
+
 	// void CreateInteractionWidget();
 
 public:
@@ -65,6 +68,16 @@ public:
 		AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	bool bOverlapped;
+	UFUNCTION() void OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION() void GiveItem();
+
+	UFUNCTION() void CallDeleFunc_LootingStart();
+	UFUNCTION() void CallDeleFunc_LootingCancle();
+
+
+	bool bOverlapped;
+	bool bLooting;
+	AActor* TransferActor;
 };
