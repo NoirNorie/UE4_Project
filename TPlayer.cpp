@@ -385,6 +385,11 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	}
 }
 
+void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
+{
+
+}
+
 void ATPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

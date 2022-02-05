@@ -182,10 +182,14 @@ public:
 
 	// 인터페이스 함수
 	// 인터페이스 함수의 인터페이스
+	// 무기 획득 인터페이스 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
 		void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX);
-	// 인터페이스 함수의 구현
 	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX) override;
+	// 총알 획득 인터페이스 함수
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
+		void GetAmmoItem(FName Ammo_Name, int32 Ammo_Type);
+	virtual void GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type);
 
 	// 인터페이스로 보낼 무기 확인용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

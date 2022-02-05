@@ -139,7 +139,8 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	TransferActor = nullptr; // 액터 정보도 지운다.
 	if (InfoPlayer != nullptr)
 	{
-		// 묶인 델리게이트를 해제한다
+		// 혹시 모를 메모리 누수를 방지하기 위해서 묶인 델리게이트를 해제한다.
+		// 아직 발생한 경험은 없다.
 		InfoPlayer->OnLootingStarted.Unbind();
 		InfoPlayer->OnLootingCancled.Unbind();
 	}

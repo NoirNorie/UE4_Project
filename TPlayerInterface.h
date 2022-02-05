@@ -28,4 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "CheckWeapon")
 	void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponType);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "GetAmmo")
+	void GetAmmoItem(FName Ammo_Name, int32 Ammo_Type);
+
 };
