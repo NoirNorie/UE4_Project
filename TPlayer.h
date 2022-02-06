@@ -54,8 +54,8 @@
 
 // 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
-DECLARE_DELEGATE(FDele_LootingStart);
-DECLARE_DELEGATE(FDele_LootingCancle);
+DECLARE_DELEGATE(FDele_LootingStart);  // 줍기 시작을 알릴 델리게이트
+DECLARE_DELEGATE(FDele_LootingCancle); // 줍기 취소를 알릴 델리게이트 
 
 UCLASS()
 class PP_API ATPlayer : public ACharacter, public ITPlayerInterface
@@ -69,7 +69,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:
-	// -- 변수 -- 
+	// --- 액터 변수 ----------------------------------------------------------------------------------------
+
 	// 스프링 암
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* TPSpringArm;
@@ -112,14 +113,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 		float FireRate;
 
-	// 히트 스캔을 위한 포인터
+	// 히트 스캔을 위한 게임스태틱 포인터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
 
-	// 위젯을 가져올 포인터
-	class APPGameModeBase* GMD;
+	// -------- 위젯 관련 포인터 ----------------------------------------------------------------------------------
+
+	class APPGameModeBase* GMD;					// 게임모드
 	class UTPlayerStateWidget* PlayerWidget;
-	class UInventoryBase* Inventory;
+	class UInventoryBase* Inventory;			// 인벤토리 위젯 포인터
+
+	// ------------------------------------------------------------------------------------------------------------
+
 
 	// -- 변수 -- 
 
@@ -180,16 +185,24 @@ public:
 	// 무기 처리용 맵
 	 TMap<FName, ConstructorHelpers::FObjectFinder<USkeletalMesh>> WeaponMap; // 문자열로 인식되는 맵을 생성한다.
 
-	// 인터페이스 함수
-	// 인터페이스 함수의 인터페이스
+	// --- 인터페이스 함수 ----------------------------------------------------------------------------------------
+
 	// 무기 획득 인터페이스 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
 		void EquipWeaponItem(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX);
 	virtual void EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX) override;
+
 	// 총알 획득 인터페이스 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
 		void GetAmmoItem(FName Ammo_Name, int32 Ammo_Type);
 	virtual void GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type);
+
+	// 음식 아이템 획득 인터페이스 함수
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
+		void GetFoodItem(FName Food_Name, float fHungry, float fThirsty);
+	virtual void GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty);
+
+	// ------------------------------------------------------------------------------------------------------------
 
 	// 인터페이스로 보낼 무기 확인용 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

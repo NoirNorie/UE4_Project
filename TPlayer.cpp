@@ -390,6 +390,11 @@ void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
 
 }
 
+void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty)
+{
+
+}
+
 void ATPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

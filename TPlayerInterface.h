@@ -31,4 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "GetAmmo")
 	void GetAmmoItem(FName Ammo_Name, int32 Ammo_Type);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "GetFood")
+	void GetFoodItem(FName Food_Name, float fHungry, float fThirsty);
+
 };
