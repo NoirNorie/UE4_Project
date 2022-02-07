@@ -132,8 +132,8 @@ void ATPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	RequireMoisture += DeltaTime * 10;
-	RequireFat += DeltaTime * 10;
+	RequireMoisture += DeltaTime * 0.1;
+	RequireFat += DeltaTime * 0.1;
 
 	if (PlayerWidget)
 	{
@@ -387,7 +387,12 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 
 void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Get Ammo Interface Called")));
+	if (Inventory)
+	{
+		Inventory->AmmoInserter(Ammo_Name, Ammo_Type);
 
+	}
 }
 
 void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty)

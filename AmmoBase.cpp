@@ -133,6 +133,7 @@ void AAmmoBase::GiveItem()
 			ITPlayerInterface* EQAmmoInterface = Cast<ITPlayerInterface>(TransferActor);
 			if (EQAmmoInterface)
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Get Ammo Interface Called")));
 				EQAmmoInterface->Execute_GetAmmoItem(TransferActor, Ammo_Name, Ammo_Type);
 			}
 		}
