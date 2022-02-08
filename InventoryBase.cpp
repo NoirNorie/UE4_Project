@@ -128,7 +128,7 @@ void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
 {
 	if (InventorySet.Find(FoodName) != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Ammo")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Food")));
 
 		// List->GetIndexForItem();
 
@@ -143,12 +143,12 @@ void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
 			}
 		}
 	}
-	else // 찾는 총알이 없다면
+	else // 찾는 음식이 없다면
 	{
-		InventorySet.Add(FoodName); // 총알이 들어왔다는 사실을 기록한다.
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("No Exist Ammo")));
+		InventorySet.Add(FoodName);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("No Exist Food")));
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Insert Sequence")));
-		AmmoItemSelector(FoodType); // 총알 아이템을 리스트에 추가하는 함수로 넘어간다.
+		FoodItemSelector(FoodType);
 	}
 
 	if (List != nullptr) // 인벤토리를 갱신하여 변경 사항을 등록한다.
@@ -181,14 +181,14 @@ void UInventoryBase::FoodItemSelector(int32 t)
 		}
 		case(3):
 		{
-			LootingFood->SetItemIndex(7);
+			LootingFood->SetItemIndex(6);
 			LootingFood->SetItemName("FoodCan");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food0.Food0'"));
 			break;
 		}
 		case(4):
 		{
-			LootingFood->SetItemIndex(8);
+			LootingFood->SetItemIndex(7);
 			LootingFood->SetItemName("SoupCan");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food3.Food3'"));
 			break;
