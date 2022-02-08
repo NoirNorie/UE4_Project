@@ -395,9 +395,13 @@ void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
 	}
 }
 
-void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty)
+void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty, int32 FoodType)
 {
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Get Ammo Interface Called")));
+	if (Inventory)
+	{
+		Inventory->FoodInserter(Food_Name, FoodType);
+	}
 }
 
 void ATPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,

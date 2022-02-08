@@ -199,8 +199,8 @@ public:
 
 	// 음식 아이템 획득 인터페이스 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
-		void GetFoodItem(FName Food_Name, float fHungry, float fThirsty);
-	virtual void GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty);
+		void GetFoodItem(FName Food_Name, float fHungry, float fThirsty, int32 FoodType);
+	virtual void GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty, int32 FoodType);
 
 	// ------------------------------------------------------------------------------------------------------------
 

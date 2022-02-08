@@ -38,7 +38,7 @@ public:
 
 
 	void AmmoInserter(FName AmmoName, int32 AmmoType);
-
 	void AmmoItemSelector(int32 t);
+	void FoodInserter(FName FoodName, int32 FoodType);
 	void FoodItemSelector(int32 t);
 };

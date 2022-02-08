@@ -124,6 +124,39 @@ void UInventoryBase::AmmoItemSelector(int32 t)
 	}
 }
 
+void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
+{
+	if (InventorySet.Find(FoodName) != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Ammo")));
+
+		// List->GetIndexForItem();
+
+		// 아이템이 존재하는 사실이 확실하므로
+		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
+		{
+			UInventoryData* Data = Cast<UInventoryData>(List->GetItemAt(i)); // 인벤토리 내부에 있을 데이터를 구해온다.
+			if (Data != nullptr && Data->GetItemName() == FoodName.ToString())
+			{
+				Data->SetItemCount(Data->GetItemCount() + 1); // 개수를 하나 증가시킨다.
+				break; // 불필요한 연산은 줄인다.
+			}
+		}
+	}
+	else // 찾는 총알이 없다면
+	{
+		InventorySet.Add(FoodName); // 총알이 들어왔다는 사실을 기록한다.
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("No Exist Ammo")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Insert Sequence")));
+		AmmoItemSelector(FoodType); // 총알 아이템을 리스트에 추가하는 함수로 넘어간다.
+	}
+
+	if (List != nullptr) // 인벤토리를 갱신하여 변경 사항을 등록한다.
+	{
+		List->RegenerateAllEntries();
+	}
+}
+
 void UInventoryBase::FoodItemSelector(int32 t)
 {
 	UInventoryData* LootingFood = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
@@ -132,25 +165,18 @@ void UInventoryBase::FoodItemSelector(int32 t)
 	{
 		switch (t)
 		{
-		case(0):
+		case(1):
 		{
 			LootingFood->SetItemIndex(4);
 			LootingFood->SetItemName("Water");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Drink0.Drink0'"));
 			break;
 		}
-		case(1):
+		case(2):
 		{
 			LootingFood->SetItemIndex(5);
 			LootingFood->SetItemName("Coke");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Drink1.Drink1'"));
-			break;
-		}
-		case(2):
-		{
-			LootingFood->SetItemIndex(6);
-			LootingFood->SetItemName("Milk");
-			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Drink3.Drink3'"));
 			break;
 		}
 		case(3):
@@ -165,20 +191,6 @@ void UInventoryBase::FoodItemSelector(int32 t)
 			LootingFood->SetItemIndex(8);
 			LootingFood->SetItemName("SoupCan");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food3.Food3'"));
-			break;
-		}
-		case(5):
-		{
-			LootingFood->SetItemIndex(9);
-			LootingFood->SetItemName("Bread");
-			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food2.Food2'"));
-			break;
-		}
-		case(6):
-		{
-			LootingFood->SetItemIndex(10);
-			LootingFood->SetItemName("TunaCan");
-			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food4.Food4'"));
 			break;
 		}
 		}

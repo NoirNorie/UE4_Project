@@ -134,7 +134,7 @@ void AUsableItemBase::GiveItem()
 			ITPlayerInterface* EQAmmoInterface = Cast<ITPlayerInterface>(TransferActor);
 			if (EQAmmoInterface)
 			{
-				EQAmmoInterface->Execute_GetFoodItem(TransferActor, Food_Name, fHungry, fThirsty);
+				EQAmmoInterface->Execute_GetFoodItem(TransferActor, Food_Name, fHungry, fThirsty, FoodType);
 			}
 		}
 	}
