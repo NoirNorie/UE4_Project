@@ -319,10 +319,18 @@ void ATPlayer::InventoryToggle()
 		if (Inventory->GetVisibility() == ESlateVisibility::Collapsed)
 		{
 			Inventory->SetVisibility(ESlateVisibility::Visible);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI::FInputModeGameAndUI());
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = true;
 		}
 		else
 		{
 			Inventory->SetVisibility(ESlateVisibility::Collapsed);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameOnly::FInputModeGameOnly());
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = false;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = false;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = false;
 		}
 	}
 }
