@@ -3,6 +3,11 @@
 
 #include "InventorySlot.h"
 
+void UInventorySlot::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
+
 	// Setter
 void UInventorySlot::SetItemIndex(int32 idx)
 {
@@ -27,6 +32,7 @@ void UInventorySlot::SetItemIcon(UTexture2D* Icon)
 	ItemIcon = Icon;
 	ImgBox->SetBrushFromTexture(ItemIcon);
 }
+
 //// Getter
 //int32 UInventorySlot::GetItemIndex()
 //{

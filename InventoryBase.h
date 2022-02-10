@@ -11,6 +11,10 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/ListView.h"
 
+// 플레이어 헤더
+#include "TPlayer.h"
+#include "TPlayerController.h"
+
 #include "InventoryBase.generated.h"
 
 /**
@@ -33,12 +37,14 @@ public:
 
 	void InventoryInit();
 
+	void ItemClick(UObject* items);
+
 	void ItemInsert(FName ItemName);
 	void ItemDelete(FName ItemName);
 
 
 	void AmmoInserter(FName AmmoName, int32 AmmoType);
 	void AmmoItemSelector(int32 t);
-	void FoodInserter(FName FoodName, int32 FoodType);
-	void FoodItemSelector(int32 t);
+	void FoodInserter(FName FoodName, float hungry, float thirst, int32 FoodType);
+	void FoodItemSelector(int32 t, float hungry, float thirst);
 };

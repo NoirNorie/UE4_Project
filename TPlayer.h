@@ -168,6 +168,8 @@ public:
 
 	// 인벤토리 함수 선언
 	UFUNCTION() void InventoryToggle();
+	// 아이템 사용 함수
+	UFUNCTION() void UseItem(int32 itemIdx, float Inc_HP, float Dec_Hungry, float Dec_Thirst);
 
 	// 상호작용 함수 선언
 	UFUNCTION() void StartInteraction();
@@ -199,8 +201,8 @@ public:
 
 	// 음식 아이템 획득 인터페이스 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface Call")
-		void GetFoodItem(FName Food_Name, float fHungry, float fThirsty, int32 FoodType);
-	virtual void GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty, int32 FoodType);
+		void GetFoodItem(FName Food_Name, float fHungry, float fThirst, int32 FoodType);
+	virtual void GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirst, int32 FoodType);
 
 	// ------------------------------------------------------------------------------------------------------------
 

@@ -26,6 +26,24 @@ void UInventoryData::SetItemIcon(const FString& IconPath)
 
 }
 
+void UInventoryData::SetItemDecHungry(float inp)
+{
+	dec_Hungry = inp;
+}
+void UInventoryData::SetItemDecThrist(float inp)
+{
+	dec_Thirst = inp;
+}
+void UInventoryData::SetItemIncHP(float inp)
+{
+	inc_HP = inp;
+}
+void UInventoryData::SetItemWeight(float inp)
+{
+	ItemWeight = inp;
+}
+
+
 // Getter
 int32 UInventoryData::GetItemIndex()
 {
@@ -46,4 +64,21 @@ FString UInventoryData::GetItemName()
 UTexture2D* UInventoryData::GetItemIcon()
 {
 	return ItemIcon;
+}
+
+float UInventoryData::GetDecHungry()
+{
+	return dec_Hungry;
+}
+float UInventoryData::GetDecThrist()
+{
+	return dec_Thirst;
+}
+float UInventoryData::GetIncHP()
+{
+	return inc_HP;
+}
+float UInventoryData::GetWeight()
+{
+	return ItemWeight;
 }

@@ -334,6 +334,42 @@ void ATPlayer::InventoryToggle()
 		}
 	}
 }
+void ATPlayer::UseItem(int32 itemIdx, float Inc_HP, float Dec_Hungry, float Dec_Thirst)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Item Index %d"), itemIdx));
+	switch(itemIdx)
+	{
+	case 4: // Water
+	{
+		RequireFat -= Dec_Hungry;
+		RequireMoisture -= Dec_Thirst;
+		break;
+	}
+	case 5: // Coke
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Coke")));
+		RequireFat -= Dec_Hungry;
+		RequireMoisture -= Dec_Thirst;
+		break;
+	}
+	case 6: // FoodCan
+	{
+		RequireFat -= Dec_Hungry;
+		RequireMoisture -= Dec_Thirst;
+		break;
+	}
+	case 7: // SoupCan
+	{
+		RequireFat -= Dec_Hungry;
+		RequireMoisture -= Dec_Thirst;
+		break;
+	}
+	}
+	if (RequireFat < 0.0f) RequireFat = 0.0f;
+	if (RequireMoisture < 0.0f) RequireMoisture = 0.0f;
+	PlayerWidget->SetCurrentHungry(RequireFat);
+	PlayerWidget->SetCurrentThirst(RequireMoisture);
+}
 // 상호작용 함수 구현
 void ATPlayer::StartInteraction()
 {
@@ -403,12 +439,12 @@ void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
 	}
 }
 
-void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirsty, int32 FoodType)
+void ATPlayer::GetFoodItem_Implementation(FName Food_Name, float fHungry, float fThirst, int32 FoodType)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Get Food Interface Called")));
 	if (Inventory)
 	{
-		Inventory->FoodInserter(Food_Name, FoodType);
+		Inventory->FoodInserter(Food_Name, fHungry, fThirst, FoodType);
 	}
 }
 

@@ -29,6 +29,16 @@ protected:
 		FString ItemName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")
 		UTexture2D* ItemIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item Stat")
+		float dec_Hungry;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item Stat")
+		float dec_Thirst;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item Stat")
+		float inc_HP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item Stat")
+		float ItemWeight;
+
 public:
 	// Setter
 	void SetItemIndex(int32 idx);
@@ -36,10 +46,23 @@ public:
 	void SetItemCount(int32 cnt);
 	void SetItemName(FString name);
 	void SetItemIcon(const FString& IconPath);
+
+	// item stat setter
+	void SetItemDecHungry(float inp);
+	void SetItemDecThrist(float inp);
+	void SetItemIncHP(float inp);
+	void SetItemWeight(float inp);
+
 	// Getter
 	int32 GetItemIndex();
 	int32 GetItemNumber();
 	int32 GetItemCount();
 	FString GetItemName();
 	UTexture2D* GetItemIcon();
+
+	// item stat getter
+	float GetDecHungry();
+	float GetDecThrist();
+	float GetIncHP();
+	float GetWeight();
 };

@@ -7,12 +7,13 @@ void UInventoryBase::NativeConstruct()
 {
 	Super::NativeConstruct();
 	List = Cast<UListView>(GetWidgetFromName(TEXT("List")));
+	List->OnItemClicked().AddUObject(this, &UInventoryBase::ItemClick);
 	// InventoryInit();
 }
 
 void UInventoryBase::InventoryInit()
 {
-	// 인벤토리 아이템을 등록해놓는다.
+	// 인벤토리 테스트 용 함수
 	// UInventoryData* HeavyAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("HeavyAmmo"));
 	UInventoryData* HeavyAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
 	//HeavyAmmo->SetItemIndex(0);
@@ -37,13 +38,35 @@ void UInventoryBase::InventoryInit()
 	DMRAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/BulletBox.BulletBox'"));
 	List->AddItem(DMRAmmo);
 	List->RemoveItem(DMRAmmo);
-
-	//UInventoryData* DMRAmmo = CreateDefaultSubobject<UInventoryData>(TEXT("DMRAmmo"));
-	//HeavyAmmo->SetItemIndex(2);
-	//HeavyAmmo->SetItemCount(0);
-	//HeavyAmmo->SetItemName("DMRAmmo");
-	//List->AddItem(DMRAmmo);
 }
+
+void UInventoryBase::ItemClick(UObject* items)
+{
+
+	UInventoryData* ItemData = Cast<UInventoryData>(items);
+
+	if (ItemData != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Click")));
+		int32 ItemIndex = ItemData->GetItemIndex();
+		if (ItemIndex > 3) // 인덱스가 3 이상일때만 동작하면 된다.
+		{
+			// 플레이어를 가져온다.
+			ATPlayerController* PlayerCont = Cast<ATPlayerController>(GetWorld()->GetFirstPlayerController());
+			if (PlayerCont != nullptr)
+			{
+				ATPlayer* Player = Cast<ATPlayer>(PlayerCont->GetCharacter());
+				if (Player != nullptr)
+				{
+					Player->UseItem(ItemIndex, ItemData->GetIncHP(), ItemData->GetDecHungry(), ItemData->GetDecThrist());
+				}
+			}
+
+
+		}
+	}
+}
+
 
 void UInventoryBase::ItemInsert(FName ItemName)
 {
@@ -89,42 +112,7 @@ void UInventoryBase::AmmoInserter(FName AmmoName, int32 AmmoType)
 
 }
 
-void UInventoryBase::AmmoItemSelector(int32 t)
-{
-	UInventoryData* LootingAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
-	LootingAmmo->SetItemCount(1);
-	if (LootingAmmo != nullptr)
-	{
-		switch (t)
-		{
-		case(1):
-		{			
-			LootingAmmo->SetItemIndex(1);
-			LootingAmmo->SetItemName("LightAmmo");
-			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Bullet04.Bullet04'"));
-			break;
-		}
-		case(2):
-		{
-			LootingAmmo->SetItemIndex(2);
-			LootingAmmo->SetItemName("HeavyAmmo");
-			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Bullet03.Bullet03'"));
-			break;
-		}
-		case(3):
-		{
-			LootingAmmo->SetItemIndex(3);
-			LootingAmmo->SetItemName("DMRAmmo");
-			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/BulletBox.BulletBox'"));
-			break;
-		}
-		}
-		List->AddItem(LootingAmmo); // 아이템을 리스트 뷰 상에 추가한다.
-		LootingAmmo = nullptr;		// nullptr을 가리키게 만든다. 
-	}
-}
-
-void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
+void UInventoryBase::FoodInserter(FName FoodName, float hungry, float thirst, int32 FoodType)
 {
 	if (InventorySet.Find(FoodName) != nullptr)
 	{
@@ -148,7 +136,7 @@ void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
 		InventorySet.Add(FoodName);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("No Exist Food")));
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Insert Sequence")));
-		FoodItemSelector(FoodType);
+		FoodItemSelector(FoodType, hungry, thirst);
 	}
 
 	if (List != nullptr) // 인벤토리를 갱신하여 변경 사항을 등록한다.
@@ -157,10 +145,46 @@ void UInventoryBase::FoodInserter(FName FoodName, int32 FoodType)
 	}
 }
 
-void UInventoryBase::FoodItemSelector(int32 t)
+// 인벤토리 내부에 동일한 아이템이 존재하지 않을 경우 아이템을 추가하는 함수
+
+void UInventoryBase::AmmoItemSelector(int32 t)
+{
+	UInventoryData* LootingAmmo = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
+	if (LootingAmmo != nullptr)
+	{
+		switch (t)
+		{
+		case(1):
+		{
+			LootingAmmo->SetItemIndex(1);
+			LootingAmmo->SetItemName("LightAmmo");
+			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Bullet04.Bullet04'"));
+			break;
+		}
+		case(2):
+		{
+			LootingAmmo->SetItemIndex(2);
+			LootingAmmo->SetItemName("HeavyAmmo");
+			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Bullet03.Bullet03'"));
+			break;
+		}
+		case(3):
+		{
+			LootingAmmo->SetItemIndex(3);
+			LootingAmmo->SetItemName("DMRAmmo");
+			LootingAmmo->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/BulletBox.BulletBox'"));
+			break;
+		}
+		}
+		LootingAmmo->SetItemCount(1);
+		List->AddItem(LootingAmmo); // 아이템을 리스트 뷰 상에 추가한다.
+		LootingAmmo = nullptr;		// nullptr을 가리키게 만든다. 
+	}
+}
+
+void UInventoryBase::FoodItemSelector(int32 t, float hungry, float thirst)
 {
 	UInventoryData* LootingFood = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
-	LootingFood->SetItemCount(1);
 	if (LootingFood != nullptr)
 	{
 		switch (t)
@@ -194,7 +218,12 @@ void UInventoryBase::FoodItemSelector(int32 t)
 			break;
 		}
 		}
+
+		LootingFood->SetItemCount(1);
+		LootingFood->SetItemDecHungry(hungry);
+		LootingFood->SetItemDecThrist(thirst);
 		List->AddItem(LootingFood);
+
 		LootingFood = nullptr;
 	}
 }

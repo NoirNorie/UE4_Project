@@ -38,6 +38,8 @@ protected:
 		class UImage* ImgBox;
 
 public:
+	virtual void NativeConstruct() override;
+
 
 	UFUNCTION(BlueprintCallable)
 		void SetData(class UInventoryData* Data);
@@ -48,6 +50,7 @@ public:
 	void SetItemCount(int32 cnt);
 	void SetItemName(FString name);
 	void SetItemIcon(UTexture2D* Icon);
+
 	//// Getter
 	//int32 GetItemIndex();
 	//int32 GetItemNumber();
