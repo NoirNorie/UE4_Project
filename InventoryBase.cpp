@@ -42,9 +42,7 @@ void UInventoryBase::InventoryInit()
 
 void UInventoryBase::ItemClick(UObject* items)
 {
-
 	UInventoryData* ItemData = Cast<UInventoryData>(items);
-
 	if (ItemData != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Click")));
@@ -61,8 +59,11 @@ void UInventoryBase::ItemClick(UObject* items)
 					Player->UseItem(ItemIndex, ItemData->GetIncHP(), ItemData->GetDecHungry(), ItemData->GetDecThrist());
 				}
 			}
-
-
+			ItemData->SetItemCount(ItemData->GetItemCount() - 1);
+			if (ItemData->GetItemCount() <= 0)
+			{
+				List->RemoveItem(ItemData);
+			}
 		}
 	}
 }

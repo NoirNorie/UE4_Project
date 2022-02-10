@@ -347,7 +347,6 @@ void ATPlayer::UseItem(int32 itemIdx, float Inc_HP, float Dec_Hungry, float Dec_
 	}
 	case 5: // Coke
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Coke")));
 		RequireFat -= Dec_Hungry;
 		RequireMoisture -= Dec_Thirst;
 		break;
