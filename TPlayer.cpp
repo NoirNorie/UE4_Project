@@ -55,6 +55,7 @@ ATPlayer::ATPlayer()
 	// 콜리전 프로필
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TPlayer"));
 
+	// 사운드 큐 연결
 	static ConstructorHelpers::FObjectFinder<USoundCue>RifleEmpty(TEXT("SoundCue'/Game/Blueprint/WeaponSound/RifleEmpty_Cue.RifleEmpty_Cue'"));
 	if (RifleEmpty.Succeeded())
 	{
@@ -63,6 +64,18 @@ ATPlayer::ATPlayer()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerAudio"));
 	AudioComponent->bAutoActivate = false;
 	AudioComponent->SetupAttachment(RootComponent);
+
+	// 파티클 연결
+	static ConstructorHelpers::FObjectFinder<UParticleSystem>ParticleObj(TEXT("ParticleSystem'/Game/Effects/ParticleSystems/Weapons/AssaultRifle/Muzzle/P_AssaultRifle_MF.P_AssaultRifle_MF'"));
+	if (ParticleObj.Succeeded())
+	{
+		MuzzleParticle = ParticleObj.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UParticleSystem>ImpactParticleObj(TEXT("ParticleSystem'/Game/Effects/ParticleSystems/Weapons/AssaultRifle/Impacts/P_AssaultRifle_IH.P_AssaultRifle_IH'"));
+	if (ImpactParticleObj.Succeeded())
+	{
+		ImpactParticle = ImpactParticleObj.Object;
+	}
 
 	// 사용할 무기를 맵에 기록해 놓는다
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>WeaponSK1(TEXT("SkeletalMesh'/Game/Blueprint/Weapon/SK_AR4_X.SK_AR4_X'"));
@@ -273,9 +286,12 @@ void ATPlayer::Fire()
 
 					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
 				}
+				GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 200));
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
+
+			GameStatic->SpawnEmitterAttached(MuzzleParticle, Weapon_Socket, FName("Socket_MuzzleLoc"));
 
 			// 사운드 재생은 애니메이션 노티파이에 부착했다
 			// 소리가 중첩될 수 있도록 처리함

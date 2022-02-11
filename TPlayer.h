@@ -44,11 +44,14 @@
 // 플레이어 컨트롤러 헤더
 #include "TPlayerController.h"
 
-
 // 엔진 위에 그리기 위한 헤더
 #include "Engine/Canvas.h" 
 // 디버그 헤더
 #include "DrawDebugHelpers.h"
+
+// 파티클 헤더
+#include "Particles/ParticleSystem.h"
+
 
 #include "TPlayer.generated.h"
 
@@ -116,6 +119,14 @@ public:
 	// 히트 스캔을 위한 게임스태틱 포인터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UGameplayStatics* GameStatic;
+
+	// 총구 섬광 표현을 위한 변수
+	UPROPERTY()
+	class UParticleSystem* MuzzleParticle;
+	// 총알 충돌 이펙트를 표현할 변수
+	UPROPERTY()
+	class UParticleSystem* ImpactParticle;
+
 
 	// -------- 위젯 관련 포인터 ----------------------------------------------------------------------------------
 
