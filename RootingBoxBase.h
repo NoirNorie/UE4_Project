@@ -43,7 +43,7 @@ protected:
 
 	// 아이템 정보 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable Item Info")
-		FName Food_Name;
+		FName Box_Name;
 
 	// 플래그 변수
 	bool bOverlapped;

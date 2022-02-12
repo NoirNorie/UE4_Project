@@ -69,7 +69,7 @@ void AUsableItemBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (bOverlapped == true && bLooting == true)
 	{
-		progressVar += 1.0f;
+		progressVar += 2.5f;
 		DisplayedWidget->SetPercent(progressVar);
 		if (progressVar >= 100.0f)
 		{
