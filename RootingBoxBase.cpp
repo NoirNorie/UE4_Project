@@ -180,7 +180,7 @@ void ARootingBoxBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 void ARootingBoxBase::DropItem()
 {
 	int32 RandomNumb = FMath::RandRange(1, 10);
-	if (RandomNumb <= 7)
+	if (RandomNumb <= 7) // 70%의 확률로 아이템을 드랍한다.
 	{
 		UWorld* world = GetWorld();
 		if (world != nullptr)
@@ -193,7 +193,6 @@ void ARootingBoxBase::DropItem()
 			world->SpawnActor<AActor>(*(ItemBPMap.Find(RandomNumb)), SpawnLocation, rotator, SpawnParams);
 		}
 	}
-
 }
 
 void ARootingBoxBase::CallDeleFunc_LootingStart()
