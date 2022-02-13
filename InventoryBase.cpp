@@ -2,6 +2,9 @@
 
 
 #include "InventoryBase.h"
+// 플레이어 헤더
+#include "TPlayer.h"
+#include "TPlayerController.h"
 
 void UInventoryBase::NativeConstruct()
 {

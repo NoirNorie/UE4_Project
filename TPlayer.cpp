@@ -286,7 +286,8 @@ void ATPlayer::Fire()
 
 					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
 				}
-				GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 200));
+				GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint));
+				// GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 20));
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));

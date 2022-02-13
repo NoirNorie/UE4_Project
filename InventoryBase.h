@@ -11,9 +11,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/ListView.h"
 
-// 플레이어 헤더
-#include "TPlayer.h"
-#include "TPlayerController.h"
+
 
 #include "InventoryBase.generated.h"
 
