@@ -62,6 +62,7 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void OpenDoor();
+	void OpenDoor_Implementation();
 
 	// 충돌 확인 함수
 	UFUNCTION() void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,

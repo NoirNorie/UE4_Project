@@ -72,7 +72,7 @@ void AInteractionDoorBase::Tick(float DeltaTime)
 	{
 		if (bDoorState != true)
 		{
-			progressVar += (20.0f / DoorLevel);
+			progressVar += (0.5f / DoorLevel);
 			DisplayedWidget->SetPercent(progressVar);
 			if (progressVar >= 100.0f)
 			{
@@ -130,6 +130,10 @@ void AInteractionDoorBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent
 	InfoPlayer = nullptr;
 }
 
+void AInteractionDoorBase::OpenDoor_Implementation()
+{
+
+}
 
 void AInteractionDoorBase::CallDeleFunc_LootingStart()
 {
