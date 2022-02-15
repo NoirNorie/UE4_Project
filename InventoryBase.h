@@ -45,4 +45,8 @@ public:
 	void AmmoItemSelector(int32 t);
 	void FoodInserter(FName FoodName, float hungry, float thirst, int32 FoodType);
 	void FoodItemSelector(int32 t, float hungry, float thirst);
+
+
+	int32 HaveAmmo(FName AmmoName); // 해당 총알이 인벤토리에 존재하는지 물어보는 함수
+	void ReloadAmmo(FName AmmoName);
 };

@@ -89,7 +89,6 @@ void UInventoryBase::AmmoInserter(FName AmmoName, int32 AmmoType)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Ammo")));
 
 		// List->GetIndexForItem();
-
 		// 아이템이 존재하는 사실이 확실하므로
 		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
 		{
@@ -182,7 +181,8 @@ void UInventoryBase::AmmoItemSelector(int32 t)
 		}
 		LootingAmmo->SetItemCount(1);
 		List->AddItem(LootingAmmo); // 아이템을 리스트 뷰 상에 추가한다.
-		LootingAmmo = nullptr;		// nullptr을 가리키게 만든다. 
+		LootingAmmo = nullptr;
+		// nullptr로 포인터를 지워줘야 제대로 동작한다.
 	}
 }
 
@@ -229,5 +229,53 @@ void UInventoryBase::FoodItemSelector(int32 t, float hungry, float thirst)
 		List->AddItem(LootingFood);
 
 		LootingFood = nullptr;
+	}
+}
+
+int32 UInventoryBase::HaveAmmo(FName AmmoName)
+{
+	if (InventorySet.Find(AmmoName) != nullptr) // 찾는 총알이 있다면
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Ammo Exist")));
+		// 총알이 확실하게 존재하므로
+		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
+		{
+			UInventoryData* Data = Cast<UInventoryData>(List->GetItemAt(i)); // 인벤토리 내부에 있을 데이터를 구해온다.
+			if (Data != nullptr && Data->GetItemName() == AmmoName.ToString())
+			{
+				return Data->GetItemCount(); // 가지고 있는 총알 수를 반환한다.
+			}
+		}
+
+		// 제어 경로 문제로 반환값을 설정한다
+		// 여기까지 오면 뭔가 문제가 있는 것임
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Cancled")));
+		return 0;
+	}
+	else
+	{
+		// 가지고 있는 총알이 없는 경우
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("No Exist")));
+		return 0;
+	}
+}
+
+void UInventoryBase::ReloadAmmo(FName AmmoName) // 재장전 동작
+{
+	if (InventorySet.Find(AmmoName) != nullptr) // 찾는 총알이 있다면
+	{
+		// 총알이 확실하게 존재하므로
+		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
+		{
+			UInventoryData* Data = Cast<UInventoryData>(List->GetItemAt(i)); // 인벤토리 내부에 있을 데이터를 구해온다.
+			if (Data != nullptr && Data->GetItemName() == AmmoName.ToString())
+			{
+				Data->SetItemCount(Data->GetItemCount() - 1);
+				if (Data->GetItemCount() <= 0)
+				{
+					List->RemoveItem(Data);
+				}
+			}
+		}
 	}
 }

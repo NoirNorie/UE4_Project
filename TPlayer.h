@@ -231,6 +231,8 @@ public:
 		int32 player_ammo;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 player_mag;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FName CurrentAmmoName;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsReloading;
 
@@ -241,6 +243,7 @@ public:
 		float player_Hungry;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float player_Thirsty;
+
 
 
 	UFUNCTION() void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,

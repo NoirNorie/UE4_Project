@@ -305,16 +305,28 @@ void ATPlayer::Fire()
 // 재장전 함수 구현
 void ATPlayer::StartReload()
 {
-	if (player_mag != 0 && CheckWeapon == true)
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Active")));
+	if (Inventory->HaveAmmo(CurrentAmmoName) > 0) // 인벤토리 상에 현재 가지고 있는 무기의 총알이 존재한다면
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Call")));
 		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
 		IsReloading = true;
 	}
+
+	//if (player_mag != 0 && CheckWeapon == true)
+	//{
+	//	AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
+	//	IsReloading = true;
+	//}
 }
 void ATPlayer::ReloadEnd()
 {
 	IsReloading = false;
-	PlayerWidget->SetCurrentAmmo(--player_mag);
+	PlayerWidget->SetCurrentAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+	// 인벤토리에서 현재 가지고 있는 무기의 총알을 위젯으로 출력한다.
+	// 인벤토리 상에 현재 무기의 총알이 없다면 0이 반환되어 출력될 것임
+
+	//PlayerWidget->SetCurrentAmmo(--player_mag);
 }
 
 // 무기 장착 사실을 전달할 함수
@@ -426,11 +438,6 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	
 	WeaponName = weapon_Name;
 	player_ammo = weaponAmmo;
-	if (PlayerWidget)
-	{
-		PlayerWidget->SetWeaponName(WeaponName);
-		PlayerWidget->SetCurrentAmmo(player_ammo);
-	}
 	player_Damage = weaponDamage;
 	FireRate = weaponFireRate;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Damage %f"), player_Damage));
@@ -440,9 +447,38 @@ void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmm
 	if (CurrentWeapon != nullptr)
 	{
 		Weapon_Socket->SetSkeletalMesh(CurrentWeapon);
+
+		// 사용하는 총알 정보를 설정한다.
+		switch (weaponIDX)
+		{
+		case 0:
+		{
+			CurrentAmmoName = "LightAmmo";
+			break;
+		}
+		case 1:
+		{
+			CurrentAmmoName = "HeavyAmmo";
+			break;
+		}
+		case 2:
+		{
+			CurrentAmmoName = "DMRAmmo";
+			break;
+		}
+		}
 		CheckWeapon = true;
 		AnimInst->WeaponState = true;
 	}
+
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetWeaponName(WeaponName);
+		PlayerWidget->SetCurrentAmmo(player_ammo);
+		PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+	}
+
+
 }
 
 void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
@@ -451,7 +487,10 @@ void ATPlayer::GetAmmoItem_Implementation(FName Ammo_Name, int32 Ammo_Type)
 	if (Inventory)
 	{
 		Inventory->AmmoInserter(Ammo_Name, Ammo_Type);
-
+	}
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
 	}
 }
 
