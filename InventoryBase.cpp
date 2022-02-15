@@ -66,6 +66,7 @@ void UInventoryBase::ItemClick(UObject* items)
 			if (ItemData->GetItemCount() <= 0)
 			{
 				List->RemoveItem(ItemData);
+				InventorySet.Remove(FName(ItemData->GetItemName()));
 			}
 		}
 	}
@@ -274,6 +275,7 @@ void UInventoryBase::ReloadAmmo(FName AmmoName) // 재장전 동작
 				if (Data->GetItemCount() <= 0)
 				{
 					List->RemoveItem(Data);
+					InventorySet.Remove(AmmoName);
 				}
 			}
 		}

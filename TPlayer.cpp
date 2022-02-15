@@ -117,6 +117,13 @@ void ATPlayer::BeginPlay()
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD ON")));
 
 			// 게임모드에서 위젯을 가져온다.
+			Inventory = GMD->GetInventoryWidget();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
+			if (Inventory)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
+			}
+
 			PlayerWidget = GMD->GetPlayerStateWidget();
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
 			if (PlayerWidget)
@@ -124,17 +131,12 @@ void ATPlayer::BeginPlay()
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
 				PlayerWidget->SetWeaponName(WeaponName);
 				PlayerWidget->SetCurrentAmmo(player_ammo);
-				PlayerWidget->SetRemainAmmo(player_mag);
+				PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
 				PlayerWidget->SetCurrentHP(player_HP);
 				PlayerWidget->SetCurrentHungry(player_Hungry);
 				PlayerWidget->SetCurrentThirst(player_Thirsty);
 			}
-			Inventory = GMD->GetInventoryWidget();
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
-			if (Inventory)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
-			}
+
 		}
 	}
 
@@ -309,6 +311,7 @@ void ATPlayer::StartReload()
 	if (Inventory->HaveAmmo(CurrentAmmoName) > 0) // 인벤토리 상에 현재 가지고 있는 무기의 총알이 존재한다면
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Call")));
+		Inventory->ReloadAmmo(CurrentAmmoName);
 		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
 		IsReloading = true;
 	}
@@ -322,7 +325,9 @@ void ATPlayer::StartReload()
 void ATPlayer::ReloadEnd()
 {
 	IsReloading = false;
-	PlayerWidget->SetCurrentAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+	// PlayerWidget->SetCurrentAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+	PlayerWidget->SetCurrentAmmo(player_ammo);
+	PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
 	// 인벤토리에서 현재 가지고 있는 무기의 총알을 위젯으로 출력한다.
 	// 인벤토리 상에 현재 무기의 총알이 없다면 0이 반환되어 출력될 것임
 

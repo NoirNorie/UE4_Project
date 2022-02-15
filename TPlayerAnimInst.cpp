@@ -101,6 +101,7 @@ void UTPlayerAnimInst::AnimNotify_ReloadEnd()
 		}
 
 		// Character->player_mag--;
+		Character->ReloadEnd();
 	}
 	IsReload = false;
 }
