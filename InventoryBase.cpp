@@ -70,6 +70,12 @@ void UInventoryBase::ItemClick(UObject* items)
 			}
 		}
 	}
+
+	if (List != nullptr) // 인벤토리를 갱신하여 변경 사항을 등록한다.
+	{
+		List->RegenerateAllEntries();
+	}
+
 }
 
 
@@ -89,7 +95,6 @@ void UInventoryBase::AmmoInserter(FName AmmoName, int32 AmmoType)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Ammo")));
 
-		// List->GetIndexForItem();
 		// 아이템이 존재하는 사실이 확실하므로
 		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
 		{
@@ -121,16 +126,16 @@ void UInventoryBase::FoodInserter(FName FoodName, float hungry, float thirst, in
 	if (InventorySet.Find(FoodName) != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Already Exist Food")));
-
-		// List->GetIndexForItem();
-
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), FoodType));
 		// 아이템이 존재하는 사실이 확실하므로
 		for (int i = 0; i < List->GetNumItems(); i++) // 어디에 있는지 찾아낸다.
 		{
 			UInventoryData* Data = Cast<UInventoryData>(List->GetItemAt(i)); // 인벤토리 내부에 있을 데이터를 구해온다.
 			if (Data != nullptr && Data->GetItemName() == FoodName.ToString())
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), i));
 				Data->SetItemCount(Data->GetItemCount() + 1); // 개수를 하나 증가시킨다.
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("INC")));
 				break; // 불필요한 연산은 줄인다.
 			}
 		}
@@ -190,32 +195,34 @@ void UInventoryBase::AmmoItemSelector(int32 t)
 void UInventoryBase::FoodItemSelector(int32 t, float hungry, float thirst)
 {
 	UInventoryData* LootingFood = NewObject<UInventoryData>(this, UInventoryData::StaticClass());
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), t));
 	if (LootingFood != nullptr)
 	{
 		switch (t)
 		{
-		case(1):
+		case(4):
 		{
 			LootingFood->SetItemIndex(4);
 			LootingFood->SetItemName("Water");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Drink0.Drink0'"));
 			break;
 		}
-		case(2):
+		case(5):
 		{
+
 			LootingFood->SetItemIndex(5);
-			LootingFood->SetItemName("Coke");
+			LootingFood->SetItemName("Black Soda");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Drink1.Drink1'"));
 			break;
 		}
-		case(3):
+		case(6):
 		{
 			LootingFood->SetItemIndex(6);
 			LootingFood->SetItemName("FoodCan");
 			LootingFood->SetItemIcon(TEXT("Texture2D'/Game/Blueprint/ETC/Food0.Food0'"));
 			break;
 		}
-		case(4):
+		case(7):
 		{
 			LootingFood->SetItemIndex(7);
 			LootingFood->SetItemName("SoupCan");
@@ -250,7 +257,7 @@ int32 UInventoryBase::HaveAmmo(FName AmmoName)
 
 		// 제어 경로 문제로 반환값을 설정한다
 		// 여기까지 오면 뭔가 문제가 있는 것임
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Cancled")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Error Sequence")));
 		return 0;
 	}
 	else
@@ -271,13 +278,21 @@ void UInventoryBase::ReloadAmmo(FName AmmoName) // 재장전 동작
 			UInventoryData* Data = Cast<UInventoryData>(List->GetItemAt(i)); // 인벤토리 내부에 있을 데이터를 구해온다.
 			if (Data != nullptr && Data->GetItemName() == AmmoName.ToString())
 			{
-				Data->SetItemCount(Data->GetItemCount() - 1);
+				Data->SetItemCount((Data->GetItemCount() - 1));
 				if (Data->GetItemCount() <= 0)
 				{
 					List->RemoveItem(Data);
 					InventorySet.Remove(AmmoName);
+					//List->RegenerateAllEntries();
 				}
+				break;
 			}
 		}
 	}
+
+	if (List != nullptr) // 인벤토리를 갱신하여 변경 사항을 등록한다.
+	{
+		List->RegenerateAllEntries();
+	}
+
 }

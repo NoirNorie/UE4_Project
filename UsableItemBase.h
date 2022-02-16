@@ -47,6 +47,8 @@ protected:
 	// 아이템 정보 변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable Item Info")
 		FName Food_Name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable Item Info")
+		int32 FoodType;
 	// 소비 시 캐릭터가 얻을 변수들
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable Item Info")
 		float fHungry;
@@ -56,7 +58,7 @@ protected:
 	// 플래그 변수
 	bool bOverlapped;
 	bool bLooting;
-	int32 FoodType;
+
 	// 진행바 변수
 	float progressVar;
 

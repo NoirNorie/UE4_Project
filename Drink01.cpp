@@ -8,5 +8,5 @@ ADrink01::ADrink01()
 	Food_Name = "Water";
 	fHungry = 0.0f;
 	fThirsty = 40.0f;
-	FoodType = 1;
+	FoodType = 4;
 }

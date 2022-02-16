@@ -8,5 +8,5 @@ ADrink02::ADrink02()
 	Food_Name = "Black Soda";
 	fHungry = 10.0f;
 	fThirsty = 20.0f;
-	FoodType = 2;
+	FoodType = 5;
 }
