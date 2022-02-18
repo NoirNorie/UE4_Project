@@ -43,12 +43,16 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 				// 일단 폰을 제어하고 있는 무언가가 널포인터가 아닌것이 위에서 확실하므로
 				AAZombie* Zombie = Cast<AAZombie>(ControllingPawn);
-				if (Zombie != nullptr) Zombie->Detect();
-
+				if (Zombie != nullptr)
+				{
+					Zombie->Detect();
+					Zombie->GetCharacterMovement()->MaxWalkSpeed += 400;
+				}
 
 				if (ControllingPawn->GetDistanceTo(aPlayer) >= 850.0f)
 				{
 					OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieController::TargetPosKey, nullptr);
+					Zombie->GetCharacterMovement()->MaxWalkSpeed -= 400;
 				}
 				return;
 			}
