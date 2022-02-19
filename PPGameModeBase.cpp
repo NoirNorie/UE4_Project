@@ -35,6 +35,7 @@ void APPGameModeBase::BeginPlay()
 	}
 	CreateStateWidget(StartWidgetClass);
 	CreateInventory(InventoryClass);
+	CreateProgressWidget(GameProgressClass);
 }
 // 플레이어 상태창 등록
 void APPGameModeBase::CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass)
@@ -79,6 +80,25 @@ void APPGameModeBase::CreateInventory(TSubclassOf<UInventoryBase>NewInventoryCla
 		}
 
 		PlayerInventory->SetVisibility(ESlateVisibility::Collapsed); // 일단 안보이게 한다.
+	}
+}
+// 게임 진행도 위젯 등록
+void APPGameModeBase::CreateProgressWidget(TSubclassOf<UGameProgressWidget>NewProgressClass)
+{
+	if (ProgressWidget != nullptr)
+	{
+		ProgressWidget->RemoveFromViewport();
+		ProgressWidget = nullptr;
+	}
+	if (NewProgressClass != nullptr)
+	{
+		ProgressWidget = CreateWidget<UGameProgressWidget>(GetWorld(), NewProgressClass);
+		if (ProgressWidget != nullptr)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FindProgressWidget")));
+			ProgressWidget->AddToViewport();
+			ProgressWidget->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 }
 
