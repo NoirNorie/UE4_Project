@@ -29,6 +29,7 @@ AAZombie::AAZombie()
 	ZombieDamage = 30.0f;
 	AttackRange = 150.0f;
 	AttackRadius = 50.0f;
+	Tags.Add("Zombie");
 }
 
 // Called when the game starts or when spawned

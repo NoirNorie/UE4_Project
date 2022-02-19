@@ -193,6 +193,9 @@ public:
 
 	// 데미지 처리를 위한 프레임워크 함수
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	// 좀비를 공격했을 때 발생시킬 함수
+	void ZombieAggro();
+
 
 
 	// 무기 처리용 맵

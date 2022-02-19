@@ -2,6 +2,8 @@
 
 
 #include "TPlayer.h"
+#include "AZombie.h"
+#include "ZombieController.h"
 
 // Sets default values
 ATPlayer::ATPlayer()
@@ -266,6 +268,8 @@ void ATPlayer::Fire()
 
 			// 1차 충돌 검사용 선분
 
+			ZombieAggro();
+
 			FHitResult OutHit; // 충돌 검사를 할 변수
 			FVector Line1Start = TFollowCamera->GetComponentLocation(); // 선분의 시작점
 			FVector Line1FV = TFollowCamera->GetForwardVector(); // 선분의 방향 벡터
@@ -301,6 +305,7 @@ void ATPlayer::Fire()
 			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
 			PlayerWidget->SetCurrentAmmo(--player_ammo);
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
+
 		}
 	}
 }
@@ -435,6 +440,72 @@ float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 
 	return FinalDamage;
 }
+
+void ATPlayer::ZombieAggro()
+{
+
+	float Radius = 2000.0f;
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionQueryParams CollisionQueryParam;
+	
+	bool bResult = GetWorld()->OverlapMultiByChannel(
+		OverlapResults, GetActorLocation(),
+		FQuat::Identity, ECollisionChannel::ECC_Visibility,
+		FCollisionShape::MakeSphere(Radius), CollisionQueryParam);
+
+	if (bResult)
+	{
+		DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 16, FColor::Red, false, 0.2f);
+		for (auto OvActor : OverlapResults)
+		{
+			if (OvActor.GetActor())
+			{
+				auto thisActor = OvActor.GetActor();
+				if (thisActor->ActorHasTag("Zombie"))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("do")));
+					auto Zombie = Cast<AAZombie>(thisActor);
+					if (Zombie != nullptr)
+					{
+						auto ZombieAI = Cast<AZombieController>(Zombie->GetController());
+						if (ZombieAI != nullptr)
+						{
+							ZombieAI->SetDetectRadius(Radius);
+						}
+					}
+				}
+
+			}
+
+		}
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("actors %d"), OverlapResults.Num()));
+	}
+
+
+
+	//if (bResult)
+	//{
+	//	for (auto OvActor : OverlapResults)
+	//	{
+	//		if (OvActor.GetActor()->ActorHasTag("Zombie"))
+	//		{
+	//			//auto Zombie = Cast<AAZombie>(OvActor.GetActor());
+	//			//if (Zombie != nullptr)
+	//			//{
+	//			//	auto ZombieAI = Cast<AZombieController>(Zombie->GetController());
+	//			//	if (ZombieAI != nullptr)
+	//			//	{
+	//			//		// ZombieAI->SetDetectRadius(Radius);
+	//			//	}
+	//			//}
+	//			
+	//			
+	//		}
+	//	}
+	//}
+
+}
+
 
 // 무기 장착 인터페이스 함수
 void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX)

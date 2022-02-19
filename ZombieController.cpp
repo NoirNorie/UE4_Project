@@ -21,6 +21,8 @@ AZombieController::AZombieController()
 	{
 		BTZombie = BTObject.Object;
 	}
+
+	detectRadius = 600.0f;
 }
 
 void AZombieController::OnPossess(APawn* InPawn)
@@ -45,4 +47,19 @@ void AZombieController::StopAI()
 	UBehaviorTreeComponent* BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
 	if (BehaviorTreeComponent == nullptr) return;
 	BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+}
+
+void AZombieController::SetDetectRadius(float radius)
+{
+	detectRadius = radius;
+}
+
+float AZombieController::GetDetectRadius()
+{
+	return detectRadius;
+}
+
+void AZombieController::ResetDetectRadius()
+{
+	detectRadius = 600.0f;
 }

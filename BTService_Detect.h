@@ -21,7 +21,12 @@ UCLASS()
 class PP_API UBTService_Detect : public UBTService
 {
 	GENERATED_BODY()
+private:
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DetectRadius;
 public:
 	UBTService_Detect();
+	float Aggro();
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

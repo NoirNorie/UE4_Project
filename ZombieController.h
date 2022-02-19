@@ -27,10 +27,18 @@ public:
 
 	UFUNCTION()
 		virtual void OnPossess(APawn* InPawn) override;
+	UFUNCTION()
+	void SetDetectRadius(float radius);
+	UFUNCTION()
+	float GetDetectRadius();
+	UFUNCTION()
+	void ResetDetectRadius();
 
 	void RunAI();
 	void StopAI();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float detectRadius;
 	UPROPERTY() class UBlackboardData* BBZombie;
 	UPROPERTY() class UBehaviorTree* BTZombie;
 public:
