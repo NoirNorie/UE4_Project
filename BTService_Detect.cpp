@@ -50,14 +50,14 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 				if (Zombie != nullptr)
 				{
 					Zombie->Detect();
-					Zombie->GetCharacterMovement()->MaxWalkSpeed += 250;
+					Zombie->GetCharacterMovement()->MaxWalkSpeed += 150;
 				}
 
-				if (ControllingPawn->GetDistanceTo(aPlayer) >= 850.0f)
-				{
-					OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieController::TargetPosKey, nullptr);
-					Zombie->GetCharacterMovement()->MaxWalkSpeed -= 250;
-				}
+				//if (ControllingPawn->GetDistanceTo(aPlayer) >= 850.0f)
+				//{
+				//	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AZombieController::TargetPosKey, nullptr);
+				//	Zombie->GetCharacterMovement()->MaxWalkSpeed -= 250;
+				//}
 				return;
 			}
 		}

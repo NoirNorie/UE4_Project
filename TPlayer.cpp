@@ -34,6 +34,9 @@ ATPlayer::ATPlayer()
 	RequireMoisture = 1.0f;
 	RequireFat = 1.0f;
 
+	// 제한 시간 초기화
+	GateOpenProgress = 0.0f;
+
 
 	// 스프링암
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
@@ -138,7 +141,12 @@ void ATPlayer::BeginPlay()
 				PlayerWidget->SetCurrentHungry(player_Hungry);
 				PlayerWidget->SetCurrentThirst(player_Thirsty);
 			}
+			ProgressWidget = GMD->GetGameProgressWidget();
+			if (ProgressWidget)
+			{
 
+				ProgressWidget->setProgress(GateOpenProgress);
+			}
 		}
 	}
 
@@ -151,11 +159,17 @@ void ATPlayer::Tick(float DeltaTime)
 
 	RequireMoisture += DeltaTime * 0.1;
 	RequireFat += DeltaTime * 0.1;
+	GateOpenProgress += DeltaTime * 0.05f;
 
 	if (PlayerWidget)
 	{
 		PlayerWidget->SetCurrentThirst(RequireMoisture);
 		PlayerWidget->SetCurrentHungry(RequireFat);
+	}
+	if (ProgressWidget)
+	{
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Progress %f"), GateOpenProgress));
+		ProgressWidget->setProgress(GateOpenProgress);
 	}
 }
 
@@ -441,7 +455,7 @@ float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	return FinalDamage;
 }
 
-void ATPlayer::ZombieAggro()
+void ATPlayer::ZombieAggro() // 공격 시 범위 내의 모든 좀비의 감지 반경을 증가시킨다.
 {
 
 	float Radius = 2000.0f;
@@ -480,30 +494,6 @@ void ATPlayer::ZombieAggro()
 		}
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("actors %d"), OverlapResults.Num()));
 	}
-
-
-
-	//if (bResult)
-	//{
-	//	for (auto OvActor : OverlapResults)
-	//	{
-	//		if (OvActor.GetActor()->ActorHasTag("Zombie"))
-	//		{
-	//			//auto Zombie = Cast<AAZombie>(OvActor.GetActor());
-	//			//if (Zombie != nullptr)
-	//			//{
-	//			//	auto ZombieAI = Cast<AZombieController>(Zombie->GetController());
-	//			//	if (ZombieAI != nullptr)
-	//			//	{
-	//			//		// ZombieAI->SetDetectRadius(Radius);
-	//			//	}
-	//			//}
-	//			
-	//			
-	//		}
-	//	}
-	//}
-
 }
 
 

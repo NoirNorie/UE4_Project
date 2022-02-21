@@ -115,3 +115,9 @@ UInventoryBase* APPGameModeBase::GetInventoryWidget() const
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Inventory")));
 	return PlayerInventory;
 }
+
+UGameProgressWidget* APPGameModeBase::GetGameProgressWidget() const
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Progress Widget")));
+	return ProgressWidget;
+}

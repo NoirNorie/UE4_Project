@@ -52,6 +52,7 @@ public:
 
 	UTPlayerStateWidget* GetPlayerStateWidget() const; // 플레이어 상태창 반환
 	UInventoryBase* GetInventoryWidget() const;		   // 플레이어 인벤토리 반환
+	UGameProgressWidget* GetGameProgressWidget() const; // 게임 진행 상황 위젯 반환
 };
 
 

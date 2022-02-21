@@ -36,6 +36,7 @@
 // 위젯 헤더
 #include "Components/Widget.h"
 #include "TPlayerStateWidget.h"
+#include "GameProgressWidget.h"
 // 인벤토리 헤더
 #include "InventoryBase.h"
 // 위젯을 위해 가져올 게임모드 헤더
@@ -71,6 +72,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	float GateOpenProgress;
+
+
 public:
 	// --- 액터 변수 ----------------------------------------------------------------------------------------
 
@@ -131,8 +136,9 @@ public:
 	// -------- 위젯 관련 포인터 ----------------------------------------------------------------------------------
 
 	class APPGameModeBase* GMD;					// 게임모드
-	class UTPlayerStateWidget* PlayerWidget;
+	class UTPlayerStateWidget* PlayerWidget;	// 플레이어 상태 창 위젯 포인터
 	class UInventoryBase* Inventory;			// 인벤토리 위젯 포인터
+	class UGameProgressWidget* ProgressWidget;  // 게임 진행 상황 위젯 포인터
 
 	// ------------------------------------------------------------------------------------------------------------
 
