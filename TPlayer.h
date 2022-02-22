@@ -141,6 +141,8 @@ public:
 	class UTPlayerStateWidget* PlayerWidget;	// 플레이어 상태 창 위젯 포인터
 	class UInventoryBase* Inventory;			// 인벤토리 위젯 포인터
 	class UGameProgressWidget* ProgressWidget;  // 게임 진행 상황 위젯 포인터
+	class UGameOverWidget* GameOverWidget;		// 게임 오버 위젯 포인터
+	class UPauseWidget* PauseWidget;			// 정지 메뉴 위젯 포인터
 
 	// ------------------------------------------------------------------------------------------------------------
 
@@ -193,6 +195,9 @@ public:
 	// 상호작용 함수 선언
 	UFUNCTION() void StartInteraction();
 	UFUNCTION() void StopInteraction();
+
+	// 중지 메뉴 함수 선언
+	UFUNCTION() void PauseToggle();
 
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인

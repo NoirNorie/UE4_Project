@@ -37,6 +37,7 @@ void APPGameModeBase::BeginPlay()
 	CreateInventory(InventoryClass);
 	CreateProgressWidget(GameProgressClass);
 	CreateGameOverWidget(GameOverWidgetClass);
+	CreatePauseWidget(PauseWidgetClass);
 }
 // 플레이어 상태창 등록
 void APPGameModeBase::CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass)
@@ -112,16 +113,34 @@ void APPGameModeBase::CreateGameOverWidget(TSubclassOf<UGameOverWidget>NewGameOv
 	}
 	if(NewGameOverWidgetClass != nullptr)
 	{
-		GameOverWidget = CreateWidget<UGameOverWidget>(GetWorld(), NewGameOverWidgetClass); // 등록만 해놓는다.
-		//if (GameOverWidget != nullptr)
-		//{
-		//	GameOverWidget->AddToViewport();
-		//	GameOverWidget->
-		//}
+		GameOverWidget = CreateWidget<UGameOverWidget>(GetWorld(), NewGameOverWidgetClass);
+		if (GameOverWidget != nullptr)
+		{
+			GameOverWidget->AddToViewport();
+			GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
+}
+// 정지 메뉴 위젯 등록
+void APPGameModeBase::CreatePauseWidget(TSubclassOf<UPauseWidget>NewPauseWidgetClass)
+{
+	if (PauseWidget != nullptr)
+	{
+		PauseWidget->RemoveFromParent();
+		PauseWidget = nullptr;
+	}
+	if (NewPauseWidgetClass != nullptr)
+	{
+		PauseWidget = CreateWidget<UPauseWidget>(GetWorld(), NewPauseWidgetClass);
+		if (PauseWidget != nullptr)
+		{
+			PauseWidget->AddToViewport();
+			PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
+		}
 	}
 }
 
-// 띄워진 위젯을 반환하는 함수
+// 띄워진 위젯을 반환하는 함수들
 UTPlayerStateWidget* APPGameModeBase::GetPlayerStateWidget() const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Widget")));
@@ -144,4 +163,10 @@ UGameOverWidget* APPGameModeBase::GetGameOverWidget() const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return GameOver Widget")));
 	return GameOverWidget;
+}
+
+UPauseWidget* APPGameModeBase::GetPauseWidget() const
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Pause Widget")));
+	return PauseWidget;
 }

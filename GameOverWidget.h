@@ -24,10 +24,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void ExitButtonCallback();
 
-	void SetProgressText(float inputNum);
-
-
 public:
+	void SetProgressText(float inputNum);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), Category = "GameOverUI")
 		class UTextBlock* ProgressBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), Category = "GameOverUI")

@@ -149,6 +149,8 @@ void ATPlayer::BeginPlay()
 
 				ProgressWidget->setProgress(GateOpenProgress);
 			}
+			GameOverWidget = GMD->GetGameOverWidget();	// 등록만 해놓는다.
+			PauseWidget = GMD->GetPauseWidget();		// 이것도 등록해놓는다.
 		}
 	}
 
@@ -212,6 +214,8 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// 상호작용 바인드
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ATPlayer::StartInteraction);
 	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ATPlayer::StopInteraction);
+	// 게임중지 바인드
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &ATPlayer::PauseToggle);
 }
 
 // 전후이동 함수
@@ -367,6 +371,28 @@ void ATPlayer::ReloadEnd()
 
 	//PlayerWidget->SetCurrentAmmo(--player_mag);
 }
+void ATPlayer::PauseToggle()
+{
+	if (PauseWidget != nullptr)
+	{
+		if (PauseWidget->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			PauseWidget->SetVisibility(ESlateVisibility::Visible);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI::FInputModeGameAndUI());
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = true;
+		}
+		else
+		{
+			PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameOnly::FInputModeGameOnly());
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = false;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = false;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = false;
+		}
+	}
+}
 
 // 무기 장착 사실을 전달할 함수
 bool ATPlayer::GetWeaponCheck()
@@ -467,7 +493,7 @@ float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 		PlayerWidget->SetCurrentHP(player_HP);
 		if (player_HP <= 0 && player_Death != true) // 체력이 0 이하로 떨어진다면
 		{
-			PlayerDeath();
+			PlayerDeath(); // 사망 함수를 호출한다.
 		}
 	}
 
@@ -509,9 +535,7 @@ void ATPlayer::ZombieAggro() // 공격 시 범위 내의 모든 좀비의 감지
 						}
 					}
 				}
-
 			}
-
 		}
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("actors %d"), OverlapResults.Num()));
 	}
@@ -526,6 +550,33 @@ void ATPlayer::PlayerDeath()
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+
+	if (GameOverWidget != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GameOver Widget called")));
+		//GameOverWidget->AddToViewport();
+		GameOverWidget->SetProgressText(GateOpenProgress);
+		GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI::FInputModeGameAndUI());
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = true;
+
+		// 연결된 모든 위젯을 없앤다.
+		if (Inventory) Inventory->SetVisibility(ESlateVisibility::Collapsed);
+		if (PlayerWidget) PlayerWidget->SetVisibility(ESlateVisibility::Collapsed);
+		if (ProgressWidget) ProgressWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+		// 사망 애니메이션이 완전히 출력될 즈음 게임을 멈춘다.
+		// 2초 정도
+		FTimerHandle WaitHandle;
+		GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+			{
+				UGameplayStatics::SetGamePaused(GetWorld(), true);
+			}), 2.0f, false);
+		
+	}
 }
 
 // 무기 장착 인터페이스 함수
