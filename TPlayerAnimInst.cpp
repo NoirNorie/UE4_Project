@@ -17,7 +17,8 @@ UTPlayerAnimInst::UTPlayerAnimInst()
 	}
 
 	WeaponState = false;
-
+	Attacked = false;
+	IsDead = false;
 }
 
 void UTPlayerAnimInst::NativeUpdateAnimation(float DeltaSeconds)
@@ -104,4 +105,8 @@ void UTPlayerAnimInst::AnimNotify_ReloadEnd()
 		Character->ReloadEnd();
 	}
 	IsReload = false;
+}
+void UTPlayerAnimInst::AnimNotify_HitEnd()
+{
+	Attacked = false; // 공격 받는 상태 종료
 }

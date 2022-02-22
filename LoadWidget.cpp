@@ -8,6 +8,5 @@ void ULoadWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	LoadingBox = Cast<UTextBlock>(GetWidgetFromName(TEXT("LoadingBox")));
-
-	// UEditorLevelLibrary::LoadLevel();
+	Throb = Cast<UCircularThrobber>(GetWidgetFromName(TEXT("Throb")));
 }

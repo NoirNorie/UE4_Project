@@ -36,6 +36,7 @@ void APPGameModeBase::BeginPlay()
 	CreateStateWidget(StartWidgetClass);
 	CreateInventory(InventoryClass);
 	CreateProgressWidget(GameProgressClass);
+	CreateGameOverWidget(GameOverWidgetClass);
 }
 // 플레이어 상태창 등록
 void APPGameModeBase::CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass)
@@ -101,7 +102,24 @@ void APPGameModeBase::CreateProgressWidget(TSubclassOf<UGameProgressWidget>NewPr
 		}
 	}
 }
-
+// 게임 오버 위젯 등록
+void APPGameModeBase::CreateGameOverWidget(TSubclassOf<UGameOverWidget>NewGameOverWidgetClass)
+{
+	if (GameOverWidget != nullptr)
+	{
+		GameOverWidget->RemoveFromParent();
+		GameOverWidget = nullptr;
+	}
+	if(NewGameOverWidgetClass != nullptr)
+	{
+		GameOverWidget = CreateWidget<UGameOverWidget>(GetWorld(), NewGameOverWidgetClass); // 등록만 해놓는다.
+		//if (GameOverWidget != nullptr)
+		//{
+		//	GameOverWidget->AddToViewport();
+		//	GameOverWidget->
+		//}
+	}
+}
 
 // 띄워진 위젯을 반환하는 함수
 UTPlayerStateWidget* APPGameModeBase::GetPlayerStateWidget() const
@@ -120,4 +138,10 @@ UGameProgressWidget* APPGameModeBase::GetGameProgressWidget() const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Progress Widget")));
 	return ProgressWidget;
+}
+
+UGameOverWidget* APPGameModeBase::GetGameOverWidget() const
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return GameOver Widget")));
+	return GameOverWidget;
 }

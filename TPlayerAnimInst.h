@@ -32,6 +32,14 @@ public:
 		float CurrentPawnSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentWalkSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsSprint;
+
+	// 공격 받음
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool Attacked;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsDead;
 
 	// 무기 장착 여부 판정
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
@@ -66,6 +74,7 @@ public:
 	UFUNCTION() void AnimNotify_FireStart(); // 사격 시작 함수
 	UFUNCTION() void AnimNotify_FireEnd(); // 사격 종료 함수
 	UFUNCTION() void AnimNotify_ReloadEnd(); // 재장전 종료 함수
+	UFUNCTION() void AnimNotify_HitEnd(); // 피격 종료 함수
 
 	// 사격음 변수
 	int32 ShotIDX;

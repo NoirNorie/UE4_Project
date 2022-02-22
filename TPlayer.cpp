@@ -37,6 +37,8 @@ ATPlayer::ATPlayer()
 	// 제한 시간 초기화
 	GateOpenProgress = 0.0f;
 
+	// 플레이어 사망 상태 처리
+	player_Death = false;
 
 	// 스프링암
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
@@ -159,12 +161,20 @@ void ATPlayer::Tick(float DeltaTime)
 
 	RequireMoisture += DeltaTime * 0.1;
 	RequireFat += DeltaTime * 0.1;
-	GateOpenProgress += DeltaTime * 0.05f;
+	GateOpenProgress += DeltaTime * 0.05f; // 게임 클리어까지 남은 시간
 
 	if (PlayerWidget)
 	{
 		PlayerWidget->SetCurrentThirst(RequireMoisture);
 		PlayerWidget->SetCurrentHungry(RequireFat);
+
+		if (RequireMoisture >= 100.0f || RequireFat >= 100.0f) // 사망 조건 2: 탈수 또는 배고픔으로 인해 사망
+		{
+			if (player_Death != true) // 플레이어 사망 처리가 틱마다 일어나지 않도록 변수를 설정해줘야 한다.
+			{
+				PlayerDeath();
+			}
+		}
 	}
 	if (ProgressWidget)
 	{
@@ -233,10 +243,14 @@ void ATPlayer::StopJump()
 void ATPlayer::Sprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
+	bSprint = true;
+	AnimInst->IsSprint = true;
 }
 void ATPlayer::StopSprinting()
 {
 	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
+	bSprint = false;
+	AnimInst->IsSprint = false;
 }
 // 조준 함수
 void ATPlayer::StartAim()
@@ -269,7 +283,8 @@ void ATPlayer::StopFire()
 }
 void ATPlayer::Fire()
 {
-	if (isFiring == true && CheckWeapon == true)
+	// 사격 키가 눌려졌으며 무기를 들고 있으며 달리는 중이 아닐때
+	if (isFiring == true && CheckWeapon == true && bSprint == false)
 	{
 		if (player_ammo == 0) // 총알이 없는 경우 공이 소리만 나도록 한다
 		{
@@ -450,7 +465,13 @@ float ATPlayer::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	if (PlayerWidget)
 	{
 		PlayerWidget->SetCurrentHP(player_HP);
+		if (player_HP <= 0 && player_Death != true) // 체력이 0 이하로 떨어진다면
+		{
+			PlayerDeath();
+		}
 	}
+
+	AnimInst->Attacked = true; // 공격 받은 사실을 애니메이션 클래스에 알린다.
 
 	return FinalDamage;
 }
@@ -496,6 +517,16 @@ void ATPlayer::ZombieAggro() // 공격 시 범위 내의 모든 좀비의 감지
 	}
 }
 
+// 사망처리 함수
+void ATPlayer::PlayerDeath()
+{
+	// 플레이어 사망 처리가 중복되어 처리되지 않도록 변수를 바꿔줘야 한다
+	player_Death = true;
+	AnimInst->IsDead = true;
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
 
 // 무기 장착 인터페이스 함수
 void ATPlayer::EquipWeaponItem_Implementation(FName weapon_Name, int32 weaponAmmo, float weaponDamage, float weaponFireRate, int32 weaponIDX)

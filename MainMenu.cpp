@@ -17,7 +17,7 @@ void UMainMenu::NativeConstruct()
 
 void UMainMenu::StartButtonCallback()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), "Basic");
+	UGameplayStatics::OpenLevel(GetWorld(), "LoadingMap");
 	// 레퍼런스 경로가 아닌 맵의 이름을 적어야 한다
 
 }

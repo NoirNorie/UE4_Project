@@ -12,6 +12,7 @@
 #include "TPlayerStateWidget.h"
 #include "GameProgressWidget.h"
 #include "InventoryBase.h"
+#include "GameOverWidget.h"
 
 #include "PPGameModeBase.generated.h"
 
@@ -32,13 +33,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
 	TSubclassOf<UInventoryBase> InventoryClass;			// 인벤토리를 띄울 위젯
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
-	TSubclassOf<UGameProgressWidget> GameProgressClass;
-	UPROPERTY()
-	UTPlayerStateWidget* CurrentWidget;
-	UPROPERTY()
-	UInventoryBase* PlayerInventory;
-	UPROPERTY()
-	UGameProgressWidget* ProgressWidget;
+	TSubclassOf<UGameProgressWidget> GameProgressClass; // 게임 진행 상황을 띄울 위젯
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+	TSubclassOf<UGameOverWidget> GameOverWidgetClass; // 게임 종료 상황을 띄울 위젯
+
+	UPROPERTY() UTPlayerStateWidget* CurrentWidget;
+	UPROPERTY() UInventoryBase* PlayerInventory;
+	UPROPERTY() UGameProgressWidget* ProgressWidget;
+	UPROPERTY() UGameOverWidget* GameOverWidget;
 
 public:
 	APPGameModeBase(const FObjectInitializer& ObjectInitializer);
@@ -49,10 +51,13 @@ public:
 	void CreateInventory(TSubclassOf<UInventoryBase>NewInventoryClass);
 	UFUNCTION(BlueprintCallable, Category = "UMG Game")
 	void CreateProgressWidget(TSubclassOf<UGameProgressWidget>NewProgressClass);
+	UFUNCTION(BlueprintCallable, Category = "UMG Game")
+	void CreateGameOverWidget(TSubclassOf<UGameOverWidget>NewGameOverWidgetClass);
 
-	UTPlayerStateWidget* GetPlayerStateWidget() const; // 플레이어 상태창 반환
-	UInventoryBase* GetInventoryWidget() const;		   // 플레이어 인벤토리 반환
-	UGameProgressWidget* GetGameProgressWidget() const; // 게임 진행 상황 위젯 반환
+	UTPlayerStateWidget* GetPlayerStateWidget() const;		// 플레이어 상태창 반환
+	UInventoryBase* GetInventoryWidget() const;				// 플레이어 인벤토리 반환
+	UGameProgressWidget* GetGameProgressWidget() const;		// 게임 진행 상황 위젯 반환
+	UGameOverWidget* GetGameOverWidget() const;				// 게임 오버 위젯 반환
 };
 
 

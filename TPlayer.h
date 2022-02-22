@@ -100,6 +100,8 @@ public:
 	// 달리기 속도
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Movement: Walking")
 		float SprintSpeedMultiplier;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Movement: Walking")
+		bool bSprint;
 
 	// 사운드 재생
 	UPROPERTY(BlueprintReadOnly, Category = "Audio") // 사운드 컴포넌트
@@ -202,6 +204,8 @@ public:
 	// 좀비를 공격했을 때 발생시킬 함수
 	void ZombieAggro();
 
+	// 사망 처리를 위한 함수
+	void PlayerDeath();
 
 
 	// 무기 처리용 맵
@@ -252,6 +256,8 @@ public:
 		float player_Hungry;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float player_Thirsty;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool player_Death;
 
 
 
