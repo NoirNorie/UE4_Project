@@ -4,8 +4,7 @@
 ----------------------------------------------
 
 ### 사용 기술
-<img src="https://img.shields.io/badge/c++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
-<img src="https://img.shields.io/badge/Unreal_Engine-0E1128?style=for-the-badge&logo=아이콘이름&logoColor=white">
+<img src="https://img.shields.io/badge/c++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"> <img src="https://img.shields.io/badge/Unreal_Engine-0E1128?style=for-the-badge&logo=아이콘이름&logoColor=white">
 
 ### 구현 내용
 
