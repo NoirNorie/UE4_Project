@@ -3,6 +3,11 @@
 
 #include "RootingBoxFood.h"
 
+ARootingBoxFood::ARootingBoxFood()
+{
+	Box_Name = "Food Box";
+}
+
 void ARootingBoxFood::DropItem()
 {
 	int32 RandomNumb = FMath::RandRange(1, 10);

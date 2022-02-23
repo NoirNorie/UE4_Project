@@ -14,5 +14,6 @@ class PP_API ARootingBoxFood : public ARootingBoxBase
 {
 	GENERATED_BODY()
 protected:
-	void DropItem();
+	ARootingBoxFood();
+	void DropItem() override;
 };

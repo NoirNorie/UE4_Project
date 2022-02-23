@@ -36,7 +36,7 @@ ARootingBoxBase::ARootingBoxBase()
 	bLooting = false;
 	progressVar = 0.0f;
 
-	Box_Name = "";
+	Box_Name = "Item Box";
 
 	// 드랍할 아이템을 맵에 기록해놓는다.
 	// 소모 아이템

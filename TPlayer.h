@@ -9,6 +9,7 @@
 // 카메라 관련 헤더
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Camera/CameraShake.h" // 카메라 쉐이크 헤더
 // 캐릭터의 이동 컴포넌트 헤더(속도 계산용)
 #include "GameFramework/CharacterMovementComponent.h"
 // 스켈레탈 메시 컴포넌트 헤더
@@ -265,14 +266,12 @@ public:
 		bool player_Death;
 
 
-
+	// 접촉 함수
 	UFUNCTION() void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 	UFUNCTION() void OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 	AActor* ContactActor;
 
 

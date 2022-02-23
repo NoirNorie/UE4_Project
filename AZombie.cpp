@@ -7,7 +7,7 @@
 AAZombie::AAZombie()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false; // 틱을 끈다.
 	
 	// AI가 컨트롤할 수 있도록 하는 구문
 	AIControllerClass = AZombieController::StaticClass();

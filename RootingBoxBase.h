@@ -65,7 +65,7 @@ protected:
 	UFUNCTION() void OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	void DropItem();
+	void virtual DropItem();
 
 	// 델리게이트 함수
 	UFUNCTION() void CallDeleFunc_LootingStart();

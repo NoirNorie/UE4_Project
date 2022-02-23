@@ -80,6 +80,8 @@ void AInteractionDoorBase::Tick(float DeltaTime)
 				progressVar = 100.0f;
 				DisplayedWidget->SetPercent(progressVar);
 				OpenDoor();
+				PrimaryActorTick.bCanEverTick = false; 
+				// 상호작용이 완료된다면 틱을 종료시킨다.
 			}
 		}
 	}

@@ -14,5 +14,6 @@ class PP_API ARootingBoxAmmo : public ARootingBoxBase
 {
 	GENERATED_BODY()
 protected:
-	void DropItem();
+	ARootingBoxAmmo();
+	void DropItem() override;
 };

@@ -161,7 +161,9 @@ void ATPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	RequireMoisture += DeltaTime * 0.1;
+	if (bSprint == true && GetCharacterMovement()->IsMovingOnGround()) RequireMoisture += DeltaTime * 0.2;
+	else RequireMoisture += DeltaTime * 0.1;
+
 	RequireFat += DeltaTime * 0.1;
 	GateOpenProgress += DeltaTime * 0.05f; // 게임 클리어까지 남은 시간
 
