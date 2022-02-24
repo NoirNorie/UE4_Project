@@ -1,5 +1,5 @@
 # UE4_Project
-## Native C++ TPS 생존 게임 프로젝트
+## Native C++ TPS Project
 
 ----------------------------------------------
 
