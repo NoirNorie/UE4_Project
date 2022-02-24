@@ -32,6 +32,8 @@
 
 - AI와 좀비, 좀비 스폰
 
+![ZombieSpawn](https://user-images.githubusercontent.com/71704247/155544817-29468791-b07f-4aa7-8143-3351dc4cd485.gif)
+
 
 - 데미지 처리
 
