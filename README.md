@@ -37,6 +37,7 @@
 
 - 데미지 처리
 
+![Damage](https://user-images.githubusercontent.com/71704247/155546246-e4817b07-d8f0-4683-95c5-26eb3872d64c.gif)
 
 - 캐릭터 컨트롤
 
