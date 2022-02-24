@@ -25,9 +25,12 @@
 ![Fire](https://user-images.githubusercontent.com/71704247/155540178-b54ff0b9-af8a-4ca8-a77e-5cc07a687790.gif)
 
 
-- 시간의 흐름과 좀비 스폰
+- 시간 흐름
 
-- AI와 좀비
+![Time](https://user-images.githubusercontent.com/71704247/155542415-bce883f3-9f9d-41fe-9d47-d7855cc76f6e.gif)
+
+
+- AI와 좀비, 좀비 스폰
 
 
 - 데미지 처리
