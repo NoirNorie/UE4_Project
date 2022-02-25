@@ -16,7 +16,8 @@
 #include "Components/SkeletalMeshComponent.h"
 // 캡슐 컴포넌트 헤더
 #include "Components/CapsuleComponent.h"
-
+// 라이트 컴포넌트 헤더
+#include "Components/SpotLightComponent.h"
 // 사운드 컴포넌트 헤더
 #include "Components/AudioComponent.h"
 // 사운드 큐 헤더
@@ -94,6 +95,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USkeletalMeshComponent* Weapon_Socket; // 무기 장착 위치가 될 곳
 
+
 	FTimerHandle timer;
 	UPROPERTY() 
 		bool isFiring;
@@ -147,6 +149,8 @@ public:
 
 	// ------------------------------------------------------------------------------------------------------------
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool ProgressComp;
 
 	// -- 변수 -- 
 

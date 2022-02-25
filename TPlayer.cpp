@@ -36,6 +36,7 @@ ATPlayer::ATPlayer()
 
 	// 제한 시간 초기화
 	GateOpenProgress = 0.0f;
+	ProgressComp = false;
 
 	// 플레이어 사망 상태 처리
 	player_Death = false;
@@ -184,6 +185,11 @@ void ATPlayer::Tick(float DeltaTime)
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Progress %f"), GateOpenProgress));
 		ProgressWidget->setProgress(GateOpenProgress);
+		if (GateOpenProgress >= 100.0f && ProgressComp == false) // 한번만 동작하도록 설정한다.
+		{
+			ProgressComp = true;
+			ProgressWidget->setProgressText();
+		}
 	}
 }
 
@@ -553,32 +559,49 @@ void ATPlayer::PlayerDeath()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	// 연결된 모든 위젯을 가린다.
+	if (Inventory)
+	{
+		Inventory->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	if (PlayerWidget)
+	{
+		PlayerWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	if (ProgressWidget)
+	{
+		ProgressWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	}
+
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI::FInputModeGameAndUI());
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = true;
+
+
+
+	// 사망 애니메이션이 완전히 출력될 즈음 게임을 멈춘다.
+	// 2초 정도
+	FTimerHandle WaitHandle;
+	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+		}), 2.0f, false);
 
 	if (GameOverWidget != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GameOver Widget called")));
-		//GameOverWidget->AddToViewport();
+		GameOverWidget->AddToViewport();
+	
 		GameOverWidget->SetProgressText(GateOpenProgress);
 		GameOverWidget->SetVisibility(ESlateVisibility::Visible);
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI::FInputModeGameAndUI());
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableMouseOverEvents = true;
-
-		// 연결된 모든 위젯을 없앤다.
-		if (Inventory) Inventory->SetVisibility(ESlateVisibility::Collapsed);
-		if (PlayerWidget) PlayerWidget->SetVisibility(ESlateVisibility::Collapsed);
-		if (ProgressWidget) ProgressWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-		// 사망 애니메이션이 완전히 출력될 즈음 게임을 멈춘다.
-		// 2초 정도
-		FTimerHandle WaitHandle;
-		GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				UGameplayStatics::SetGamePaused(GetWorld(), true);
-			}), 2.0f, false);
-		
+		GameOverWidget->SetFocus();	
 	}
+
+
+	// GMD->GameOverWidgetOnline(GateOpenProgress);
+
 }
 
 // 무기 장착 인터페이스 함수

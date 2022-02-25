@@ -35,6 +35,7 @@ public:
 
 	void InventoryInit();
 
+	UFUNCTION(BlueprintCallable)
 	void ItemClick(UObject* items);
 
 	void ItemInsert(FName ItemName);

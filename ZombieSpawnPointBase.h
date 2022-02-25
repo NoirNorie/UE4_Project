@@ -25,7 +25,7 @@ protected:
 
 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable) // 해가 지면 좀비를 생성하기 위해 함수 실행은 블루프린트에서 한다.
 		void ZombieSpawn();
 
 	class AAZombie* SpawnZombie;

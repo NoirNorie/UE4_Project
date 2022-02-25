@@ -8,6 +8,8 @@
 // 생성자 보조 함수 헤더
 #include "UObject/ConstructorHelpers.h"
 
+#include "Kismet/GameplayStatics.h"
+
 #include "Blueprint/UserWidget.h"
 #include "TPlayerStateWidget.h"
 #include "GameProgressWidget.h"
@@ -65,6 +67,10 @@ public:
 	UGameProgressWidget* GetGameProgressWidget() const;		// 게임 진행 상황 위젯 반환
 	UGameOverWidget* GetGameOverWidget() const;				// 게임 오버 위젯 반환
 	UPauseWidget* GetPauseWidget() const;					// 정지 메뉴 위젯 반환
+
+	void GameOverWidgetOnline(float GateOpenProgress) const;						// 게임 오버 위젯을 출력하기 위한 함수
+
+
 };
 
 

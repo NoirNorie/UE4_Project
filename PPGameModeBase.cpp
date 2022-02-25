@@ -34,10 +34,11 @@ void APPGameModeBase::BeginPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Begin Start"));
 	}
 	CreateStateWidget(StartWidgetClass);
-	CreateInventory(InventoryClass);
 	CreateProgressWidget(GameProgressClass);
-	CreateGameOverWidget(GameOverWidgetClass);
+	CreateInventory(InventoryClass);
 	CreatePauseWidget(PauseWidgetClass);
+	CreateGameOverWidget(GameOverWidgetClass);
+
 }
 // 플레이어 상태창 등록
 void APPGameModeBase::CreateStateWidget(TSubclassOf<UTPlayerStateWidget>NewWidgetClass)
@@ -169,4 +170,15 @@ UPauseWidget* APPGameModeBase::GetPauseWidget() const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("return Pause Widget")));
 	return PauseWidget;
+}
+
+void APPGameModeBase::GameOverWidgetOnline(float GateOpenProgress) const
+{
+	if (GameOverWidget != nullptr)
+	{
+
+
+		GameOverWidget->SetProgressText(GateOpenProgress);
+		GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }

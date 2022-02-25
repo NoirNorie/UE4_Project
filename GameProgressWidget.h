@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "GameProgressWidget.generated.h"
 
 /**
@@ -19,9 +20,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Game Progress")
 		class UProgressBar* GateOpenProgress;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Game Progress")
+		class UTextBlock* ProgressText;
 
 	float progressVar;
 
 public:
 	void setProgress(float inp);
+	void setProgressText();
 };
