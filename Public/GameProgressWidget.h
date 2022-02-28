@@ -15,7 +15,7 @@ UCLASS()
 class PP_API UGameProgressWidget : public UUserWidget
 {
 	GENERATED_BODY()
-protected:
+public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Game Progress")

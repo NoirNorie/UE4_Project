@@ -11,16 +11,16 @@ AUsableItemBase::AUsableItemBase()
 
 	// 콜리전 생성
 	ItemCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("WCapsule"));
-	// ItemCollision->SetupAttachment(RootComponent);
-	ItemCollision->AttachTo(RootComponent);
+	ItemCollision->SetupAttachment(RootComponent);
+	//ItemCollision->AttachTo(RootComponent);
 	// 메시 생성
 	SK_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shape"));
-	// SK_Mesh->SetupAttachment(ItemCollision);
-	SK_Mesh->AttachTo(ItemCollision);
+	SK_Mesh->SetupAttachment(ItemCollision);
+	//SK_Mesh->AttachTo(ItemCollision);
 	// 위젯 컴포넌트 생성
 	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractionWidget"));
-	//InteractionWidget->SetupAttachment(ItemCollision);
-	InteractionWidget->AttachTo(ItemCollision);
+	InteractionWidget->SetupAttachment(ItemCollision);
+	//InteractionWidget->AttachTo(ItemCollision);
 	InteractionWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 	InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	static ConstructorHelpers::FClassFinder<UItemInteractionWidget>ItemInterWidgetClass(TEXT

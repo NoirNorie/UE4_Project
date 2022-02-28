@@ -17,7 +17,7 @@ UCLASS()
 class PP_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
-protected:
+public:
 	virtual void NativeConstruct() override;
 	
 	UFUNCTION(BlueprintCallable)

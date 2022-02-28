@@ -15,7 +15,7 @@ UCLASS()
 class PP_API UItemInteractionWidget : public UUserWidget
 {
 	GENERATED_BODY()
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Info")
 		FString ItemName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Info")

@@ -18,7 +18,7 @@ UCLASS()
 class PP_API UInventorySlot : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")
 		int32 ItemIndex;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")

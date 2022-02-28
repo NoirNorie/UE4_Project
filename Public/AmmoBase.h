@@ -29,7 +29,7 @@ public:
 	// Sets default values for this actor's properties
 	AAmmoBase();
 
-protected:
+public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Casule", meta = (AllowPrivateAccess = "true"))

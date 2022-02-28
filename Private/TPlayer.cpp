@@ -43,8 +43,7 @@ ATPlayer::ATPlayer()
 
 	// 스프링암
 	TPSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSpringArm"));
-	//TPSpringArm->SetupAttachment(RootComponent);
-	TPSpringArm->AttachTo(RootComponent);
+	TPSpringArm->SetupAttachment(RootComponent);
 	TPSpringArm->TargetArmLength = CamArmLength = 300.0f;
 	CamOriginPos.X = 100.0f;
 	CamOriginPos.Y = 50.0f;
@@ -53,14 +52,14 @@ ATPlayer::ATPlayer()
 
 	// 카메라
 	TFollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TFollowCamera"));
-	//TFollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
-	TFollowCamera->AttachTo(TPSpringArm, USpringArmComponent::SocketName);
+	TFollowCamera->SetupAttachment(TPSpringArm, USpringArmComponent::SocketName);
 	TFollowCamera->bUsePawnControlRotation = false;
 
 	// 무기 소켓 - 손
 	FName weaponSocketName = TEXT("Socket_R_Hand");
 	Weapon_Socket = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
+	Weapon_Socket->SetupAttachment(GetMesh(), weaponSocketName);
+	// Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
 	// 콜리전 프로필
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TPlayer"));
@@ -74,7 +73,7 @@ ATPlayer::ATPlayer()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerAudio"));
 	AudioComponent->bAutoActivate = false;
 	//AudioComponent->SetupAttachment(RootComponent);
-	AudioComponent->AttachTo(RootComponent);
+	AudioComponent->SetupAttachment(RootComponent);
 
 	// 파티클 연결
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>ParticleObj(TEXT("ParticleSystem'/Game/Effects/ParticleSystems/Weapons/AssaultRifle/Muzzle/P_AssaultRifle_MF.P_AssaultRifle_MF'"));
@@ -110,6 +109,9 @@ ATPlayer::ATPlayer()
 
 	// 접촉한 액터의 정보를 초기화한다.
 	ContactActor = nullptr;
+	GMD_Online = false;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -118,45 +120,49 @@ void ATPlayer::BeginPlay()
 	Super::BeginPlay();
 	// 디버그 메시지
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Player Online"));
+	
+	// 이해가 안되지만, 에디터의 순서와 패키지 후의 순서가 다르다
+	// 놀랍게도 언리얼에서 뭐가 먼저 실행될지 보장해주지 않는다.
+	//UWorld* const world = GetWorld();
+	//if (world) // 월드 유효성 검사
+	//{
+	//	if (APPGameModeBase* myGmd = Cast<APPGameModeBase>(GetWorld()->GetAuthGameMode())) // 게임모드 포인터 유효성 검사
+	//	{
+	//		GMD = myGmd;
+	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("GMD ON")));
+	//		GMD_Online = true;
+	//		// 게임모드에서 위젯을 가져온다.
+	//		Inventory = GMD->GetInventoryWidget();
+	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
+	//		if (Inventory)
+	//		{
+	//			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
+	//		}
 
-	UWorld* const world = GetWorld();
-	if (world) // 월드 유효성 검사
-	{
-		if (APPGameModeBase* myGmd = Cast<APPGameModeBase>(GetWorld()->GetAuthGameMode())) // 게임모드 포인터 유효성 검사
-		{
-			GMD = myGmd;
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD ON")));
+	//		PlayerWidget = GMD->GetPlayerStateWidget();
+	//		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
+	//		if (PlayerWidget)
+	//		{
+	//			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
+	//			PlayerWidget->SetWeaponName(WeaponName);
+	//			PlayerWidget->SetCurrentAmmo(player_ammo);
+	//			PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+	//			PlayerWidget->SetCurrentHP(player_HP);
+	//			PlayerWidget->SetCurrentHungry(player_Hungry);
+	//			PlayerWidget->SetCurrentThirst(player_Thirsty);
+	//		}
+	//		ProgressWidget = GMD->GetGameProgressWidget();
+	//		if (ProgressWidget)
+	//		{
+	//			ProgressWidget->setProgress(GateOpenProgress);
+	//		}
+	//		GameOverWidget = GMD->GetGameOverWidget();	// 등록만 해놓는다.
+	//		PauseWidget = GMD->GetPauseWidget();		// 이것도 등록해놓는다.
+	//	}
+	//}
 
-			// 게임모드에서 위젯을 가져온다.
-			Inventory = GMD->GetInventoryWidget();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
-			//if (Inventory)
-			//{
-			//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
-			//}
 
-			PlayerWidget = GMD->GetPlayerStateWidget();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
-			if (PlayerWidget)
-			{
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
-				PlayerWidget->SetWeaponName(WeaponName);
-				PlayerWidget->SetCurrentAmmo(player_ammo);
-				PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
-				PlayerWidget->SetCurrentHP(player_HP);
-				PlayerWidget->SetCurrentHungry(player_Hungry);
-				PlayerWidget->SetCurrentThirst(player_Thirsty);
-			}
-			ProgressWidget = GMD->GetGameProgressWidget();
-			if (ProgressWidget)
-			{
-
-				ProgressWidget->setProgress(GateOpenProgress);
-			}
-			GameOverWidget = GMD->GetGameOverWidget();	// 등록만 해놓는다.
-			PauseWidget = GMD->GetPauseWidget();		// 이것도 등록해놓는다.
-		}
-	}
 
 }
 
@@ -164,6 +170,56 @@ void ATPlayer::BeginPlay()
 void ATPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// 에디터 상에서는 상관이 없지만 독립 시행 시에서의 문제 처리를 위한 함수
+	if (GMD_Online == false) // 아직 게임모드가 로드되지 않았다면
+	{
+		APPGameModeBase* myGmd = Cast<APPGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (myGmd)
+		{
+			GMD = myGmd;
+			if (GMD != nullptr && GMD->HasActorBegunPlay())
+			{
+				// GMD_Online = true; // 틱마다 읽히는 것을 방지하기 위함
+				// 게임모드에서 위젯을 가져온다.
+				Inventory = GMD->GetInventoryWidget();
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
+				if (Inventory)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
+				}
+
+				PlayerWidget = GMD->GetPlayerStateWidget();
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
+				if (PlayerWidget)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
+					PlayerWidget->SetWeaponName(WeaponName);
+					PlayerWidget->SetCurrentAmmo(player_ammo);
+					PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
+					PlayerWidget->SetCurrentHP(player_HP);
+					PlayerWidget->SetCurrentHungry(player_Hungry);
+					PlayerWidget->SetCurrentThirst(player_Thirsty);
+				}
+				ProgressWidget = GMD->GetGameProgressWidget();
+				if (ProgressWidget)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Progress Widget Called")));
+					ProgressWidget->setProgress(GateOpenProgress);
+				}
+				GameOverWidget = GMD->GetGameOverWidget();	// 등록만 해놓는다.
+				PauseWidget = GMD->GetPauseWidget();		// 이것도 등록해놓는다.
+
+				// 모든 위젯들이 동작하면 더이상 로드 틱을 작동시키지 않도록 한다.
+				if (Inventory && PlayerWidget && ProgressWidget && GameOverWidget && PauseWidget)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ALL Widgets Called")));
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD_ON")));
+					GMD_Online = true;
+				}
+			}	
+		}
+	}
 
 	if (bSprint == true && GetCharacterMovement()->IsMovingOnGround()) RequireMoisture += DeltaTime * 0.2;
 	else RequireMoisture += DeltaTime * 0.1;
@@ -298,6 +354,7 @@ void ATPlayer::StopFire()
 }
 void ATPlayer::Fire()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire Check")));
 	// 사격 키가 눌려졌으며 무기를 들고 있으며 달리는 중이 아닐때
 	if (isFiring == true && CheckWeapon == true && bSprint == false)
 	{
@@ -312,7 +369,7 @@ void ATPlayer::Fire()
 
 			// 1차 충돌 검사용 선분
 
-			ZombieAggro();
+			// ZombieAggro();
 
 			FHitResult OutHit; // 충돌 검사를 할 변수
 			FVector Line1Start = TFollowCamera->GetComponentLocation(); // 선분의 시작점
@@ -324,31 +381,31 @@ void ATPlayer::Fire()
 			DrawDebugLine(GetWorld(), Line1Start, Line1End, FColor::Green, true);
 			bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Line1Start, Line1End, ECC_Visibility, CollisionParams);
 
-			if (isHit)
-			{
-				//if (OutHit.GetActor()->ActorHasTag("Monster"))
-				if(OutHit.GetActor())
-				{
-					DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
-					UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
-					UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
-					AActor* HitActor = OutHit.GetActor();
+			//if (isHit)
+			//{
+			//	//if (OutHit.GetActor()->ActorHasTag("Monster"))
+			//	if(OutHit.GetActor())
+			//	{
+			//		//DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
+			//		//UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
+			//		//UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
+			//		AActor* HitActor = OutHit.GetActor();
 
-					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
-				}
-				GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint));
-				// GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 20));
-			}
+			//		GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
+			//	}
+			//	GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint));
+			//	// GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 20));
+			//}
 
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
+			////GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
 
-			GameStatic->SpawnEmitterAttached(MuzzleParticle, Weapon_Socket, FName("Socket_MuzzleLoc"));
+			//GameStatic->SpawnEmitterAttached(MuzzleParticle, Weapon_Socket, FName("Socket_MuzzleLoc"));
 
-			// 사운드 재생은 애니메이션 노티파이에 부착했다
-			// 소리가 중첩될 수 있도록 처리함
-			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
-			PlayerWidget->SetCurrentAmmo(--player_ammo);
-			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
+			//// 사운드 재생은 애니메이션 노티파이에 부착했다
+			//// 소리가 중첩될 수 있도록 처리함
+			//AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
+			//PlayerWidget->SetCurrentAmmo(--player_ammo);
+			//GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
 
 		}
 	}
@@ -357,12 +414,15 @@ void ATPlayer::Fire()
 void ATPlayer::StartReload()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Active")));
-	if (Inventory->HaveAmmo(CurrentAmmoName) > 0) // 인벤토리 상에 현재 가지고 있는 무기의 총알이 존재한다면
+	if (Inventory)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Call")));
-		Inventory->ReloadAmmo(CurrentAmmoName);
-		AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
-		IsReloading = true;
+		if (Inventory->HaveAmmo(CurrentAmmoName) > 0) // 인벤토리 상에 현재 가지고 있는 무기의 총알이 존재한다면
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Reload Call")));
+			Inventory->ReloadAmmo(CurrentAmmoName);
+			AnimInst->PlayReload(); // 재장전 모션을 동작시킨다
+			IsReloading = true;
+		}
 	}
 
 	//if (player_mag != 0 && CheckWeapon == true)
@@ -420,6 +480,7 @@ bool ATPlayer::GetAimCheck()
 // 인벤토리 토글 함수
 void ATPlayer::InventoryToggle()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
 	if (Inventory != nullptr)
 	{
@@ -529,7 +590,7 @@ void ATPlayer::ZombieAggro() // 공격 시 범위 내의 모든 좀비의 감지
 
 	if (bResult)
 	{
-		DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 16, FColor::Red, false, 0.2f);
+		//DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 16, FColor::Red, false, 0.2f);
 		for (auto OvActor : OverlapResults)
 		{
 			if (OvActor.GetActor())

@@ -26,7 +26,7 @@ UCLASS()
 class PP_API APPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-protected:
+public:
 
 	// virtual void StartPlay() override;
 	virtual void BeginPlay() override;

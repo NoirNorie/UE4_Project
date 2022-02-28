@@ -10,18 +10,19 @@ AInteractionDoorBase::AInteractionDoorBase()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	DoorCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("DoorCapsule"));
-	//DoorCollision->SetupAttachment(RootComponent);
-	DoorCollision->AttachTo(RootComponent);
+	DoorCollision->SetupAttachment(RootComponent);
+	//DoorCollision->AttachTo(RootComponent);
+
 	// 메시 생성
 	ST_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shape"));
-	//ST_Mesh->SetupAttachment(DoorCollision);
-	ST_Mesh->AttachTo(DoorCollision);
+	ST_Mesh->SetupAttachment(DoorCollision);
+	//ST_Mesh->AttachTo(DoorCollision);
 
 	//ST_Mesh->SetupAttachment(DoorCollision);
 	// 위젯 컴포넌트 생성
 	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractionWidget"));
-	//InteractionWidget->SetupAttachment(DoorCollision);
-	InteractionWidget->AttachTo(DoorCollision);
+	InteractionWidget->SetupAttachment(DoorCollision);
+	//InteractionWidget->AttachTo(DoorCollision);
 	InteractionWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 	InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	static ConstructorHelpers::FClassFinder<UItemInteractionWidget>ItemInterWidgetClass(TEXT

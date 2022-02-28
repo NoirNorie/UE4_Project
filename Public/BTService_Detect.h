@@ -22,7 +22,7 @@ class PP_API UBTService_Detect : public UBTService
 {
 	GENERATED_BODY()
 private:
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DetectRadius;
 public:

@@ -18,7 +18,7 @@ UCLASS()
 class PP_API UGameOverWidget : public UUserWidget
 {
 	GENERATED_BODY()
-protected:
+public:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable)

@@ -120,14 +120,14 @@ void AAZombie::AttackCheck()
 		FCollisionShape::MakeSphere(GetZombieAttackRadius()), Params);
 	Params.AddIgnoredActor(this);
 
-	// 디버그 드로잉
-	FVector TraceVec = GetActorForwardVector() * GetZombieAttackRange();
-	FVector Center = GetActorLocation() + TraceVec * 0.5f;
-	float HalfHeigh = GetZombieAttackRange() * 0.5f + GetZombieAttackRadius();
-	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = 5.0f;
-	DrawDebugCapsule(GetWorld(), Center, HalfHeigh, 200.0f, CapsuleRot, DrawColor, false, DebugLifeTime);
+	//// 디버그 드로잉
+	//FVector TraceVec = GetActorForwardVector() * GetZombieAttackRange();
+	//FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	//float HalfHeigh = GetZombieAttackRange() * 0.5f + GetZombieAttackRadius();
+	//FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	//FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	//float DebugLifeTime = 5.0f;
+	//DrawDebugCapsule(GetWorld(), Center, HalfHeigh, 200.0f, CapsuleRot, DrawColor, false, DebugLifeTime);
 
 	if (bResult) // 맞았는가?
 	{

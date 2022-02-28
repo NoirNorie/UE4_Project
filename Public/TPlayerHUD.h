@@ -23,7 +23,7 @@ class PP_API ATPlayerHUD : public AHUD
 public:
 	//ATPlayerHUD();
 	virtual void DrawHUD() override;
-protected:
+public:
 	UPROPERTY(EditDefaultsOnly)
 	class UTexture2D* CrossHair;
 };

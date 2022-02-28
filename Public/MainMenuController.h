@@ -13,7 +13,7 @@ UCLASS()
 class PP_API AMainMenuController : public APlayerController
 {
 	GENERATED_BODY()
-protected:
+public:
 	void BeginPlay();
 public:
 

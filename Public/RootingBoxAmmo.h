@@ -13,7 +13,7 @@ UCLASS()
 class PP_API ARootingBoxAmmo : public ARootingBoxBase
 {
 	GENERATED_BODY()
-protected:
+public:
 	ARootingBoxAmmo();
 	void DropItem() override;
 };

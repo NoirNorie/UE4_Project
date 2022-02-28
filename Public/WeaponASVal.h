@@ -13,7 +13,8 @@ UCLASS()
 class PP_API AWeaponASVal : public AWeaponBase
 {
 	GENERATED_BODY()
+
+public:
 	// 생성자
 	AWeaponASVal();
-public:
 };

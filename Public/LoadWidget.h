@@ -8,8 +8,6 @@
 #include "Components/Button.h"
 #include "Components/CircularThrobber.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
-#include "EditorLevelLibrary.h"
 #include "LoadWidget.generated.h"
 
 /**

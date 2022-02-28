@@ -17,7 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	AZombieSpawnPointBase();
 
-protected:
+public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowprivateAccess = "true"), category = "Spawn")

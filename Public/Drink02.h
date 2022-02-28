@@ -13,6 +13,7 @@ UCLASS()
 class PP_API ADrink02 : public AUsableItemBase
 {
 	GENERATED_BODY()
-	ADrink02();
+
 public:
+	ADrink02();
 };

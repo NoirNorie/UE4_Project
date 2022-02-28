@@ -12,17 +12,17 @@ ARootingBoxBase::ARootingBoxBase()
 
 	// 콜리전
 	RootingBoxCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
-	//RootingBoxCollision->SetupAttachment(RootComponent);
-	RootingBoxCollision->AttachTo(RootComponent);
+	RootingBoxCollision->SetupAttachment(RootComponent);
+	//RootingBoxCollision->AttachTo(RootComponent);
 	// 메시
 	ST_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shape"));
-	//ST_Mesh->SetupAttachment(RootingBoxCollision);
-	ST_Mesh->AttachTo(RootingBoxCollision);
+	ST_Mesh->SetupAttachment(RootingBoxCollision);
+	//ST_Mesh->AttachTo(RootingBoxCollision);
 	
 	// 위젯
 	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractionWidget"));
-	//InteractionWidget->SetupAttachment(RootingBoxCollision);
-	InteractionWidget->AttachTo(RootingBoxCollision);
+	InteractionWidget->SetupAttachment(RootingBoxCollision);
+	//InteractionWidget->AttachTo(RootingBoxCollision);
 	InteractionWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 	InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	// 위젯 읽어오기
@@ -43,44 +43,51 @@ ARootingBoxBase::ARootingBoxBase()
 
 	// 드랍할 아이템을 맵에 기록해놓는다.
 	// 소모 아이템
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink01.BP_Drink01'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink01.BP_Drink01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("'/Game/Blueprint/Items/BP_Drink01'"));
 	if (Food01.Succeeded())
 	{
 		TSubclassOf<class AActor> FoodItem1 = (UClass*)Food01.Object->GeneratedClass;
 		ItemBPMap.Add(1, FoodItem1);
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink02.BP_Drink02'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink02.BP_Drink02'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("'/Game/Blueprint/Items/BP_Drink02'"));
 	if (Food02.Succeeded())
 	{
 		TSubclassOf<class AActor> FoodItem2 = (UClass*)Food02.Object->GeneratedClass;
 		ItemBPMap.Add(2, FoodItem2);
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food01.BP_Food01'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food01.BP_Food01'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("'/Game/Blueprint/Items/BP_Food01'"));
 	if (Food03.Succeeded())
 	{
 		TSubclassOf<class AActor> FoodItem3 = (UClass*)Food03.Object->GeneratedClass;
 		ItemBPMap.Add(3, FoodItem3);
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food02.BP_Food02'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food02.BP_Food02'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("'/Game/Blueprint/Items/BP_Food02'"));
 	if (Food04.Succeeded())
 	{
 		TSubclassOf<class AActor> FoodItem4 = (UClass*)Food04.Object->GeneratedClass;
 		ItemBPMap.Add(4, FoodItem4);
 	}
 	// 총알 아이템
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("Blueprint'/Game/Blueprint/Items/BP_HeavyAmmo.BP_HeavyAmmo'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("Blueprint'/Game/Blueprint/Items/BP_HeavyAmmo.BP_HeavyAmmo'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("'/Game/Blueprint/Items/BP_HeavyAmmo'"));
 	if (Ammo01.Succeeded())
 	{
 		TSubclassOf<class AActor> AmmoItem1 = (UClass*)Ammo01.Object->GeneratedClass;
 		ItemBPMap.Add(5, AmmoItem1);
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("Blueprint'/Game/Blueprint/Items/BP_LightAmmo.BP_LightAmmo'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("Blueprint'/Game/Blueprint/Items/BP_LightAmmo.BP_LightAmmo'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("'/Game/Blueprint/Items/BP_LightAmmo'"));
 	if (Ammo02.Succeeded())
 	{
 		TSubclassOf<class AActor> AmmoItem2 = (UClass*)Ammo02.Object->GeneratedClass;
 		ItemBPMap.Add(6, AmmoItem2);
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("Blueprint'/Game/Blueprint/Items/BP_DMRAmmo.BP_DMRAmmo'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("Blueprint'/Game/Blueprint/Items/BP_DMRAmmo.BP_DMRAmmo'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("'/Game/Blueprint/Items/BP_DMRAmmo'"));
 	if (Ammo03.Succeeded())
 	{
 		TSubclassOf<class AActor> AmmoItem3 = (UClass*)Ammo03.Object->GeneratedClass;

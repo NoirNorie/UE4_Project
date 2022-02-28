@@ -10,15 +10,15 @@ AWeaponBase::AWeaponBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	W_Contact = CreateDefaultSubobject<UCapsuleComponent>(TEXT("WCapsule"));
-	//W_Contact->SetupAttachment(RootComponent);
-	W_Contact->AttachTo(RootComponent);
+	W_Contact->SetupAttachment(RootComponent);
+	//W_Contact->AttachTo(RootComponent);
 	SK_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Shape"));
-	// SK_Mesh->SetupAttachment(W_Contact);
-	SK_Mesh->AttachTo(W_Contact);
+	SK_Mesh->SetupAttachment(W_Contact);
+	//SK_Mesh->AttachTo(W_Contact);
 	// 위젯이 표시될 곳을 만들어 놓는다.
 	Inter_Widget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InterWidget"));
-	// Inter_Widget->SetupAttachment(W_Contact);
-	Inter_Widget->AttachTo(W_Contact);
+	Inter_Widget->SetupAttachment(W_Contact);
+	//Inter_Widget->AttachTo(W_Contact);
 	Inter_Widget->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 	Inter_Widget->SetWidgetSpace(EWidgetSpace::Screen); // 항상 플레이어를 향하도록 만든다.
 

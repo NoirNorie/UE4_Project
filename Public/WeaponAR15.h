@@ -13,9 +13,9 @@ UCLASS()
 class PP_API AWeaponAR15 : public AWeaponBase
 {
 	GENERATED_BODY()
+public:
 	// 생성자
 	AWeaponAR15();
-public:
 
 	// ue4에서 LNK1169와 LNK2005가 뜬다
 	// 이 경우에는 로그를 보고 경로를 찾아간다

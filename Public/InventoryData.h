@@ -18,7 +18,7 @@ UCLASS(Blueprintable, BlueprintType)
 class PP_API UInventoryData : public UObject
 {
 	GENERATED_BODY()
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")
 		int32 ItemIndex;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"), category = "Inventory")

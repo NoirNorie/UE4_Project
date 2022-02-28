@@ -15,7 +15,7 @@ UCLASS()
 class PP_API UPauseWidget : public UUserWidget
 {
 	GENERATED_BODY()
-protected:
+public:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable) void ContinueButtonCallback();

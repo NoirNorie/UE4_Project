@@ -13,6 +13,7 @@ UCLASS()
 class PP_API ALightAmmo : public AAmmoBase
 {
 	GENERATED_BODY()
-	ALightAmmo();
+
 public:
+	ALightAmmo();
 };

@@ -13,6 +13,6 @@ UCLASS()
 class PP_API AInteractionDoorLV3 : public AInteractionDoorBase
 {
 	GENERATED_BODY()
-	AInteractionDoorLV3();
 public:
+	AInteractionDoorLV3();
 };

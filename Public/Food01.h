@@ -13,6 +13,7 @@ UCLASS()
 class PP_API AFood01 : public AUsableItemBase
 {
 	GENERATED_BODY()
-	AFood01();
+
 public:
+	AFood01();
 };

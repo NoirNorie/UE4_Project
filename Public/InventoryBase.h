@@ -23,7 +23,7 @@ class PP_API UInventoryBase : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), category = "Player State UI")
 		class UListView* List;
 
