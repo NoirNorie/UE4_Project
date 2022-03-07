@@ -3,6 +3,14 @@
 
 #include "RootingBoxBase.h"
 #include "TPlayer.h"
+#include "UsableItemBase.h"
+#include "DMRAmmo.h"
+#include "Drink01.h"
+#include "Drink02.h"
+#include "Food01.h"
+#include "Food02.h"
+#include "HeavyAmmo.h"
+#include "LightAmmo.h"
 
 // Sets default values
 ARootingBoxBase::ARootingBoxBase()
@@ -42,58 +50,64 @@ ARootingBoxBase::ARootingBoxBase()
 	Box_Name = "Item Box";
 
 	// 드랍할 아이템을 맵에 기록해놓는다.
-	// 소모 아이템
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink01.BP_Drink01'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("'/Game/Blueprint/Items/BP_Drink01'"));
-	if (Food01.Succeeded())
+		// 소모 아이템
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food01(TEXT("/Game/Blueprint/Items/BP_Drink01"));
+	static ConstructorHelpers::FClassFinder<ADrink01>Food01(TEXT("/Game/Blueprint/Items/BP_Drink01"));
+	if (Food01.Succeeded() && Food01.Class != nullptr)
 	{
-		TSubclassOf<class AActor> FoodItem1 = (UClass*)Food01.Object->GeneratedClass;
+		//TSubclassOf<class AActor> FoodItem1 = (UClass*)Food01.Object->GeneratedClass;
+		TSubclassOf<class AActor> FoodItem1 = Food01.Class;
 		ItemBPMap.Add(1, FoodItem1);
 	}
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("Blueprint'/Game/Blueprint/Items/BP_Drink02.BP_Drink02'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("'/Game/Blueprint/Items/BP_Drink02'"));
-	if (Food02.Succeeded())
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food02(TEXT("/Game/Blueprint/Items/BP_Drink02"));
+	static ConstructorHelpers::FClassFinder<ADrink02>Food02(TEXT("/Game/Blueprint/Items/BP_Drink02"));
+	if (Food02.Succeeded() && Food02.Class != nullptr)
 	{
-		TSubclassOf<class AActor> FoodItem2 = (UClass*)Food02.Object->GeneratedClass;
+		//TSubclassOf<class AActor> FoodItem2 = (UClass*)Food02.Object->GeneratedClass;
+		TSubclassOf<class AActor> FoodItem2 = Food02.Class;
 		ItemBPMap.Add(2, FoodItem2);
 	}
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food01.BP_Food01'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("'/Game/Blueprint/Items/BP_Food01'"));
-	if (Food03.Succeeded())
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food03(TEXT("/Game/Blueprint/Items/BP_Food01"));
+	static ConstructorHelpers::FClassFinder<AFood01>Food03(TEXT("/Game/Blueprint/Items/BP_Food01"));
+	if (Food03.Succeeded() && Food03.Class != nullptr)
 	{
-		TSubclassOf<class AActor> FoodItem3 = (UClass*)Food03.Object->GeneratedClass;
+		//TSubclassOf<class AActor> FoodItem3 = (UClass*)Food03.Object->GeneratedClass;
+		TSubclassOf<class AActor> FoodItem3 = Food03.Class;
 		ItemBPMap.Add(3, FoodItem3);
 	}
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("Blueprint'/Game/Blueprint/Items/BP_Food02.BP_Food02'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("'/Game/Blueprint/Items/BP_Food02'"));
-	if (Food04.Succeeded())
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Food04(TEXT("/Game/Blueprint/Items/BP_Food02"));
+	static ConstructorHelpers::FClassFinder<AFood02>Food04(TEXT("/Game/Blueprint/Items/BP_Food02"));
+	if (Food04.Succeeded() && Food04.Class != nullptr)
 	{
-		TSubclassOf<class AActor> FoodItem4 = (UClass*)Food04.Object->GeneratedClass;
+		// TSubclassOf<class AActor> FoodItem4 = (UClass*)Food04.Object->GeneratedClass;
+		TSubclassOf<class AActor> FoodItem4 = Food04.Class;
 		ItemBPMap.Add(4, FoodItem4);
 	}
 	// 총알 아이템
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("Blueprint'/Game/Blueprint/Items/BP_HeavyAmmo.BP_HeavyAmmo'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("'/Game/Blueprint/Items/BP_HeavyAmmo'"));
-	if (Ammo01.Succeeded())
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo01(TEXT("/Game/Blueprint/Items/BP_HeavyAmmo"));
+	static ConstructorHelpers::FClassFinder<AHeavyAmmo>Ammo01(TEXT("/Game/Blueprint/Items/BP_HeavyAmmo"));
+	if (Ammo01.Succeeded() && Ammo01.Class != nullptr)
 	{
-		TSubclassOf<class AActor> AmmoItem1 = (UClass*)Ammo01.Object->GeneratedClass;
+		//TSubclassOf<class AActor> AmmoItem1 = (UClass*)Ammo01.Object->GeneratedClass;
+		TSubclassOf<class AActor> AmmoItem1 = Ammo01.Class;
 		ItemBPMap.Add(5, AmmoItem1);
 	}
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("Blueprint'/Game/Blueprint/Items/BP_LightAmmo.BP_LightAmmo'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("'/Game/Blueprint/Items/BP_LightAmmo'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo02(TEXT("/Game/Blueprint/Items/BP_LightAmmo"));
+	static ConstructorHelpers::FClassFinder<ALightAmmo>Ammo02(TEXT("/Game/Blueprint/Items/BP_LightAmmo"));
 	if (Ammo02.Succeeded())
 	{
-		TSubclassOf<class AActor> AmmoItem2 = (UClass*)Ammo02.Object->GeneratedClass;
+		//TSubclassOf<class AActor> AmmoItem2 = (UClass*)Ammo02.Object->GeneratedClass;
+		TSubclassOf<class AActor> AmmoItem2 = Ammo02.Class;
 		ItemBPMap.Add(6, AmmoItem2);
 	}
-	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("Blueprint'/Game/Blueprint/Items/BP_DMRAmmo.BP_DMRAmmo'"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("'/Game/Blueprint/Items/BP_DMRAmmo'"));
+	//static ConstructorHelpers::FObjectFinder<UBlueprint>Ammo03(TEXT("/Game/Blueprint/Items/BP_DMRAmmo"));
+	static ConstructorHelpers::FClassFinder<ADMRAmmo>Ammo03(TEXT("/Game/Blueprint/Items/BP_DMRAmmo"));
 	if (Ammo03.Succeeded())
 	{
-		TSubclassOf<class AActor> AmmoItem3 = (UClass*)Ammo03.Object->GeneratedClass;
+		//TSubclassOf<class AActor> AmmoItem3 = (UClass*)Ammo03.Object->GeneratedClass;
+		TSubclassOf<class AActor> AmmoItem3 = Ammo03.Class;
 		ItemBPMap.Add(7, AmmoItem3);
 	}
-
 }
 
 // Called when the game starts or when spawned
@@ -120,13 +134,15 @@ void ARootingBoxBase::BeginPlay()
 		InfoPlayer->OnLootingStarted.BindUFunction(this, FName("CallDeleFunc_LootingStart"));
 		InfoPlayer->OnLootingCancled.BindUFunction(this, FName("CallDeleFunc_LootingCancle"));
 	}
-
+	
 }
 
 // Called every frame
 void ARootingBoxBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	
 
 	if (bOverlapped == true && bLooting == true)
 	{
@@ -138,6 +154,7 @@ void ARootingBoxBase::Tick(float DeltaTime)
 			Destroy();
 		}
 	}
+
 }
 
 

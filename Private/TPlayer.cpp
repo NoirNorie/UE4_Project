@@ -354,7 +354,7 @@ void ATPlayer::StopFire()
 }
 void ATPlayer::Fire()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire Check")));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire Check")));
 	// 사격 키가 눌려졌으며 무기를 들고 있으며 달리는 중이 아닐때
 	if (isFiring == true && CheckWeapon == true && bSprint == false)
 	{
@@ -381,31 +381,31 @@ void ATPlayer::Fire()
 			DrawDebugLine(GetWorld(), Line1Start, Line1End, FColor::Green, true);
 			bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Line1Start, Line1End, ECC_Visibility, CollisionParams);
 
-			//if (isHit)
-			//{
-			//	//if (OutHit.GetActor()->ActorHasTag("Monster"))
-			//	if(OutHit.GetActor())
-			//	{
-			//		//DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
-			//		//UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
-			//		//UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
-			//		AActor* HitActor = OutHit.GetActor();
+			if (isHit)
+			{
+				//if (OutHit.GetActor()->ActorHasTag("Monster"))
+				if(OutHit.GetActor())
+				{
+					//DrawDebugSolidBox(GetWorld(), OutHit.ImpactPoint, FVector(10.0f), FColor::Blue, true); // 피격된 지점에 박스를 그린다
+					//UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s"), *OutHit.GetActor()->GetName());
+					//UE_LOG(LogTemp, Log, TEXT("Hit Bone : %s"), *OutHit.BoneName.ToString());
+					AActor* HitActor = OutHit.GetActor();
 
-			//		GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
-			//	}
-			//	GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint));
-			//	// GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 20));
-			//}
+					GameStatic->ApplyPointDamage(HitActor, player_Damage, HitActor->GetActorLocation(), OutHit, nullptr, this, nullptr); // 데미지를 가한다.
+				}
+				GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint));
+				// GameStatic->SpawnEmitterAtLocation(GetWorld(), ImpactParticle, (OutHit.ImpactPoint)+(OutHit.ImpactNormal * 20));
+			}
 
-			////GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fire")));
 
-			//GameStatic->SpawnEmitterAttached(MuzzleParticle, Weapon_Socket, FName("Socket_MuzzleLoc"));
+			GameStatic->SpawnEmitterAttached(MuzzleParticle, Weapon_Socket, FName("Socket_MuzzleLoc"));
 
-			//// 사운드 재생은 애니메이션 노티파이에 부착했다
-			//// 소리가 중첩될 수 있도록 처리함
-			//AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
-			//PlayerWidget->SetCurrentAmmo(--player_ammo);
-			//GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
+			// 사운드 재생은 애니메이션 노티파이에 부착했다
+			// 소리가 중첩될 수 있도록 처리함
+			AnimInst->PlayFire(); // 사격 모션을 동작시킨다.
+			PlayerWidget->SetCurrentAmmo(--player_ammo);
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &ATPlayer::Fire, FireRate, false);
 
 		}
 	}

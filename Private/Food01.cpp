@@ -9,4 +9,5 @@ AFood01::AFood01()
 	fHungry = 25.0f;
 	fThirsty = 0.0f;
 	FoodType = 6;
+	
 }
