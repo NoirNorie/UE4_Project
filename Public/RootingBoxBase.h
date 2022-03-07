@@ -48,6 +48,7 @@ public:
 	// 플래그 변수
 	bool bOverlapped;
 	bool bLooting;
+	bool BP_Online;
 	int32 FoodType;
 	// 진행바 변수
 	float progressVar;
