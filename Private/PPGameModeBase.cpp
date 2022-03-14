@@ -29,7 +29,7 @@ APPGameModeBase::APPGameModeBase(const FObjectInitializer& ObjectInitializer) :S
 void APPGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("GameMode Online"));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("GameMode Online"));
 	//if (GEngine)
 	//{
 	//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Begin Start"));
@@ -76,11 +76,11 @@ void APPGameModeBase::CreateInventory(TSubclassOf<UInventoryBase>NewInventoryCla
 	if (NewInventoryClass != nullptr) // 인벤토리로 등록해놓은 클래스가 유효한지 확인한다.
 	{
 		PlayerInventory = CreateWidget<UInventoryBase>(GetWorld(), NewInventoryClass);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("LocateInventory")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("LocateInventory")));
 		if (PlayerInventory != nullptr)
 		{
 			PlayerInventory->AddToViewport();
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("AddInventory")));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("AddInventory")));
 		}
 
 		PlayerInventory->SetVisibility(ESlateVisibility::Collapsed); // 일단 안보이게 한다.
@@ -99,7 +99,7 @@ void APPGameModeBase::CreateProgressWidget(TSubclassOf<UGameProgressWidget>NewPr
 		ProgressWidget = CreateWidget<UGameProgressWidget>(GetWorld(), NewProgressClass);
 		if (ProgressWidget != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FindProgressWidget")));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FindProgressWidget")));
 			ProgressWidget->AddToViewport();
 			ProgressWidget->SetVisibility(ESlateVisibility::Visible);
 		}

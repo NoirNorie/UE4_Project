@@ -15,6 +15,7 @@ void UGameOverWidget::NativeConstruct()
 
 void UGameOverWidget::ExitButtonCallback()
 {
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
 	UGameplayStatics::OpenLevel(GetWorld(), "GameOpen");
 }
 

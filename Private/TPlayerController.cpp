@@ -9,11 +9,11 @@ void ATPlayerController::BeginPlay()
 	// SetInputMode(FInputModeGameAndUI());
 	SetInputMode(FInputModeGameOnly()); // 게임모드로 변환한다.
 
-	CreateStateWidget(StartWidgetClass);
-	CreateProgressWidget(GameProgressClass);
-	CreateInventory(InventoryClass);
-	CreatePauseWidget(PauseWidgetClass);
-	CreateGameOverWidget(GameOverWidgetClass);
+	//CreateStateWidget(StartWidgetClass);
+	//CreateProgressWidget(GameProgressClass);
+	//CreateInventory(InventoryClass);
+	//CreatePauseWidget(PauseWidgetClass);
+	//CreateGameOverWidget(GameOverWidgetClass);
 
 }
 // 플레이어 상태창 등록
@@ -51,11 +51,11 @@ void ATPlayerController::CreateInventory(TSubclassOf<UInventoryBase>NewInventory
 	if (NewInventoryClass != nullptr) // 인벤토리로 등록해놓은 클래스가 유효한지 확인한다.
 	{
 		PlayerInventory = CreateWidget<UInventoryBase>(GetWorld(), NewInventoryClass);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("LocateInventory")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("LocateInventory")));
 		if (PlayerInventory != nullptr)
 		{
 			PlayerInventory->AddToViewport();
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("AddInventory")));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("AddInventory")));
 		}
 
 		PlayerInventory->SetVisibility(ESlateVisibility::Collapsed); // 일단 안보이게 한다.
@@ -74,7 +74,7 @@ void ATPlayerController::CreateProgressWidget(TSubclassOf<UGameProgressWidget>Ne
 		ProgressWidget = CreateWidget<UGameProgressWidget>(GetWorld(), NewProgressClass);
 		if (ProgressWidget != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FindProgressWidget")));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FindProgressWidget")));
 			ProgressWidget->AddToViewport();
 			ProgressWidget->SetVisibility(ESlateVisibility::Visible);
 		}

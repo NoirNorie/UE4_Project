@@ -61,6 +61,11 @@ ATPlayer::ATPlayer()
 	Weapon_Socket->SetupAttachment(GetMesh(), weaponSocketName);
 	// Weapon_Socket->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, weaponSocketName);
 
+	// 조명
+	FName lightSocketName = TEXT("PointLightSocket");
+	PlayerLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("PlayerLight"));
+	PlayerLight->SetupAttachment(GetMesh(), lightSocketName);
+
 	// 콜리전 프로필
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TPlayer"));
 
@@ -111,6 +116,7 @@ ATPlayer::ATPlayer()
 	ContactActor = nullptr;
 	GMD_Online = false;
 
+	bLightCond = false;
 
 }
 
@@ -120,7 +126,7 @@ void ATPlayer::BeginPlay()
 	Super::BeginPlay();
 	// 디버그 메시지
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Play")));
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Player Online"));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Player Online"));
 	
 	// 이해가 안되지만, 에디터의 순서와 패키지 후의 순서가 다르다
 	// 놀랍게도 언리얼에서 뭐가 먼저 실행될지 보장해주지 않는다.
@@ -183,17 +189,17 @@ void ATPlayer::Tick(float DeltaTime)
 				// GMD_Online = true; // 틱마다 읽히는 것을 방지하기 위함
 				// 게임모드에서 위젯을 가져온다.
 				Inventory = GMD->GetInventoryWidget();
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
+				// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Called")));
 				if (Inventory)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
+					// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Inventory Called")));
 				}
 
 				PlayerWidget = GMD->GetPlayerStateWidget();
 				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Widget Called")));
 				if (PlayerWidget)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
+					// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Widget Called")));
 					PlayerWidget->SetWeaponName(WeaponName);
 					PlayerWidget->SetCurrentAmmo(player_ammo);
 					PlayerWidget->SetRemainAmmo(Inventory->HaveAmmo(CurrentAmmoName));
@@ -204,7 +210,7 @@ void ATPlayer::Tick(float DeltaTime)
 				ProgressWidget = GMD->GetGameProgressWidget();
 				if (ProgressWidget)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Progress Widget Called")));
+					// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Progress Widget Called")));
 					ProgressWidget->setProgress(GateOpenProgress);
 				}
 				GameOverWidget = GMD->GetGameOverWidget();	// 등록만 해놓는다.
@@ -213,8 +219,8 @@ void ATPlayer::Tick(float DeltaTime)
 				// 모든 위젯들이 동작하면 더이상 로드 틱을 작동시키지 않도록 한다.
 				if (Inventory && PlayerWidget && ProgressWidget && GameOverWidget && PauseWidget)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ALL Widgets Called")));
-					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD_ON")));
+					// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ALL Widgets Called")));
+					// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("GMD_ON")));
 					GMD_Online = true;
 				}
 			}	
@@ -283,6 +289,8 @@ void ATPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Interaction", IE_Released, this, &ATPlayer::StopInteraction);
 	// 게임중지 바인드
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &ATPlayer::PauseToggle);
+	// 조명 토글 바인드
+	PlayerInputComponent->BindAction("LightToggle", IE_Pressed, this, &ATPlayer::LightToggle);
 }
 
 // 전후이동 함수
@@ -378,7 +386,7 @@ void ATPlayer::Fire()
 
 			FCollisionQueryParams CollisionParams;
 			CollisionParams.AddIgnoredActor(this); // 충돌에서 이 플레이어 액터를 제외한다.
-			DrawDebugLine(GetWorld(), Line1Start, Line1End, FColor::Green, true);
+			// DrawDebugLine(GetWorld(), Line1Start, Line1End, FColor::Green, true);
 			bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Line1Start, Line1End, ECC_Visibility, CollisionParams);
 
 			if (isHit)
@@ -480,7 +488,7 @@ bool ATPlayer::GetAimCheck()
 // 인벤토리 토글 함수
 void ATPlayer::InventoryToggle()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Inventory Toggle")));
 	if (Inventory != nullptr)
 	{
@@ -553,6 +561,20 @@ void ATPlayer::StopInteraction()
 	if (OnLootingCancled.IsBound() == true)
 	{
 		OnLootingCancled.Execute();
+	}
+}
+// 조명 토글 함수 구현
+void ATPlayer::LightToggle()
+{
+	if (bLightCond == false)
+	{
+		PlayerLight->SetIntensity(5000.0f);
+		bLightCond = true;
+	}
+	else
+	{
+		PlayerLight->SetIntensity(0.0f);
+		bLightCond = false;
 	}
 }
 
