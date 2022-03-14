@@ -93,6 +93,9 @@ public:
 	// 손 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USkeletalMeshComponent* Weapon_Socket; // 무기 장착 위치가 될 곳
+	// 라이트
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class USpotLightComponent* PlayerLight;
 
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -206,6 +209,9 @@ public:
 	// 중지 메뉴 함수 선언
 	UFUNCTION() void PauseToggle();
 
+	// 조명 토글 함수 선언
+	UFUNCTION() void LightToggle();
+
 	// 변수 반환용 함수들
 	bool GetWeaponCheck(); // 무기 장착 여부 확인
 	bool GetAimCheck(); // 조준 여부 확인
@@ -270,6 +276,10 @@ public:
 		float player_Thirsty;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool player_Death;
+
+	// 조명 토글 변수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bLightCond;
 
 	// 로드 변수
 	bool GMD_Online;
